@@ -23,7 +23,7 @@ def plot(test, fit):
     plt.plot(fit_xs,  fit_fs, color='k',linewidth = 2, alpha = 1., label = 'paras: m=' + str(round(fit_paras[0], 2)) + ' b=' + str(round(fit_paras[1], 2)) + ' A=' + str(round(fit_paras[2], 2)) + r" $x_{0}$=" + str(round(fit_paras[3], 2)) + r' $\sigma$=' + str(round(fit_paras[4], 2)) + ' L=' + str(fit.pop.best_cost) )
     plt.scatter(test.xs, test.fsn, s = 8, color = 'b', marker='o')
     plt.legend()
-    plt.savefig('testing_hessian_fit.png', format = 'png')
+    plt.savefig('plots/testing_hessian_fit.png', format = 'png')
     plt.close()
 
 
@@ -79,21 +79,41 @@ class parameter_sweeps:
             fitted_para = []
             correct_para = []
             correct_cost = []
-            N = 10
-            if(i < 1):
-                N = 300
+            N = 1000
+            plt.subplot(plot_coor + i)
+            if(i == 0):
+                #plt.ylim(-400.0,0.0)
+                plt.ylim(-10, 0.0)
+                plt.xlim(-10, 10)
+            elif(i == 1):
+                #plt.ylim(-175.0, 0.0)
+                plt.ylim(-5.0, 0.0)
+                plt.xlim(20, 40)
+            elif(i == 2):
+                #plt.ylim(-175.0, 0.0)
+                plt.ylim(-5.0, 0.0)
+                plt.xlim(40, 60)
+            elif(i == 3):
+                #plt.ylim(-10.0,0.0)
+                plt.ylim(-.6,0.0)
+                plt.xlim(-0.25, 0.1)
+            elif(i == 4):
+                #plt.ylim(-10.0,0.0)
+                plt.ylim(-.75,0.0)
+                plt.xlim(1.35, 1.55)
+                
             for j in range(0, N):
-                tmp.append(-float(j))
+                tmp.append(- float(j))
                 fitted_para.append(self.best[i])
                 correct_para.append(self.correct[i])
-            plt.subplot(plot_coor + i)
             plt.title(names[i])
             plt.xlabel(labels[i])
             plt.ylabel('cost')
             plt.scatter(self.sweep[i].para, self.sweep[i].cost,color='k', s=.5, marker= 'o' )
             plt.plot(fitted_para, tmp,color='b' )
             plt.plot(correct_para, tmp,color='r' )
-        plt.savefig('parameter_sweeps.png', format='png')
+
+        plt.savefig('plots/parameter_sweeps_peak.png', format='png')
         
         
 def main(file_name = None):
@@ -104,7 +124,7 @@ def main(file_name = None):
         fit = diff_evo(test.xs, test.fsn, 10, file_name)
     else:
         print 'optimizing...'
-        fit = diff_evo(test.xs, test.fsn, 5000, file_name)
+        fit = diff_evo(test.xs, test.fsn, 50000, file_name)
         fit.pop.save_population('optimized_test_data.pop')
         
     

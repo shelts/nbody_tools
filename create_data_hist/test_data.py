@@ -61,4 +61,4 @@ class test_data(): # class to create a test data set with guassian noise
         plt.xlim(-6, 6)
         plt.plot(self.xs, self.fs, linewidth = 2, color = 'r')
         plt.scatter(self.xs, self.fsn, s = 8, color = 'b', marker='o')
-        plt.savefig('test_data.png', format='png')
+        plt.savefig('plots/test_data.png', format='png')

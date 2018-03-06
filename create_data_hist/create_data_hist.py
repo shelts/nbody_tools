@@ -298,7 +298,7 @@ class data:#class system for reading in data and making a data histogram
         if(len(self.bin_diff.counts) > 0):
             plt.bar(self.bnd.bin_centers, self.bin_diff.counts, width = w, color = "b", edgecolor = "b", alpha = 0.5)
             #plt.bar(self.bnd.bin_centers, self.bnd.bin_N, width = w, color = "k", edgecolor = "b", alpha = 0.5)
-        plt.savefig('figure5_recreation.png', format='png')
+        plt.savefig('plots/figure5_recreation.png', format='png')
         plt.clf()
         #plt.show()
     
@@ -311,7 +311,7 @@ class data:#class system for reading in data and making a data histogram
         #plt.tick_params(which='minor', length=4, color='r')
         w = 2.6
         plt.bar(self.bnd.bin_centers, self.bin_normed.counts, width = w, color = "b", edgecolor = "b", alpha = 0.5)
-        plt.savefig('figure5_simunits_normed.png', format='png')
+        plt.savefig('plots/figure5_simunits_normed.png', format='png')
         plt.clf()
         #plt.show()   
         
@@ -359,7 +359,7 @@ def main():
     on_field_counts_file = "l270soxlbfgcxNTbcorr.newon"
     off_field_counts_file = "l270soxlbfgcxNTbcorr.newoff"
     bin_data = "data_from_yanny.dat"
-    bin_data = "custom_bins.dat"
+    bin_data = "custom_bins4.dat"
     
     dat = data(on_field_counts_file, off_field_counts_file)
     # initiaze bins parameters #

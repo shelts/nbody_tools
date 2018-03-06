@@ -5,7 +5,7 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 import numpy as np
 from numpy.linalg import inv
-
+import math as mt
 
 def function(p):
     x = p[0]
@@ -19,11 +19,11 @@ class hessian:
     def __init__(self, cost, parameters):
         self.cost = cost
         self.paras = parameters
+        self.steps = [25., 4., 4., .25, 0.2] # by eye
         #self.paras = [2.0, 3.0, 4.0]
         self.dim = len(self.paras)
         self.create_matrix()
         self.invert()
-        
     def create_matrix(self):
         self.H = []
         for i in range(0, self.dim):
@@ -37,6 +37,9 @@ class hessian:
     def calc_derivative(self, i, j):
         n = len(self.paras)
         h1 = .95 * self.paras[n - 1]# setting the step size to the fitted sigma
+        h1 = self.steps[i]
+        h2 = self.steps[j]
+        
         #h1 = 0.001
         #print h1
         h2 = h1
@@ -57,7 +60,8 @@ class hessian:
             #f3 = function(p)
             f3 = self.cost.get_cost(p)
             
-            der = f2 - 2.0 * f1 + f3
+            # calculate in log space
+            der = mt.log(abs(f2)) - 2.0 * mt.log(abs(f1)) + mt.log(abs(f3))
             der = der / (h1 * h1)
             
         else: # second partial derivative
@@ -82,7 +86,8 @@ class hessian:
             #f4 = function(p)
             f4 = self.cost.get_cost(p)
             
-            der = f1 - f2 - f3 + f4
+            # calculate in log space
+            der = mt.log(abs(f1)) - mt.log(abs(f2)) - mt.log(abs(f3)) + mt.log(abs(f4))
             
             der = der / (4.0 * h1 * h2)
         

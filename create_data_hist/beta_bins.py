@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import AutoMinorLocator
 from differential_evolution import *
 from hessian import *
+from nbody_functional import *
 
 class bin_betas:#class to make histogram of betas in each bin
     def __init__(self, beta_coors_ON, beta_coors_OFF, lmda_bnd):#(on field beta coordinates, Off field beta coordinates, lambda bin parameters)
@@ -22,8 +23,8 @@ class bin_betas:#class to make histogram of betas in each bin
         # bin the on and off field seperately so you can adjust it until they have same number of bins #
         # these parameters should be kept the same. But the option is there.
         self.beta_Nbins = 30
-        self.lower = -5.0
-        self.upper = 5.0
+        self.lower = -4.0
+        self.upper = 4.0
         
         self.bin_width    = abs(self.lower - self.upper) / self.beta_Nbins
         
@@ -31,9 +32,7 @@ class bin_betas:#class to make histogram of betas in each bin
         del beta_coors_ON, beta_coors_OFF # free up some space
         
         self.off_field_star_density()
-        self.den_correction()
-        #self.off_field_average()# does a simple ave of the off field counts.
-        #self.correction() # substract the simple ave from the off and on fields
+        #self.den_correction()
         
         #self.plot_3d() # make one 3D plot of the stream
         #self.plot_each_bin()
@@ -85,26 +84,31 @@ class bin_betas:#class to make histogram of betas in each bin
     
     def optimize(self):
         iters = 100000
+        sigmas = []
         os.system("rm -r stream_beta_plots/lamb*")
         for i in range(0, self.lmda_bnd.Nbins):
             self.fit = diff_evo(self.bin_centers , self.binned_beta_combined[i], iters )
-            self.fit.pop.save_population("bin_" + str(i) + '.pop')
+
+            self.fit.pop.save_population("pop/bin_" + str(i) + '.pop')
             #self.fit = diff_evo(self.bin_centers , self.binned_beta_combined[i], iters,"bin_" + str(i) + '.pop' )
             self.fit_paras = self.fit.pop.best_paras
             self.cost = self.fit.pop.best_cost
+            print 'BIN: ', i
             print 'Paras: ', self.fit_paras
+            
             errors = hessian(self.fit.cost, self.fit_paras)
+            sigmas.append(self.fit_paras[4])
             print 'ERRORS: ', errors.errs, '\n'
+
             self.plot_each_bin(i) # plot each lambda bin seperately
-        #os.system('xdg-open stream_beta_plots/lambda_bin_' + str(0) + '_' + str(self.lmda_bnd.bin_centers[0]) + '.png')
-        
+        self.plot_sigma(sigmas)
         
     def plot_each_bin(self, i = None):
         w = 0.25
         #test_dat = test_data()
         plt.figure()
-        plt.xlim(self.lower, self.upper)
-        plt.ylim(-100, 200)
+        plt.xlim(self.lower - 2, self.upper + 2)
+        plt.ylim(0.0, 400)
         plt.ylabel("counts")
         plt.xlabel(r"$\beta_{Orphan}$")
         
@@ -112,19 +116,20 @@ class bin_betas:#class to make histogram of betas in each bin
         if(i != None):
             fit_paras = self.fit_paras
             fit_xs, fit_fs = self.fit.cost.generate_plot_points(fit_paras)
+            
             plt.plot(fit_xs,  fit_fs, color='k',linewidth = 2, alpha = 1., label = 'paras: m=' + str(round(fit_paras[0], 2)) + ' b=' + str(round(fit_paras[1], 2)) + ' A=' + str(round(fit_paras[2], 2)) + r" $x_{0}$=" + str(round(fit_paras[3], 2)) + r' $\sigma$=' + str(round(fit_paras[4], 2)) + ' L=' + str(self.cost) )
             plt.bar(self.bin_centers, self.binned_beta_combined[i], width=w, color='k', alpha = 1., label = 'C')
             plt.bar(self.bin_centers, self.binned_beta_OFF[i], width=w, color='r', alpha = 0.5, label = 'OFF')
             plt.bar(self.bin_centers, self.binned_beta_ON[i], width=w, color='b', alpha = 0.5, label = 'ON')
             plt.legend()
-            plt.savefig('stream_beta_plots/lambda_bin_' + str(i) + '_' + str(self.lmda_bnd.bin_centers[i]) + '.png', format = 'png')
+            plt.savefig('stream_beta_plots/lambda_bin_' + str(i) + '_(' + str(self.lmda_bnd.bin_lowers[i]) + ',' + str(self.lmda_bnd.bin_centers[i]) + ',' +  str(self.lmda_bnd.bin_uppers[i]) + ').png', format = 'png')
             plt.close()
         else:
             os.system("rm -r stream_beta_plots/lamb*")
             for i in range(0, self.lmda_bnd.Nbins):
                 plt.figure()
                 plt.xlim(self.lower, self.upper)
-                plt.ylim(-100, 200)
+                plt.ylim(-100, 400)
                 plt.ylabel("counts")
                 plt.xlabel(r"$\beta_{Orphan}$")
                 plt.bar(self.bin_centers, self.binned_beta_combined[i], width=w, color='k', alpha = 1., label = 'combined')
@@ -139,50 +144,15 @@ class bin_betas:#class to make histogram of betas in each bin
         
         return 0
     
-    def plot_3d(self):
-        fig = plt.figure()
-        ax = fig.add_subplot(111, projection='3d')
-        w = 0.25
-        ax.set_xlabel(r"$\beta_{Orphan}$")
-        ax.set_zlabel("counts")
-        ax.set_ylabel(r"$\Lambda_{Orphan}$")
-        for i in range(0, self.lmda_bnd.Nbins):
-            ax.bar(self.bin_centers, self.binned_beta_OFF[i], width=w,zs=self.lmda_bnd.bin_centers[i], zdir='y', color='r', alpha = 0.75)
-            ax.bar(self.bin_centers, self.binned_beta_ON[i], width=w,  zs=self.lmda_bnd.bin_centers[i], zdir='y',  color='b', alpha = 0.5, )
-        plt.savefig('stream_beta_plots/lambda_beta_bins.png', format = 'png')
-        plt.show()
-        
-        return 0
+    def plot_sigma(self, sigmas):
+        plt.title(r'$\sigma$ vs $\Lambda_{Orphan}$')
+        plt.xlabel(r'$\Lambda_{Orphan}$')
+        plt.ylabel(r'$\sigma$')
+        plt.ylim(0, 1.5)
+        plt.scatter(self.lmda_bnd.bin_centers, sigmas, marker='o')
+        plt.savefig('plots/sigma_v_lambda.png', format='png')
     
-    def off_field_average(self):
-        self.bin_off_field_aves = []
-        bins_with_counts = []
-        for i in range(0, self.lmda_bnd.Nbins): # for each lambda bin
-            off_field_ave = 0.0
-            bns = 0.0
-            for j in range(0, self.beta_Nbins): # for each of the beta bins
-                if(self.binned_beta_OFF[i][j] > 0.0): # make sure ave includes only bins with counts
-                    off_field_ave += self.binned_beta_OFF[i][j]
-                    bns += 1.0
-            bins_with_counts.append(bns)
-            self.bin_off_field_aves.append(off_field_ave)
-            if(float(bins_with_counts[i]) > 0.0):
-                self.bin_off_field_aves[i] = self.bin_off_field_aves[i] / float(bins_with_counts[i])
-        
-        return 0
     
-    def correction(self):
-        for i in range(0, self.lmda_bnd.Nbins):
-            for j in range(0, self.beta_Nbins):
-                self.binned_beta_ON[i][j]  -= self.bin_off_field_aves[i] * 1.
-                self.binned_beta_OFF[i][j] -= self.bin_off_field_aves[i] * 1.
-                
-                if(self.binned_beta_ON[i][j] < 0.0):
-                    self.binned_beta_ON[i][j] = 0
-                if(self.binned_beta_OFF[i][j] < 0.0):
-                    self.binned_beta_OFF[i][j] = 0
-
-        return 0
     
     def den_correction(self):
         for i in range(0, self.lmda_bnd.Nbins):
