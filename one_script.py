@@ -35,9 +35,9 @@ args_run_comp = [3.94243049428117, 0.204575760168173, 0.179013230102704, 12.0318
 # # # # # # # # # # # # # # # # # # # # # # # #
 #              Standard Run switches          #
 # # # # # # # # # # # # # # # # # # # # # # # #
-run_nbody                 = n                 #
-remake                    = y                 #
-run_and_compare           = n                 #
+run_nbody                 = y                 #
+remake                    = n                 #
+run_and_compare           = y                 #
 match_histograms          = n                 #
 run_from_checkpoint       = n                 #
 # # # # # # # # # # # # # # # # # # # # # # # #
