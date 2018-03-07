@@ -49,10 +49,6 @@ class nbody_running_env:
         #final piece to the run command. includes the number of threads, output format, and visualizer args
         end_piece = "-n 10  -b  --visualizer-bin=" + self.path + "nbody_test/bin/milkyway_nbody_graphics -i " + (ft) + " " + bt + " " + rl + " " + rr + " " + ml + " " + mr
         
-        #these are for manual body input lua files. not used often enough to make an option:
-        #end_piece = "-n 10 -b -u --visualizer-bin=" + self.path + "nbody_test/bin/milkyway_nbody_graphics -i " + (ft) + " " + self.path +"test2.out"
-        #end_piece = "-n 10 -b -u --visualizer-bin=" + self.path + "nbody_test/bin/milkyway_nbody_graphics -i " + (ft) + " " + bt + " " + rl + " " + rr + " " + ml + " " + mr + " " + self.path + "test3.out"
-        
         if(not comparison_hist): ##this willl produce a single run of nbody, without comparing the end result to anything
             run_command += end_piece #completing the run command
        
@@ -207,7 +203,7 @@ class nbody_outputs:#a class that takes in data from nbody output files and make
         # note: this uses a left handed coordinate system #
         # it assumes that xyz are lefted handed. l,b are  #
         # assumed to be right handed. stupid              #
-        left_handed = True                                #
+        left_handed = False                                #
         # this is the system that is used in MW@home.     #
     
         phi   = mt.radians(128.79)

@@ -127,6 +127,8 @@ class population: # a class to create, store and update a population for differe
             f.write("\n")
         f.close()
     
+    
+    
 class diff_evo: 
     class parameter: # quick class for the parameter search ranges
         def __init__(self, ranges):
@@ -136,7 +138,7 @@ class diff_evo:
     def __init__(self, xs, ys, iters, population_file = None):
         self.cross_over = 0.9 # algorithm specific parameter
         self.differential_weight = 0.8 # algorithm specific parameter
-        self.pop_size = 10 * (len(search_ranges)) # size of the population
+        self.pop_size = 100 * (len(search_ranges)) # size of the population
         self.Nparameters = len(search_ranges) # using the len of the search ranges as the number of parameters to keep it general
         self.optimization_iterations = iters  # number of iterations to run the optimization
         self.ranges = []

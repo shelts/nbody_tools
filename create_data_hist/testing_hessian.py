@@ -10,11 +10,11 @@ from test_data import *
 from differential_evolution import *
 from hessian import *
 
-def plot(test, fit):
+def plot(test, fit, name):
     w = 0.25
     plt.figure()
     #plt.xlim(self.lower, self.upper)
-    plt.ylim(0, 100)
+    plt.ylim(0, 400)
     plt.ylabel("counts")
     plt.xlabel(r"$\beta_{Orphan}$")
     
@@ -23,7 +23,7 @@ def plot(test, fit):
     plt.plot(fit_xs,  fit_fs, color='k',linewidth = 2, alpha = 1., label = 'paras: m=' + str(round(fit_paras[0], 2)) + ' b=' + str(round(fit_paras[1], 2)) + ' A=' + str(round(fit_paras[2], 2)) + r" $x_{0}$=" + str(round(fit_paras[3], 2)) + r' $\sigma$=' + str(round(fit_paras[4], 2)) + ' L=' + str(fit.pop.best_cost) )
     plt.scatter(test.xs, test.fsn, s = 8, color = 'b', marker='o')
     plt.legend()
-    plt.savefig('plots/testing_hessian_fit.png', format = 'png')
+    plt.savefig('plots/testing_hessian_fit_' + name + '.png', format = 'png')
     plt.close()
 
 
@@ -34,7 +34,7 @@ class parameter_sweeps:
             self.cost = []
             self.dim = 0.0
         
-    def __init__(self, fit, correct):
+    def __init__(self, fit, correct, name, ranges):
         self.best = fit.pop.best_paras
         self.correct = correct
         self.dim = len(self.best)
@@ -47,7 +47,7 @@ class parameter_sweeps:
             self.sweep.append(p)
             self.run_sweep(i, fit)
             
-        self.plot_sweep()
+        self.plot_sweep(name, ranges)
         
     def run_sweep(self, i, fit):
         upper = fit.ranges[i].upper
@@ -69,7 +69,7 @@ class parameter_sweeps:
         self.sweep[i].dim = N
         return 0
     
-    def plot_sweep(self):
+    def plot_sweep(self, name, ranges):
         plot_coor = 231
         names = ['Linear slope', 'Y-intercept', 'Guassian Amplitude', 'Guassian Center', r'$\sigma$']
         labels = ['m', 'b', 'A', r'$\mu$',  r'$\sigma$']
@@ -79,28 +79,28 @@ class parameter_sweeps:
             fitted_para = []
             correct_para = []
             correct_cost = []
-            N = 1000
+            N = 10000
             plt.subplot(plot_coor + i)
             if(i == 0):
-                #plt.ylim(-400.0,0.0)
+                plt.ylim(-400.0,0.0)
                 plt.ylim(-10, 0.0)
-                plt.xlim(-10, 10)
+                plt.xlim(ranges[i][0], ranges[i][1])
             elif(i == 1):
-                #plt.ylim(-175.0, 0.0)
+                plt.ylim(-175.0, 0.0)
                 plt.ylim(-5.0, 0.0)
-                plt.xlim(20, 40)
+                plt.xlim(ranges[i][0], ranges[i][1])
             elif(i == 2):
-                #plt.ylim(-175.0, 0.0)
+                plt.ylim(-175.0, 0.0)
                 plt.ylim(-5.0, 0.0)
-                plt.xlim(40, 60)
+                plt.xlim(ranges[i][0], ranges[i][1])
             elif(i == 3):
-                #plt.ylim(-10.0,0.0)
+                plt.ylim(-10.0,0.0)
                 plt.ylim(-.6,0.0)
-                plt.xlim(-0.25, 0.1)
+                plt.xlim(ranges[i][0], ranges[i][1])
             elif(i == 4):
-                #plt.ylim(-10.0,0.0)
+                plt.ylim(-10.0,0.0)
                 plt.ylim(-.75,0.0)
-                plt.xlim(1.35, 1.55)
+                plt.xlim(ranges[i][0], ranges[i][1])
                 
             for j in range(0, N):
                 tmp.append(- float(j))
@@ -110,38 +110,57 @@ class parameter_sweeps:
             plt.xlabel(labels[i])
             plt.ylabel('cost')
             plt.scatter(self.sweep[i].para, self.sweep[i].cost,color='k', s=.5, marker= 'o' )
-            plt.plot(fitted_para, tmp,color='b' )
-            plt.plot(correct_para, tmp,color='r' )
-
-        plt.savefig('plots/parameter_sweeps_peak.png', format='png')
+            plt.plot(fitted_para, tmp,color='b', label='fitted' )
+            plt.plot(correct_para, tmp,color='r' , label='correct')
+            plt.legend()
+        plt.savefig('plots/parameter_sweeps_peak' + name + '.png', format='png')
         
         
 def main(file_name = None):
-    test = test_data() #creating fittable data
-
-    if(file_name):
-        print 'optimizing from file'
-        fit = diff_evo(test.xs, test.fsn, 10, file_name)
-    else:
-        print 'optimizing...'
-        fit = diff_evo(test.xs, test.fsn, 50000, file_name)
-        fit.pop.save_population('optimized_test_data.pop')
+    
+    paras = []
+    p1 = [-1.75, 207., 61., 0.34, 1.07]
+    r1 = [[-3,-1.], [205,215], [55,70], [.25,.4], [1.0,1.5]]
+    
+    p2 = [1.6, 291., 66., -0.36, 0.64]
+    r2 = [[1,2.5], [285,300], [55,70], [-.4,-.2], [.55,.7]]
+    
+    p3 = [3.75, 262., 74., 0.26, .74]
+    r3 = [[3.,4.5], [255,270], [65,80], [.2,.35], [.7,.8]]
+    
+    p4 = [-.33, 20., 55., 0.3, 1.3]
+    r4 = [[-3.,1], [15,25], [50,65], [.25,.4], [1.0,1.5]]
+    paras = [p1, p2, p3, p4]
+    ranges = [r1, r2, r3, r4]
+    for i in range(0, len(paras)):
+        test = test_data(paras[i], [-4,4]) #creating fittable data
         
+        if(file_name):
+            print 'optimizing from file'
+            fit = diff_evo(test.xs, test.fsn, 10, file_name + str(i) + '.pop')
+        else:
+            print 'optimizing...'
+            fit = diff_evo(test.xs, test.fsn, 500000, file_name)
+            fit.pop.save_population('pop/optimized_test_data' + str(i) + '.pop')
+        
+        
+        print 'plotting...'
+        plot(test, fit, str(i))
+        print 'done'
     
-    plot(test, fit)
-    
-    fit_parameters = fit.pop.best_paras
-    print 'best fit parameters: '
-    print fit_parameters
-    
-    print '\ncalculating errors...'
-    errors = hessian(fit.cost, fit_parameters)
-    print 'done\n'
-    
-    print 'running parameter sweeps...'
-    para_sweeps = parameter_sweeps(fit, test.correct)
-    print 'done\n'
-    
+        print 'best fit parameters: '
+        print fit.pop.best_paras
+        
+        print '\ncalculating errors...'
+        #errors = hessian(fit.cost, fit.pop.best_paras)
+        print 'done\n'
+        
+        print 'running parameter sweeps...'
+        para_sweeps = parameter_sweeps(fit, test.correct, str(i), ranges[i])
+        
+        print 'done\n'
+        del test, fit, para_sweeps
+        
 args = sys.argv;
 file_name = None
 if(len(args) > 1):
