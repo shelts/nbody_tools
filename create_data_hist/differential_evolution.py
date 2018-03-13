@@ -67,8 +67,8 @@ class population: # a class to create, store and update a population for differe
         
     def update(self, x, cross_over, differential_weight, cost, ranges): # function to update the population set using the diff evo algorithm
         a = -1 # to get them into the loop
-        b = -1
-        c = -1
+        b = -1 
+        c = -1 
         while(a == b or a == c or b == c or a == x or b == x or c == x): # pick unique agents
             a = int(random.uniform(0, self.pop_size))
             b = int(random.uniform(0, self.pop_size))
@@ -109,12 +109,20 @@ class population: # a class to create, store and update a population for differe
     def get_bests(self): # finds the best cost in the population
         best_index = 0
         self.best_paras = []
+        converged = False
+        counter = 0
+        
         for i in range(1, self.pop_size):
-            if(self.pop_costs[i] < self.pop_costs[best_index]): # check for the best cost
+            if(round(self.pop_costs[i],8) < round(self.pop_costs[best_index], 8)): # check for the best cost
                 best_index = i # just keep the best index. that maps to everything needed
+                counter += 1
+                
+        if(counter == 0):
+            converged = True
+
         self.best_paras = self.cur_pop[best_index]
         self.best_cost = self.pop_costs[best_index]
-        return 0
+        return converged
     
     
     
@@ -142,6 +150,7 @@ class diff_evo:
         self.Nparameters = len(search_ranges) # using the len of the search ranges as the number of parameters to keep it general
         self.optimization_iterations = iters  # number of iterations to run the optimization
         self.ranges = []
+        self.converged = False
         
         for i in range(0, self.Nparameters): # setting up the search ranges
             val = self.parameter(search_ranges[i])
@@ -163,12 +172,14 @@ class diff_evo:
     def run_optimization(self): # runs through the optimization. Each iteration updates the population
         counter = 0
         cost = self.pop.pop_costs[0]
-        while(counter < self.optimization_iterations): # TODO: instead of running for a fixed number of iterations, should have a threshold on the cost
+        while(counter < self.optimization_iterations and not self.converged): # TODO: Currently will run a fixed number of iterations. Will stop if population is converged.
             # note: this updates the population as you go. does not create a new updated population list. 
             for i in range(0, self.pop_size): # will go through each member of the current population to update it
                 self.pop.update(i, self.cross_over, self.differential_weight, self.cost, self.ranges) # this will update the member of the population
                 counter += 1
-            self.pop.get_bests()
+            self.converged = self.pop.get_bests()
+            #if(self.converged):# no point in running after the population has converged
+                #print "Convergence Reached After ", counter , ' Iterations'
             #if(counter % 100 and (cost != self.pop.best_cost) ): # used for plotting the fits as it optimizes. not putting in if statement because not too needed or used.
                 #cost = self.pop.best_cost
                 #self.cost.plot_current_best(counter, self.pop.best_paras, cost)

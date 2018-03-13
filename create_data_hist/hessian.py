@@ -16,10 +16,10 @@ def function(p):
     return f
 
 class hessian:
-    def __init__(self, cost, parameters):
+    def __init__(self, cost, parameters, step_sizes):
         self.cost = cost
         self.paras = parameters
-        self.steps = [25., 4., 4., .25, 0.2] # by eye
+        self.steps = step_sizes # by eye
         #self.paras = [2.0, 3.0, 4.0]
         self.dim = len(self.paras)
         self.create_matrix()
@@ -36,11 +36,10 @@ class hessian:
        
     def calc_derivative(self, i, j):
         n = len(self.paras)
-        h1 = .95 * self.paras[n - 1]# setting the step size to the fitted sigma
         h1 = self.steps[i]
         h2 = self.steps[j]
         
-        #h1 = 0.001
+        #h1 = 0.1
         #print h1
         h2 = h1
         
@@ -61,7 +60,8 @@ class hessian:
             f3 = self.cost.get_cost(p)
             
             # calculate in log space
-            der = mt.log(abs(f2)) - 2.0 * mt.log(abs(f1)) + mt.log(abs(f3))
+            #der = mt.log(abs(f2)) - 2.0 * mt.log(abs(f1)) + mt.log(abs(f3))
+            der = ((f2)) - 2.0 * ((f1)) + ((f3))
             der = der / (h1 * h1)
             
         else: # second partial derivative
@@ -87,7 +87,8 @@ class hessian:
             f4 = self.cost.get_cost(p)
             
             # calculate in log space
-            der = mt.log(abs(f1)) - mt.log(abs(f2)) - mt.log(abs(f3)) + mt.log(abs(f4))
+            #der = mt.log(abs(f1)) - mt.log(abs(f2)) - mt.log(abs(f3)) + mt.log(abs(f4))
+            der = ((f1)) - ((f2)) - ((f3)) + ((f4))
             
             der = der / (4.0 * h1 * h2)
         
@@ -101,5 +102,37 @@ class hessian:
         H = np.array(array)
         H_inv = inv(H)
         for i in range(0, self.dim):
-            errs = (2.0 * abs(H_inv[i][i]))**0.5
+            errs = ( abs(H_inv[i][i]))**0.5
             self.errs.append(errs)
+            
+            
+            
+class variable_error:
+    def __init__(self, fit, best_fit, best_cost):
+        self.best = best_fit
+        self.best_cost = best_cost
+        self.errors(fit)
+        
+    def errors(self, fit):
+        paras = list(self.best)
+        dn = 0.001
+        self.error1 = []
+        self.error2 = []
+        for i in range(0, len(self.best)):
+            paras = list(self.best)
+            while(1):
+                paras[i] += dn
+                cost = fit.cost.get_cost(paras)
+                if(abs(self.best_cost - cost) >= 1.):
+                    self.error1.append(abs(paras[i] - self.best[i]))
+                    #diff1.append(abs(cost_best - cost))
+                    break
+            paras = list(self.best)
+            while(1):
+                paras[i] -= dn
+                cost = fit.cost.get_cost(paras)
+                if(abs(self.best_cost - cost) >= 1):
+                    self.error2.append(abs(paras[i] - self.best[i]))
+                    #diff2.append(abs(cost_best - cost))
+                    break
+        

@@ -135,8 +135,6 @@ class data:#class system for reading in data and making a data histogram
     
     def data_correction(self):
         cut = -15
-        #if(self.negate):
-            #cut = -cut
             
         for i in range(0, len(self.ON_star_N_lbda)):
             if(self.ON_star_N_lbda[i] < cut):
@@ -237,23 +235,6 @@ class data:#class system for reading in data and making a data histogram
                 self.beta_diff.sqsums.append((self.beta_ON.sqsums[i] ))
                 self.beta_diff.binN.append(  abs(self.beta_ON.binN[i]))
     
-    def beta_dispersion(self):
-        for i in range(0, len(self.beta_diff.sums)):
-            sums = self.beta_diff.sums[i]
-            sqsums = self.beta_diff.sqsums[i]
-            
-            N = self.beta_diff.binN[i]
-            if(N > 2):
-                dispsq = sqsums / (N - 1.)
-                #print dispsq, sqsums, sums**2.
-                dispsq -= ( N / (N - 1.) ) * (sums / N)**2.
-                #print dispsq, ( N / (N - 1.) ) * (sums / N)**2., N, '\n'
-                dispsq = dispsq**0.5
-                self.beta_diff.disp.append(dispsq)
-            else:
-                self.beta_diff.disp.append(-1)
-                
-    
     def normalize_counts(self, N, Nerr):# need to normalize counts in the mw@home data histogram
         self.bin_normed = binned_data()
         f_turn_offs = 7.5
@@ -348,8 +329,8 @@ def main():
     use_vgsr = False
     use_yanny_bins = True
     calc_beta_dispersions = True
-    make_hist = False
-    normalize_counts =  False
+    make_hist = True
+    normalize_counts =  True
     
     plot_counts = True
     plot_normed_counts = False

@@ -11,6 +11,7 @@ from matplotlib.ticker import AutoMinorLocator
 from differential_evolution import *
 from hessian import *
 from nbody_functional import *
+from testing_hessian import parameter_sweeps
 
 class bin_betas:#class to make histogram of betas in each bin
     def __init__(self, beta_coors_ON, beta_coors_OFF, lmda_bnd):#(on field beta coordinates, Off field beta coordinates, lambda bin parameters)
@@ -83,25 +84,49 @@ class bin_betas:#class to make histogram of betas in each bin
                 #print lower_bound, upper_bound
     
     def optimize(self):
-        iters = 100000
+        iters = 5000000
         sigmas = []
-        os.system("rm -r stream_beta_plots/lamb*")
+        #os.system("rm -r stream_beta_plots/lamb*")
+        s1 = [5,5,10,.12,.12]# initial step size guess
+        s2 = [8,10,16,.15,.12]
+        s3 = [5,10,16,.08, .06]
+        s4 = [5,8,10,.08,.2]
+        
+        steps  = [s1, s2, s3, s4]
+        r1 = [[-5,0.], [205,215], [55,70], [.25,.4], [1.0,1.5]]
+        r2 = [[0,4], [285,300], [55,70], [-.4,-.2], [.55,.7]]
+        r3 = [[1.,5], [255,270], [65,80], [.2,.35], [.7,.8]]
+        r4 = [[-4.,2], [15,25], [50,65], [.25,.4], [1.0,1.5]]
+        ranges = [r1, r2, r3, r4]
+        
         for i in range(0, self.lmda_bnd.Nbins):
-            self.fit = diff_evo(self.bin_centers , self.binned_beta_combined[i], iters )
+            self.fit = diff_evo(self.bin_centers , self.binned_beta_combined[i], iters, "pop/bin_" + str(i) + '.pop' )
 
-            self.fit.pop.save_population("pop/bin_" + str(i) + '.pop')
-            #self.fit = diff_evo(self.bin_centers , self.binned_beta_combined[i], iters,"bin_" + str(i) + '.pop' )
+            #self.fit.pop.save_population("pop/bin_" + str(i) + '.pop')
             self.fit_paras = self.fit.pop.best_paras
             self.cost = self.fit.pop.best_cost
             print 'BIN: ', i
             print 'Paras: ', self.fit_paras
             
-            errors = hessian(self.fit.cost, self.fit_paras)
-            sigmas.append(self.fit_paras[4])
-            print 'ERRORS: ', errors.errs, '\n'
-
-            self.plot_each_bin(i) # plot each lambda bin seperately
-        self.plot_sigma(sigmas)
+            #sweep = parameter_sweeps(self.fit, self.fit_paras, str(i), [-400.,400.])
+            errors = hessian(self.fit.cost, self.fit_paras, steps[i]) #initial errors
+            #print 'ERRORS: ' , errors.errs, '\n'
+            errors1 = hessian(self.fit.cost, self.fit_paras, errors.errs) #use previous errors as step size
+            for j in range(0, 20):#keep running until error is same as step sizes
+                step_sizes = errors1.errs
+                errors1 = hessian(self.fit.cost, self.fit_paras, errors1.errs)
+            #print 'STEP SIZES: ', step_sizes
+            print 'UPDATED ERRORS: ', errors1.errs, '\n'
+            #sigmas.append(self.fit_paras[4])
+            
+            errors2 = variable_error(self.fit, self.fit_paras, self.cost)
+            print 'ERRORS+: ', errors2.error1
+            print 'ERRORS-: ', errors2.error2
+            
+            #sweep = parameter_sweeps(self.fit, self.fit_paras, str(i), ranges[i])
+            
+            #self.plot_each_bin(i) # plot each lambda bin seperately
+        #self.plot_sigma(sigmas)
         
     def plot_each_bin(self, i = None):
         w = 0.25
@@ -112,7 +137,7 @@ class bin_betas:#class to make histogram of betas in each bin
         plt.ylabel("counts")
         plt.xlabel(r"$\beta_{Orphan}$")
         
-        # this is sloppy.
+        # this is sloppy. but whatevs
         if(i != None):
             fit_paras = self.fit_paras
             fit_xs, fit_fs = self.fit.cost.generate_plot_points(fit_paras)
