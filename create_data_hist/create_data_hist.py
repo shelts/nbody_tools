@@ -5,68 +5,21 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 import os
 from subprocess import call
-import matplotlib.pyplot as plt
 
-from mpl_toolkits.mplot3d import Axes3D
-from matplotlib.ticker import AutoMinorLocator
+from bin_classes import *
 from vel_disp import *
 from beta_bins import *
-        
-class beta_data:
-    def __init__(self):
-        self.sums = []; self.sqsums = []
-        self.disp = []; self.disp_err = []
-        self.binN = []
-        self.beta_coors = []
-        
-class binned_data:                          # class to store binned data
-    def __init__(self):
-        self.counts = []
-        self.err = []
-        
-class bin_parameters:                       # class to store binner parameters
-    def __init__(self, file_name = None):   # init the data bins since its common between star counts and vgsr disp.
-        self.bin_lowers = []                # the lower coordinates for each bin 
-        self.bin_uppers = []                # the upper coordinates for each bin
-        self.bin_N = []                     # to store the counts from Yannys data to compare with out own binned counts
-        self.bin_centers = []                 # to store the bin centers for plotting
-        self.Nbins = None                   # the number of bins
-        
-        if(file_name):                      # if there is a data file with bin beginnings and endings then we can use that
-            file_name = open(file_name, "r")
-            for line in file_name:
-                ss = line.split(" ")
-                bn_lower = float(ss[0])             # read the lower and upper bin coordinates from file
-                bn_upper = float(ss[1])
-                if(len(ss) > 3):
-                    bn_n     = float(ss[3])             # the counts yanny has in his data for that bin    
-                self.bin_lowers.append(bn_lower)    # store bin upper and lower coordinates
-                self.bin_uppers.append(bn_upper)
-                if(len(ss) > 3):
-                    self.bin_N.append(bn_n)
-                self.bin_centers.append(bn_lower + (bn_upper - bn_lower) / 2.0) # center of the bin which is what we will plot
-                
-            self.Nbins = len(self.bin_lowers) 
-            
-        else: # regularly size the bins automatically if we don't use Yanny's bin coordinates
-            self.Nbins = 10 
-            self.bin_start = -30.0
-            self.bin_end   = 30.0
-            self.bin_size = (abs(self.bin_start - self.bin_end) / self.Nbins)
-            self.bin_centers = []
-            for i in range(0, self.Nbins):
-                self.bin_centers.append(self.bin_start + self.bin_size * (0.5  + i) ) # middle bin coordinates
-
-
+from plot_functions import *
 
 class data:#class system for reading in data and making a data histogram
     def __init__(self, on_field_counts_file, off_field_counts_file):
         self.on_field_counts_file = on_field_counts_file
         self.off_field_counts_file = off_field_counts_file
-        
-        self.ON_count_err = []
-        self.OFF_count_err = []
-        #self.negate = True
+        self.beta_ON  = beta_data()
+        self.beta_OFF = beta_data()
+        self.bin_ON   = binned_data()
+        self.bin_OFF  = binned_data()
+
         self.negate = False
         self.read_counts()
         self.data_correction()
@@ -74,10 +27,6 @@ class data:#class system for reading in data and making a data histogram
     def read_counts(self):
         self.ON_star_N_lbda = []; self.OFF_star_N_lbda = [];
         self.ON_star_N_beta = []; self.OFF_star_N_beta = [];
-        self.beta_ON  = beta_data()
-        self.beta_OFF = beta_data()
-        self.bin_ON   = binned_data()
-        self.bin_OFF  = binned_data()
         
         f = open(self.on_field_counts_file, 'r')
         g = open(self.off_field_counts_file, 'r')
@@ -190,7 +139,7 @@ class data:#class system for reading in data and making a data histogram
                     beta_binN[j]       += 1.0
                     
                     if(field == "ON"):
-                        self.beta_ON.beta_coors[j].append(star_N_beta[i])
+                        self.beta_ON.beta_coors[j].append(star_N_beta[i]) # storing the beta coordinates for current bin
                     elif(field == "OFF"):
                         self.beta_OFF.beta_coors[j].append(star_N_beta[i])
                         
@@ -263,39 +212,6 @@ class data:#class system for reading in data and making a data histogram
                 self.bin_normed.err.append(1.0 / total)              # if there is no counts, then the error is set to this default #
 
 
-    def plot_counts(self):
-        plt.xlim(50, -50)
-        plt.ylim(0, 1500)
-        plt.xlabel("$\Lambda_{Orphan}$")
-        plt.ylabel("N")
-        plt.xticks( [50, 40, 30, 20, 10, 0, -10, -20, -30, -40, -50])
-        #plt.tick_params(which='minor', length=4, color='r')
-        w = 2.6
-        if(len(self.bin_ON.counts) > 0):
-            plt.bar(self.bnd.bin_centers, self.bin_ON.counts, width = w, color = "w", edgecolor = "k", alpha = 1)
-        if(len(self.bin_OFF.counts) > 0):
-            plt.bar(self.bnd.bin_centers, self.bin_OFF.counts, width = w, color = "w", edgecolor = "r", alpha = 0.5)
-        
-        if(len(self.bin_diff.counts) > 0):
-            plt.bar(self.bnd.bin_centers, self.bin_diff.counts, width = w, color = "b", edgecolor = "b", alpha = 0.5)
-            #plt.bar(self.bnd.bin_centers, self.bnd.bin_N, width = w, color = "k", edgecolor = "b", alpha = 0.5)
-        plt.savefig('plots/figure5_recreation.png', format='png')
-        plt.clf()
-        #plt.show()
-    
-    def plot_simN_normed(self):
-        plt.xlim(50, -50)
-        #plt.ylim(0, 1500)
-        plt.xlabel("$\Lambda_{Orphan}$")
-        plt.ylabel("N")
-        plt.xticks( [50, 40, 30, 20, 10, 0, -10, -20, -30, -40, -50])
-        #plt.tick_params(which='minor', length=4, color='r')
-        w = 2.6
-        plt.bar(self.bnd.bin_centers, self.bin_normed.counts, width = w, color = "b", edgecolor = "b", alpha = 0.5)
-        plt.savefig('plots/figure5_simunits_normed.png', format='png')
-        plt.clf()
-        #plt.show()   
-        
         
     def make_mw_hist(self, vgsr = None):
         hist = open("data_hist_fall_2017.hist", "w")
@@ -343,6 +259,7 @@ def main():
     bin_data = "custom_bins4.dat"
     
     dat = data(on_field_counts_file, off_field_counts_file)
+    lamda_beta_plot(dat)
     # initiaze bins parameters #
     if(use_yanny_bins):
         dat.bnd = bin_parameters(bin_data)
@@ -366,7 +283,7 @@ def main():
     #print dat.bnd.bin_centers
     # plot the binned counts #
     if(plot_counts):
-        dat.plot_counts()                                       
+        plot_binned_counts(dat)                                       
     
     # bin the beta counts #
     if(calc_beta_dispersions):
@@ -381,7 +298,7 @@ def main():
         dat.normalize_counts(dat.bin_diff.counts, dat.bin_diff.err)
     
     if(plot_normed_counts):
-        dat.plot_simN_normed()  
+        plot_simN_normed(dat)  
     
     # deletes binned diff. only need converted #
     dat.data_clear('binned diff')

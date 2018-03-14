@@ -9,7 +9,7 @@ import sys
 from test_data import *
 from differential_evolution import *
 from hessian import *
-
+from hessian2 import *
 def plot(test, fit, name):
     w = 0.25
     plt.figure()
@@ -176,4 +176,7 @@ class parameter_sweeps:
     #file_name = args[1]
 ##main(file_name)
 
-
+#def main():
+    #h = hessian2(None, None, None)
+    
+#main()

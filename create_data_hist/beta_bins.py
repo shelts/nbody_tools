@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import AutoMinorLocator
 from differential_evolution import *
 from hessian import *
+from hessian2 import *
 from nbody_functional import *
 from testing_hessian import parameter_sweeps
 
@@ -32,10 +33,9 @@ class bin_betas:#class to make histogram of betas in each bin
         self.initialize_beta_bins(beta_coors_ON, beta_coors_OFF) # sets up the beta bins
         del beta_coors_ON, beta_coors_OFF # free up some space
         
-        self.off_field_star_density()
+        #self.off_field_star_density()
         #self.den_correction()
         
-        #self.plot_3d() # make one 3D plot of the stream
         #self.plot_each_bin()
         self.optimize()
         
@@ -108,20 +108,26 @@ class bin_betas:#class to make histogram of betas in each bin
             print 'BIN: ', i
             print 'Paras: ', self.fit_paras
             
-            #sweep = parameter_sweeps(self.fit, self.fit_paras, str(i), [-400.,400.])
-            errors = hessian(self.fit.cost, self.fit_paras, steps[i]) #initial errors
-            #print 'ERRORS: ' , errors.errs, '\n'
-            errors1 = hessian(self.fit.cost, self.fit_paras, errors.errs) #use previous errors as step size
-            for j in range(0, 20):#keep running until error is same as step sizes
+            
+            errors1 = hessian(self.fit.cost, self.fit_paras, None) #initial errors
+            #errors2 = hessian2(self.fit.cost, self.fit_paras, None) #initial errors
+            print 'ERRORS: ' , errors1.errs, '\n'
+            #print 'ERRORS: ' , errors2.errs, '\n'
+            for j in range(0, 10):#keep running until error is same as step sizes
                 step_sizes = errors1.errs
                 errors1 = hessian(self.fit.cost, self.fit_paras, errors1.errs)
+                
+                #step_sizes2 = errors2.errs
+                #errors2 = hessian2(self.fit.cost, self.fit_paras, errors2.errs)
+                
             #print 'STEP SIZES: ', step_sizes
-            print 'UPDATED ERRORS: ', errors1.errs, '\n'
+            print 'UPDATED ERRORS: ', errors1.errs
+            #print 'UPDATED ERRORS2: ', errors2.errs, '\n'
             #sigmas.append(self.fit_paras[4])
             
-            errors2 = variable_error(self.fit, self.fit_paras, self.cost)
-            print 'ERRORS+: ', errors2.error1
-            print 'ERRORS-: ', errors2.error2
+            #errors2 = variable_error(self.fit, self.fit_paras, self.cost)
+            #print 'ERRORS+: ', errors2.error1
+            #print 'ERRORS-: ', errors2.error2
             
             #sweep = parameter_sweeps(self.fit, self.fit_paras, str(i), ranges[i])
             
