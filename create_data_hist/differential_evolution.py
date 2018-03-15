@@ -10,7 +10,6 @@
 
 import math as mt
 import random
-import matplotlib.pyplot as plt
 from cost import *
 
 #random.seed(a = 12345678)
