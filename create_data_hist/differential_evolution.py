@@ -172,7 +172,7 @@ class diff_evo:
     def run_optimization(self): # runs through the optimization. Each iteration updates the population
         counter = 0
         cost = self.pop.pop_costs[0]
-        while(counter < self.optimization_iterations and not self.converged): # TODO: Currently will run a fixed number of iterations. Will stop if population is converged.
+        while(counter < self.optimization_iterations ): # TODO: Currently will run a fixed number of iterations. Will stop if population is converged.
             # note: this updates the population as you go. does not create a new updated population list. 
             for i in range(0, self.pop_size): # will go through each member of the current population to update it
                 self.pop.update(i, self.cross_over, self.differential_weight, self.cost, self.ranges) # this will update the member of the population
