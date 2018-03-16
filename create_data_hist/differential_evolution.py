@@ -112,11 +112,10 @@ class population: # a class to create, store and update a population for differe
         counter = 0
         
         for i in range(1, self.pop_size):
-            if(round(self.pop_costs[best_index],8) != round(self.pop_costs[i], 8)):
+            if(round(self.pop_costs[best_index],8) != round(self.pop_costs[i], 8)):# check for convergence
                 counter += 1
             if(round(self.pop_costs[i],8) < round(self.pop_costs[best_index], 8)): # check for the best cost
                 best_index = i # just keep the best index. that maps to everything needed
-                    break
                 
         if(counter == 0):
             converged = True
