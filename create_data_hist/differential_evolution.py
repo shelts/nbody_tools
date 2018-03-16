@@ -112,9 +112,11 @@ class population: # a class to create, store and update a population for differe
         counter = 0
         
         for i in range(1, self.pop_size):
+            if(round(self.pop_costs[best_index],8) != round(self.pop_costs[i], 8)):
+                counter += 1
             if(round(self.pop_costs[i],8) < round(self.pop_costs[best_index], 8)): # check for the best cost
                 best_index = i # just keep the best index. that maps to everything needed
-                counter += 1
+                    break
                 
         if(counter == 0):
             converged = True
@@ -133,7 +135,6 @@ class population: # a class to create, store and update a population for differe
                 f.write("\t%0.15f" % self.cur_pop[i][j])
             f.write("\n")
         f.close()
-    
     
     
 class diff_evo: 
@@ -171,7 +172,7 @@ class diff_evo:
     def run_optimization(self): # runs through the optimization. Each iteration updates the population
         counter = 0
         cost = self.pop.pop_costs[0]
-        while(counter < self.optimization_iterations ): # TODO: Currently will run a fixed number of iterations. Will stop if population is converged.
+        while(counter < self.optimization_iterations and not self.converged): # TODO: Currently will run a fixed number of iterations. Will stop if population is converged.
             # note: this updates the population as you go. does not create a new updated population list. 
             for i in range(0, self.pop_size): # will go through each member of the current population to update it
                 self.pop.update(i, self.cross_over, self.differential_weight, self.cost, self.ranges) # this will update the member of the population
