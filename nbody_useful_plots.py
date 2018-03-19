@@ -19,15 +19,15 @@ from nbody_functional import *
 
 def plot(hist1, hist2, name, label1, label2): #plots two histograms. 
     ylimit = 0.4
-    xlower = 180 
-    xupper = -180
+    xlower = 50 
+    xupper = -50
     w_overlap = 2.5
     w_adjacent = 3.5
-    folder = 'quick_plots/hists/'
+    folder = 'quick_plots/hists_outs/'
     #folder = ''
     #folder = 'like_surface/'
-    save_folder_ove = 'quick_plots/comp_hist_plots/overlap/'
-    save_folder_adj = 'quick_plots/comp_hist_plots/adj/'
+    save_folder_ove = '/home/sidd/Desktop/research/quick_plots/comp_hist_plots/overlap/'
+    save_folder_adj = '/home/sidd/Desktop/research/quick_plots/comp_hist_plots/adj/'
     #os.system("" + path + "scripts/plot_matching_hist.py " + hist1 + " " + hist2)
     print "plot histogram 1: ", hist1
     print "plot histogram 2: ", hist2
@@ -36,8 +36,8 @@ def plot(hist1, hist2, name, label1, label2): #plots two histograms.
 
     
     print("plotting histograms\n")
-    hist1 = nbody_histograms(folder + plot_hist1)
-    hist2 = nbody_histograms(folder + plot_hist2)
+    hist1 = nbody_histograms(plot_hist1)
+    hist2 = nbody_histograms(plot_hist2)
             
             
     # plot overlapping #

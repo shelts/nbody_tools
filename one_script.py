@@ -30,15 +30,15 @@ sgr_dir = '/Users/master/sidd_research/'
 path = sid_dir
 
 args_run = [3.95, 0.2, 0.2, 12, 0.2] 
-args_run_comp = [3.95, 0.2, 0.2, 12, 0.2] 
-args_run_comp = [3.94243049428117, 0.204575760168173, 0.179013230102704, 12.0318620456042, 0.140573755762348]
+args_run_comp = [3.9, 0.2, 0.2, 12, 0.2] 
+#args_run_comp = [3.94243049428117, 0.204575760168173, 0.179013230102704, 12.0318620456042, 0.140573755762348]
 # # # # # # # # # # # # # # # # # # # # # # # #
 #              Standard Run switches          #
 # # # # # # # # # # # # # # # # # # # # # # # #
-run_nbody                 = y                 #
+run_nbody                 = n                 #
 remake                    = n                 #
 run_and_compare           = n                 #
-match_histograms          = n                 #
+match_histograms          = y                 #
 run_from_checkpoint       = n                 #
 # # # # # # # # # # # # # # # # # # # # # # # #
 
@@ -77,14 +77,14 @@ histogram_v168 = 'hist_v168_3p95_0p2_0p2_12_0p2__1_31_18_diffSeed'
 
 #    hist to match against for compare after run  #
 correct_hist = 'hist_v168_3p95_0p2_0p2_12_0p2__1_31_18_diffSeed'
-compare_hist = 'data_hist_fall_2017'
+compare_hist = 'data_hist_spring_2018'
 
 
 
 #    hist name for the nbody run: either set them manually or use from the list above #
 folder = path + 'quick_plots/hists_outs/'
-correctans_hist = folder + 'test'
-comparison_hist = folder + 'test'
+correctans_hist = folder + 'data_hist_spring_2018'
+comparison_hist = folder + 'data_hist_test'
 
 plot_name = compare_hist
 
@@ -146,8 +146,8 @@ def main():
     standard_run()
     
     t = nbody_outputs(sid_dir + 'quick_plots/hists_outs/mw@home_best_fit.out')
-    print t.convert_to_Lambda_Beta(255.0, 48.5, 0, False)
-    print t.convert_to_Lambda_Beta(22.344184526493443, 0.08187171980007737, 0, False)    
+    #print t.convert_to_Lambda_Beta(255.0, 48.5, 0, False)
+    #print t.convert_to_Lambda_Beta(22.344184526493443, 0.08187171980007737, 0, False)    
     if(lb_plot_switch):
         lb_plot(output)
     

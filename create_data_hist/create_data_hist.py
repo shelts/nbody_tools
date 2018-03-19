@@ -245,10 +245,10 @@ def main():
     use_vgsr = False
     use_yanny_bins = True
     calc_beta_dispersions = True
-    make_hist = True
-    normalize_counts =  True
+    make_hist = False
+    normalize_counts =  False
     
-    plot_counts = True
+    plot_counts = False
     plot_normed_counts = False
     
     # name of the data files # 

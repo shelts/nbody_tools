@@ -117,7 +117,9 @@ class parameter_sweeps:
         plt.savefig('plots/parameter_sweeps_data' + name + '.png', format='png')
         plt.clf()
         
-        
+  
+  
+
 #def main(file_name = None):
     #paras = []
     #p1 = [-1.75, 207., 61., 0.34, 1.07]

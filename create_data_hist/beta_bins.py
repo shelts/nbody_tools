@@ -96,7 +96,7 @@ class bin_betas:#class to make histogram of betas in each bin
         ranges = [r1, r2, r3, r4]
         
         for i in range(0, self.lmda_bnd.Nbins):
-            file_name = "pop/bin2_" + str(i) + '.pop'
+            #file_name = "pop/bin2_" + str(i) + '.pop'
             if file_name:
                 iters = 1
             self.fit = diff_evo(self.bin_centers , self.binned_beta_combined[i], iters, file_name)

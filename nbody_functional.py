@@ -47,7 +47,7 @@ class nbody_running_env:
                          -o " +  simulation_hist + ".out "
         
         #final piece to the run command. includes the number of threads, output format, and visualizer args
-        end_piece = "-n 10  -b  --visualizer-bin=" + self.path + "nbody_test/bin/milkyway_nbody_graphics -i " + (ft) + " " + bt + " " + rl + " " + rr + " " + ml + " " + mr
+        end_piece = "-n 10 -P -b  --visualizer-bin=" + self.path + "nbody_test/bin/milkyway_nbody_graphics -i " + (ft) + " " + bt + " " + rl + " " + rr + " " + ml + " " + mr
         
         if(not comparison_hist): ##this willl produce a single run of nbody, without comparing the end result to anything
             run_command += end_piece #completing the run command
@@ -293,7 +293,7 @@ class nbody_histograms:#a class that takes in data from nbody histogram files an
         self.get_data()
         
     def get_data(self):
-        self.lbins = []; self.counts = []; self.count_err = []; self.vd = []; self.vd_error = []
+        self.lbins = []; self.counts = []; self.count_err = []; self.bd = []; self.bd_error = []; self.vd = []; self.vd_error = []
         read_data = False
 
         lines = open(self.file_name, 'r')
@@ -312,8 +312,10 @@ class nbody_histograms:#a class that takes in data from nbody histogram files an
                     self.lbins.append(    float(ss[1]))
                     self.counts.append(   float(ss[3]))
                     self.count_err.append(float(ss[4]))
-                    self.vd.append(       float(ss[5]))
-                    self.vd_error.append( float(ss[6]))
+                    self.bd.append(       float(ss[5]))
+                    self.bd_error.append( float(ss[6]))
+                    self.vd.append(       float(ss[7]))
+                    self.vd_error.append( float(ss[8]))
                     
         lines.close()
         
