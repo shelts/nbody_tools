@@ -16,7 +16,8 @@ plot_2D = n
 
 path = '/home/sidd/Desktop/research/'
 folder = path + "like_surface/"
-name_of_sweeps = '_beta_dispersions'
+name_of_sweeps = 'parameter_sweep_beta_dispersions'
+name_of_sweeps = 'parameter_sweep_data_hist_spring_2018'
 #name_of_sweeps = '_2d'
 
 oneD_names   = ['ft', 'r', 'rr', 'm', 'mr']
@@ -47,7 +48,7 @@ plot_dim2 = [4, 5]
 def oneD_plot():
     titles  = ['Backward Evolve Time (Gyr)',  'Baryon Scale Radius (kpc)', r'Scale Radius Ratio ($R_{B}/(R_{B}+R_{D})$)', 'Baryonic Mass (SMU)',  'Mass Ratio (Baryonic/Total)']
     plot_corr = 231
-    l = -200
+    l = -2000
     plt.figure(figsize=(20, 10))
     for i in range(plot_dim[0], plot_dim[1]):
         plt.subplot(plot_corr + i)
@@ -58,12 +59,12 @@ def oneD_plot():
         if(i == 0 or i == 3):
             plt.ylabel('Likelihood', fontsize=16)
         plt.xlabel(titles[i], fontsize=16)
-        plt.xlim(ranges[i][0], ranges[i][1])
+        #plt.xlim(ranges[i][0], ranges[i][1])
         plt.ylim(l, 0)
         plt.plot(sweep.vals, sweep.liks, linestyle = '-', linewidth = 2, color ='b')
         plt.scatter(sweep.vals, sweep.liks, marker = 'o', s = 4, color ='r')
         plt.plot(sweep.corr, sweep.cor2, linestyle = '-', linewidth = 1, color ='k', alpha = 1)
-    plt.savefig(folder + 'parameter_sweeps' + name_of_sweeps + '/multiplot.png', format = 'png')
+    plt.savefig(folder + name_of_sweeps + '/multiplot.png', format = 'png')
 
 # # # # # # # # # # # # # # # # # # # # # #
 #    Two Dimensional Surface Sweep Func   #
@@ -91,7 +92,7 @@ def twoD_plot():
             ax.set_zlim(l, 0)
             ax.scatter(sweep.vals, sweep.liks, marker = 'o', s = 4, color ='r')
             plt.plot(sweep.corr, sweep.cor2, linestyle = '-', linewidth = 1, color ='k', alpha = 1)
-            plt.savefig(folder + 'parameter_sweeps' + name_of_sweeps + '/multiplot.png', format = 'png')
+            plt.savefig(folder + name_of_sweeps + '/multiplot.png', format = 'png')
     return 0
 
 def main():

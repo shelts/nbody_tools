@@ -50,13 +50,13 @@ which_sweeps2 = [run_ft, run_r, run_rr, run_m, run_mr]
     
 class sweep:
     def __init__(self, p1, p2, nbody):
-        os.system("mkdir " + path + "like_surface/hists/parameter_sweeps")
+        os.system("mkdir " + path + "like_surface/hists/parameter_sweep")
         
         self.p1 = p1 #parameter index
         self.p2 = p2
         self.data_vals1 = []
         self.data_vals2 = []
-        self.data_val_file = path + "like_surface/hists/parameter_sweeps" + "/" + parameters_names[self.p1] + "_" + parameters_names[self.p2] + "_vals.txt"
+        self.data_val_file = path + "like_surface/hists/parameter_sweep" + "/" + parameters_names[self.p1] + "_" + parameters_names[self.p2] + "_vals.txt"
         
         self.get_data_vals()
         self.run_sweep(nbody)
@@ -79,7 +79,7 @@ class sweep:
             paras[self.p2] = self.data_vals2[i]
             
             output_hist = folder + parameters_names[self.p1] + "_" + parameters_names[self.p2] + "_hists/" + "arg_" + str(paras[0]) + "_" + str(paras[1]) + "_" + str(paras[2]) + "_" + str(paras[3]) + "_" + str(paras[4])
-            pipe_name = folder + "parameter_sweeps/" + parameters_names[self.p1] + "_" + parameters_names[self.p2] + ".txt"
+            pipe_name = folder + "parameter_sweep/" + parameters_names[self.p1] + "_" + parameters_names[self.p2] + ".txt"
             nbody.run(paras, output_hist, input_hist, pipe_name)
     
     def write_data_vals(self):

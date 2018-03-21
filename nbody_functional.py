@@ -68,8 +68,8 @@ class nbody_running_env:
     def match_hists(self, hist1, hist2, pipe = None):#will compare to hist without running nbody simulation.
         print "matching histograms: "
         command = " " + self.path + "nbody_test/bin/milkyway_nbody" + self.version \
-                + " -h " + hist1 + '.hist' \
-                + " -D " + hist2 + '.hist'
+                + " -h " + hist2 + '.hist' \
+                + " -D " + hist1 + '.hist'
         
         #using call here instead so the format of using it is on record
         if(pipe):#produces the comparison to stdout
@@ -338,7 +338,7 @@ class sweep_data:
         self.sort()
         
     def parse(self):
-        location = self.folder + 'parameter_sweeps' + self.sweep_name + '/' + 'parameter_sweeps' + self.sweep_name
+        location = self.folder + self.sweep_name + '/' + self.sweep_name
         likelihood_file = open(location + '/' + self.sweep_parameter + '' + '.txt', 'r')
         data_file = open(location + '/' + self.sweep_parameter + '_vals' + '.txt', 'r')
         parameter_vals = []
@@ -367,6 +367,7 @@ class sweep_data:
             counter_g +=1
             
         if(counter_l != counter_g):
+            print counter_l, counter_g
             print 'WARNING: likelihood_data and parameter_val data length mismatch'
         else:
             self.dataN = counter_l

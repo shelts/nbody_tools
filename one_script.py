@@ -121,7 +121,7 @@ def standard_run():
         nbody.run(args_run_comp, comparison_hist, correctans_hist)
     
     if(match_histograms):
-        nbody.match_hists(correctans_hist, comparison_hist)
+        nbody.match_hists(comparison_hist, correctans_hist)
         
     if(plot_hists):
         plot(correctans_hist , comparison_hist, plot_name, '1', '2')
