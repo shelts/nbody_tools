@@ -89,7 +89,7 @@ class sweep:
         f.close()
         
 def mk_dirs():
-    os.system(folder)
+    os.system("mkdir " + folder)
     for i in range(len(parameters_names)):
         os.system("mkdir " + folder + parameters_names[i] + "_hists")
     return 0
