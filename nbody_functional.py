@@ -69,7 +69,7 @@ class nbody_running_env:
         print "matching histograms: "
         command = " " + self.path + "nbody_test/bin/milkyway_nbody" + self.version \
                 + " -h " + hist2 + '.hist' \
-                + " -D " + hist1 + '.hist'
+                + " -S " + hist1 + '.hist'
         
         #using call here instead so the format of using it is on record
         if(pipe):#produces the comparison to stdout
@@ -429,3 +429,4 @@ class sweep_data:
             self.cor2.append(-10.0 * i)
             if(self.dim > 1):
                 self.vals2.append(self.values[i].val2)
+                

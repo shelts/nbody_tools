@@ -20,6 +20,7 @@ lua           = path + "lua/full_control.lua"
 
 args = [3.95, 0.2, 0.2, 12, 0.2]
 input_hist    = folder + "arg_" + str(args[0]) + "_" + str(args[1]) + "_" + str(args[2]) + "_" + str(args[3]) + "_" + str(args[4]) + "_correct"
+input_hist  = 'data_hist_spring_2018'
 parameters_names = ['ft', 'r', 'rr', 'm', 'mr']
 
 ranges  = [ [2.0, 6.0],  \

@@ -14,8 +14,9 @@ sid_dir = '/home/sidd/Desktop/research/'
 sgr_dir = '/Users/master/sidd_research/'
 path = sid_dir
 
-ext = 'parameter_sweep_data_hist_spring_2018'
-folder        = path + "like_surface/" + ext + "/"
+sweep_name = 'parameter_sweep_data_hist_spring_2018'
+#sweep_name = 'parameter_sweep_beta_dispersions'
+folder        = path + "like_surface/" + sweep_name + "/"
 binary        = path + "nbody_test/bin/milkyway_nbody"
 lua           = path + "lua/full_control.lua"
 
@@ -44,7 +45,7 @@ class recalc_sweep:
         
         self.parameter = parameter #parameter index
         self.data_vals = []
-        self.data_val_file = folder + ext + "/" + parameters_names[self.parameter] + "_vals.txt"
+        self.data_val_file = folder + sweep_name + "/" + parameters_names[self.parameter] + "_vals.txt"
         os.system("cp " + self.data_val_file + " " + folder + "recalc_parameter_sweep/")
         
         self.read_data_vals()
