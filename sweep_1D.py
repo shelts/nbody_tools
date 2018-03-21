@@ -28,7 +28,7 @@ ranges  = [ [2.0, 6.0],  \
             [1., 60.0,], \
             [.01, .95,],   \
           ]   
-search_N = [5, 5, 5, 5, 5]
+search_N = [50, 50, 50, 50, 50]
 y = True
 n = False
 
@@ -39,10 +39,10 @@ make_correct_hist = y
 random_iter       = y
 
 run_ft = y
-run_r  = n
-run_rr = n
-run_m  = n
-run_mr = n
+run_r  = y
+run_rr = y
+run_m  = y
+run_mr = y
 which_sweeps = [run_ft, run_r, run_rr, run_m, run_mr]
 #--------------------------------------------------------------------------------------------------
 
