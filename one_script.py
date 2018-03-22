@@ -140,8 +140,8 @@ def main():
     dat = 'data_hist_spring_2018'
     sim = 'arg_3.95_0.2_0.2_12_0.2_correct'
     
-    nbody.run(args_run, 'test1', dat)
-    nbody.run(args_run, 'test2', sim)
+    nb.run(args_run, 'test1', dat)
+    nb.run(args_run, 'test2', sim)
     
     
         

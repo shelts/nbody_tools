@@ -969,7 +969,7 @@ def main():
     file1 = 'arg_3.95_0.2_0.2_12_0.2_correct2'
     file2 = 'arg_3.95_0.2_0.2_12_0.2_correct1'
     
-    plot_hist_lambda_beta(file1, file2)
+    #plot_hist_lambda_beta(file1, file2)
     
     #plot_lmda_beta(file1, file2)
     #veldisp(file2)
