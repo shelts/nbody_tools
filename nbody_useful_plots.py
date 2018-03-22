@@ -560,15 +560,13 @@ def lb_plot(file_name): #plots lb from output
 
 
 def plot_hist_lambda_beta(file1, file2, file_name = None):
-    path = 'quick_plots/'
-    hist = path + 'hists/'
-    outs = path + 'outputs/'
+    path = '/home/sidd/Desktop/research/quick_plots/hists_outs/'
     
-    out1 = nbody_outputs(outs + file1 + ".out")
-    out2 = nbody_outputs(outs + file2 + ".out")
+    out1 = nbody_outputs(path + file1 + ".out")
+    out2 = nbody_outputs(path + file2 + ".out")
     
-    hist1 = nbody_histograms(hist + file1 + ".hist")
-    hist2 = nbody_histograms(hist + file2 + ".hist")
+    hist1 = nbody_histograms(path + file1 + ".hist")
+    hist2 = nbody_histograms(path + file2 + ".hist")
     
     w_overlap = 2.5
     w_adjacent = 1.5
@@ -688,16 +686,15 @@ def plot_hist_lambda_beta_single(file1, file_name = None):
         plt.savefig('/home/sidd/Desktop/research/quick_plots/lambda_beta_without_dark', format='png')
             
     return 0 
+
 def plot_lmda_beta(file1, file2):
-    path = 'quick_plots/'
-    hist = path + 'hists/'
-    outs = path + 'outputs/'
+    path = '/home/sidd/Desktop/research/quick_plots/hists_outs/'
     
-    out1 = nbody_outputs(outs + file1 + ".out")
-    out2 = nbody_outputs(outs + file2 + ".out")
+    out1 = nbody_outputs(path + file1 + ".out")
+    out2 = nbody_outputs(path + file2 + ".out")
     
-    hist1 = nbody_histograms(hist + file1 + ".hist")
-    hist2 = nbody_histograms(hist + file2 + ".hist")
+    hist1 = nbody_histograms(path + file1 + ".hist")
+    hist2 = nbody_histograms(path + file2 + ".hist")
     
     w_overlap = 2.5
     w_adjacent = 1.5
@@ -969,10 +966,10 @@ def single_xyz(file_name):
 
 
 def main():
-    file1 = 'hist_v166_3p95_0p2_0p2_12_0p2__1_2_2018'
-    file2 = 'hist_v166_3p95_0p2_0p2_12_0p2__1_2_2018'
+    file1 = 'arg_3.95_0.2_0.2_12_0.2_correct2'
+    file2 = 'arg_3.95_0.2_0.2_12_0.2_correct1'
     
-    #plot_hist_lambda_beta(file1, file2)
+    plot_hist_lambda_beta(file1, file2)
     
     #plot_lmda_beta(file1, file2)
     #veldisp(file2)

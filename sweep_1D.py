@@ -47,7 +47,6 @@ run_mr = y
 which_sweeps = [run_ft, run_r, run_rr, run_m, run_mr]
 #--------------------------------------------------------------------------------------------------
 
-    
 class sweep:
     def __init__(self, parameter, nbody):
         os.system("mkdir " + folder + "parameter_sweep")

@@ -45,7 +45,7 @@ run_from_checkpoint       = n                 #
 # # # # # # # # # # # # # # # # # # # # # # # #
 #              Hist Plot Switches             #
 # # # # # # # # # # # # # # # # # # # # # # # #
-plot_hists                = n                 #
+plot_hists                = y                 #
 plot_veldisp_switch       = n                 #
 vlos_plot_switch          = n                 #
 # # # # # # # # # # # # # # # # # # # # # # # #
@@ -61,14 +61,9 @@ plot_overlapping          = y                 #
 # # # # # # # # # # # # # # # # # # # # # # # #
 
 
-# # # # # # # # # # # # # # # # # # # # # # # #
-#              possible tests                 #
-# # # # # # # # # # # # # # # # # # # # # # # #
-# # # # # # # # # # # # # # # # # # # # # # # #
-
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
                 #/# # # # # # # # # # # # # # \#
-                #          Circuitry           #
+                #          Names               #
                 #\# # # # # # # # # # # # # # /#
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #    Histogram names      #
@@ -83,8 +78,8 @@ compare_hist = 'data_hist_spring_2018'
 
 #    hist name for the nbody run: either set them manually or use from the list above #
 folder = path + 'quick_plots/hists_outs/'
-correctans_hist = folder + 'data_hist_spring_2018'
-comparison_hist = folder + 'data_hist_test'
+correctans_hist = folder + 'arg_3.95_0.2_0.2_12_0.2_correct2'
+simulations_hist = folder + 'arg_3.95_0.2_0.2_12_0.2_correct1'
 
 plot_name = compare_hist
 
@@ -99,12 +94,6 @@ lua = path + 'lua/' + "full_control.lua"
 #lua = path + 'lua/' + "EMD_v168.lua"
 
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-                #/# # # # # # # # # # # # # # \#
-                #          Engine Room         #
-                #\# # # # # # # # # # # # # # /#
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-
 # # # # # # # # # # # # # # # # # # # # # #
 #    standard nbody running functions     #
 # # # # # # # # # # # # # # # # # # # # # #
@@ -118,43 +107,42 @@ def standard_run():
         nbody.run(args_run, correctans_hist)
     
     if(run_and_compare):
-        nbody.run(args_run_comp, comparison_hist, correctans_hist)
+        nbody.run(args_run_comp, simulations_hist, correctans_hist)
     
     if(match_histograms):
-        nbody.match_hists(comparison_hist, correctans_hist)
+        nbody.match_hists(simulations_hist, correctans_hist)
         
     if(plot_hists):
-        plot(correctans_hist , comparison_hist, plot_name, '1', '2')
+        plot(correctans_hist , simulations_hist, plot_name, '1', '2')
         
     if(plot_veldisp_switch):
-        plot_veldisp(correctans_hist , comparison_hist, plot_name + "_velDisp", '1', '2')
+        plot_veldisp(correctans_hist , simulations_hist, plot_name + "_velDisp", '1', '2')
     
     
     if(vlos_plot_switch):
-        vlos_plot(correctans_hist, comparison_hist)
+        vlos_plot(correctans_hist, simulations_hist)
         vlos_plot_single(correctans_hist)
     
     return 0
 # #        
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
-                #/# # # # # # # # # # # # # # \#
-                #          Generator           #
-                #\# # # # # # # # # # # # # # /#
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #    
 def main():
     standard_run()
     
-    t = nbody_outputs(sid_dir + 'quick_plots/hists_outs/mw@home_best_fit.out')
-    #print t.convert_to_Lambda_Beta(255.0, 48.5, 0, False)
-    #print t.convert_to_Lambda_Beta(22.344184526493443, 0.08187171980007737, 0, False)    
     if(lb_plot_switch):
         lb_plot(output)
     
     if(lambda_beta_plot_switch):
         lambda_beta_plot(output)
-        
-        
+    
+    nb = nbody_running_env(lua, version, path)
+    dat = 'data_hist_spring_2018'
+    sim = 'arg_3.95_0.2_0.2_12_0.2_correct'
+    
+    nbody.run(args_run, 'test1', dat)
+    nbody.run(args_run, 'test2', sim)
+    
     
         
 # spark plug #

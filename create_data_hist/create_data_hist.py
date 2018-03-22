@@ -168,7 +168,6 @@ class data:#class system for reading in data and making a data histogram
         return 0
     
     def binned_diff(self):                                                                          # take the difference between the on and off fields.
-        self.beta_diff = beta_data()
         self.bin_diff = binned_data()
 
         if(len(self.bin_ON.counts) > 0 and len(self.bin_OFF.counts) > 0):
@@ -176,14 +175,6 @@ class data:#class system for reading in data and making a data histogram
                 self.bin_diff.counts.append((self.bin_ON.counts[i] - self.bin_OFF.counts[i]))           # find the difference in the on and off field in each bin
                 self.bin_diff.err.append( (self.bin_ON.counts[i] + self.bin_OFF.counts[i])**0.5)    # error in the difference. The error in the counts is the sq root of the counts. The sum of the squares is then this.    
                 
-                #self.beta_diff.sums.append(  (self.beta_ON.sums[i]   - self.beta_OFF.sums[i]))
-                #self.beta_diff.sqsums.append((self.beta_ON.sqsums[i] - self.beta_OFF.sqsums[i]))
-                #self.beta_diff.binN.append(  abs(self.beta_ON.binN[i]   - self.beta_OFF.binN[i]))
-                
-                self.beta_diff.sums.append(  (self.beta_ON.sums[i]))
-                self.beta_diff.sqsums.append((self.beta_ON.sqsums[i] ))
-                self.beta_diff.binN.append(  abs(self.beta_ON.binN[i]))
-    
     def normalize_counts(self, N, Nerr):# need to normalize counts in the mw@home data histogram
         self.bin_normed = binned_data()
         f_turn_offs = 7.5
@@ -194,8 +185,9 @@ class data:#class system for reading in data and making a data histogram
         for i in range(0, len(N)):
             N[i] *= f_turn_offs
             Nerr[i] *= f_turn_offs
-            total += N[i]                       # calc the total counts #
-            total_error +=  Nerr[i] * Nerr[i]   # total error is sum in quadrature of each error #
+            if(N[i] >= 0.0):
+                total += N[i]                       # calc the total counts #
+                total_error +=  Nerr[i] * Nerr[i]   # total error is sum in quadrature of each error #
         total_error = total_error **0.5         # take the sqr root #
         
         self.total_count = total                # for use when printing the histogram
@@ -214,14 +206,14 @@ class data:#class system for reading in data and making a data histogram
 
         
     def make_mw_hist(self, vgsr = None):
-        hist = open("data_hist_fall_2017.hist", "w")
+        hist = open("data_hist_spring_2018.hist", "w")
         hist.write("# Orphan Stream histogram \n# Generated from data from Dr. Yanny from Orphan stream paper\n# format is same as other MW@Home histograms\n#\n#\n")
         hist.write("n = %i\n" % (int(self.total_count)))
         hist.write("massPerParticle = %.15f\n" % (self.mass_per_count))
         hist.write("lambdaBins = %i\nbetaBins = 1\n" % (len(self.bnd.bin_centers)))
         for i in range(0, len(self.bnd.bin_centers)):
             if(vgsr == None):
-                hist.write("1 %.15f %.15f %.15f %.15f %.15f %.15f\n" % (self.bnd.bin_centers[i], 0, self.bin_normed.counts[i], self.bin_normed.err[i],  -1, -1)) # not using vgsr anymore
+                hist.write("1 %.15f %.15f %.15f %.15f %.15f %.15f %.15f %.15f\n" % (self.bnd.bin_centers[i], 0, self.bin_normed.counts[i], self.bin_normed.err[i],  -1, -1, -1, -1)) # not using vgsr anymore
             else:
                 hist.write("1 %.15f %.15f %.15f %.15f %.15f %.15f\n" % (self.bnd.bin_centers[i], 0, self.bin_normed.counts[i], self.bin_normed.err[i],  vgsr.vel.disp[i], vgsr.vel.disp_err[i]))
    
@@ -243,10 +235,10 @@ class data:#class system for reading in data and making a data histogram
     
 def main():
     use_vgsr = False
-    use_yanny_bins = True
-    calc_beta_dispersions = True
-    make_hist = False
-    normalize_counts =  False
+    use_yanny_bins = False
+    calc_beta_dispersions = False
+    make_hist = True
+    normalize_counts =  True
     
     plot_counts = False
     plot_normed_counts = False

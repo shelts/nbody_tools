@@ -41,9 +41,9 @@ class bin_parameters:                       # class to store binner parameters
             self.Nbins = len(self.bin_lowers) 
             
         else: # regularly size the bins automatically if we don't use Yanny's bin coordinates
-            self.Nbins = 10 
-            self.bin_start = -30.0
-            self.bin_end   = 30.0
+            self.Nbins = 24 
+            self.bin_start = -36.0
+            self.bin_end   = 36.0
             self.bin_size = (abs(self.bin_start - self.bin_end) / self.Nbins)
             self.bin_centers = []
             for i in range(0, self.Nbins):
