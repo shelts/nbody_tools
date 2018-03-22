@@ -24,7 +24,7 @@ y = True
 n = False
 #    pathways  #
 #I am tired of constantly adapting it for the servers
-lmc_dir = '~/research/'
+lmc_dir = '/home/shelts/research/'
 sid_dir = '/home/sidd/Desktop/research/'
 sgr_dir = '/Users/master/sidd_research/'
 path = sid_dir
