@@ -17,6 +17,10 @@ from hessian import *
 
 class bin_betas:#class to make histogram of betas in each bin
     def __init__(self, beta_coors_ON, beta_coors_OFF, lmda_bnd):#(on field beta coordinates, Off field beta coordinates, lambda bin parameters)
+        run_optimization = False
+        plot_each_bin = True
+        den_correction = False
+        
         self.binned_beta_ON  = []
         self.binned_beta_OFF = []
         self.binned_beta_combined = []
@@ -34,11 +38,16 @@ class bin_betas:#class to make histogram of betas in each bin
         self.initialize_beta_bins(beta_coors_ON, beta_coors_OFF) # sets up the beta bins
         del beta_coors_ON, beta_coors_OFF # free up some space
         
-        #self.off_field_star_density()
-        #self.den_correction()
+        if(den_correction):
+            self.off_field_star_density()
+            self.den_correction()
         
-        #self.plot_each_bin()
-        self.optimize()
+        if(plot_each_bin):
+            #self.plot_each_bin()
+            self.plot_each_bin_adj()
+            
+        if(run_optimization):
+            self.optimize()
         
         
     def initialize_beta_bins(self, beta_coors_ON, beta_coors_OFF):
@@ -96,11 +105,11 @@ class bin_betas:#class to make histogram of betas in each bin
         ranges = [r1, r2, r3, r4]
         
         for i in range(0, self.lmda_bnd.Nbins):
-            #file_name = "pop/bin2_" + str(i) + '.pop'
+            file_name = "pop/saved_" + str(i) + '.pop'
             if file_name:
                 iters = 1
             self.fit = diff_evo(self.bin_centers , self.binned_beta_combined[i], iters, file_name)
-            #self.fit.pop.save_population("pop/bin3_" + str(i) + '.pop')
+            #self.fit.pop.save_population("pop/saved_" + str(i) + '.pop')
             self.fit_paras = self.fit.pop.best_paras
             self.cost = self.fit.pop.best_cost
             print 'BIN: ', i
@@ -161,52 +170,102 @@ class bin_betas:#class to make histogram of betas in each bin
             for i in range(0, self.lmda_bnd.Nbins):
                 plt.figure()
                 plt.xlim(self.lower - 2 , self.upper + 2)
-                plt.ylim(0.0, 400)
+                plt.ylim(0.0, 200)
                 plt.ylabel("counts")
                 plt.xlabel(r"$\beta_{Orphan}$")
-                plt.bar(self.bin_centers, self.binned_beta_combined[i], width=w, color='k', alpha = 1., label = 'combined')
-                plt.bar(self.bin_centers, self.binned_beta_OFF[i], width=w, color='r', alpha = 0.5, label = 'OFF')
-                plt.bar(self.bin_centers, self.binned_beta_ON[i], width=w, color='b', alpha = 0.5, label = 'ON')
+                plt.bar(self.bin_centers, self.binned_beta_combined[i], width=w, color='k', alpha = 1., label = 'Combined')
+                plt.bar(self.bin_centers, self.binned_beta_OFF[i], width=w, color='r', alpha = 0.5, label = 'OFF Field')
+                plt.bar(self.bin_centers, self.binned_beta_ON[i], width=w, color='b', alpha = 0.5, label = 'ON Field')
                 plt.legend()
-                plt.savefig('stream_beta_plots/lambda_bin_' + str(i) + '_(' + str(self.lmda_bnd.bin_lowers[i]) + ',' + str(self.lmda_bnd.bin_centers[i]) + ',' +  str(self.lmda_bnd.bin_uppers[i]) + ').png', format = 'png')
-                #plt.savefig('stream_beta_plots/lambda_bin_' + str(i) + '_' + str(self.lmda_bnd.bin_centers[i]) + '.png', format = 'png')
+                #plt.savefig('stream_beta_plots/lambda_bin_' + str(i) + '_(' + str(self.lmda_bnd.bin_lowers[i]) + ',' + str(self.lmda_bnd.bin_centers[i]) + ',' +  str(self.lmda_bnd.bin_uppers[i]) + ').png', format = 'png')
+                plt.savefig('stream_beta_plots/lambda_bin_' + str(i) + '_' + str(self.lmda_bnd.bin_centers[i]) + '.png', format = 'png')
                 plt.close()
         #plt.clf()
         
         return 0
     
-    def plot_fit_dots(self, i):
-        plt.figure()
+    
+    def plot_each_bin_adj(self):
+        w = 0.25
+        #test_dat = test_data()
         plt.xlim(self.lower - 2, self.upper + 2)
         plt.ylim(0.0, 400)
         plt.ylabel("counts")
         plt.xlabel(r"$\beta_{Orphan}$")
+        plt.figure(figsize=(20, 60))
+        fig, axes = plt.subplots(ncols=2, sharex=True, sharey=True)
+        fig.subplots_adjust(hspace=0, wspace=0)
+        for i in range(0, self.lmda_bnd.Nbins):
+            #plt.ylabel("counts")
+            
+            plt.subplot(3, 8, i + 1)
+            plt.xlim(self.lower - 0.5 , self.upper + 0.5)
+            plt.ylim(0.0, 200)
+            plt.yticks([])
+            if(i == 0 or i == 8 or i == 16): #or i == 16 or i == 20):
+                plt.yticks([50,100, 150])
+            if(i == 8):
+                plt.ylabel("N")
+            if(i >= 16):
+                plt.xticks([-2, 0, 2])
+            if(i == 19):
+                plt.xlabel(r"$\beta_{Orphan}$")
+            plt.bar(self.bin_centers, self.binned_beta_combined[i], width=w, color='k', alpha = 1., label = 'Combined')
+            plt.bar(self.bin_centers, self.binned_beta_OFF[i], width=w, color='r', alpha = 0.5, label = 'OFF Field')
+            plt.bar(self.bin_centers, self.binned_beta_ON[i], width=w, color='b', alpha = 0.5, label = 'ON Field')
+            #plt.legend()
+            
+        plt.savefig('stream_beta_plots/lambda_bin_combined.png', format = 'png', dpi=300)
+        plt.close()
+
+    def plot_fit_dots(self, i):
+        plt.figure()
+        plt.xlim(self.lower - 2, self.upper + 2)
         
         # this is sloppy. but whatevs
         fit_paras = list(self.fit_paras)
         fit_xs, fit_fs = self.fit.cost.generate_plot_points(fit_paras)
+        w = 0.25
         
-        
-        fit_paras1 = list(self.fit_paras)
-        fit_paras2 = list(self.fit_paras)
-        for j in range(4,5):
-            fit_paras1[j] += self.errors1.errs[j]
-            fit_paras2[j] -= self.errors1.errs[j]
+        #fit_paras1 = list(self.fit_paras)
+        #fit_paras2 = list(self.fit_paras)
+        #for j in range(4,5):
+            #fit_paras1[j] += self.errors1.errs[j]
+            #fit_paras2[j] -= self.errors1.errs[j]
             
         
-        fit_xs2, fit_fs2 = self.fit.cost.generate_plot_points(fit_paras1)
-        fit_xs3, fit_fs3 = self.fit.cost.generate_plot_points(fit_paras2)
+        #fit_xs2, fit_fs2 = self.fit.cost.generate_plot_points(fit_paras1)
+        #fit_xs3, fit_fs3 = self.fit.cost.generate_plot_points(fit_paras2)
+        lb = 'paras: m=' + str(round(fit_paras[0], 2)) + ' b=' + str(round(fit_paras[1], 2)) + ' A=' + str(round(fit_paras[2], 2)) + r" $x_{0}$=" + str(round(fit_paras[3], 2)) + r' $\sigma$=' + str(round(fit_paras[4], 2)) + ' L=' + str(self.cost)
+        #plt.plot(fit_xs2,  fit_fs2, color='r',linewidth = 2, alpha = 1., label = '+')
+        #plt.plot(fit_xs3,  fit_fs3, color='blue',linewidth = 2, alpha = 1., label = '-')
+        #f, ((ax1, ax2)) = plt.subplots(2, sharex='col', sharey='row')
+      
+        fig, axes = plt.subplots(ncols=2, sharex=True, sharey=True)
+        fig.subplots_adjust(hspace=0)
+        ax1 = plt.subplot(211)
+        plt.ylabel("Star Count")
+        plt.xlim(self.lower - 0.5 , self.upper + 0.5)
+        plt.ylim(0.0, 400)
+        plt.plot(fit_xs,  fit_fs, color='k',linewidth = 2, alpha = 1., label = '' )
+        plt.plot(self.bin_centers, self.binned_beta_combined[i], '.', markersize=4.5, markerfacecolor='white', markeredgecolor='k', alpha = 0.9, marker = 'o', markeredgewidth=1,label = 'C')
+        #plt.plot(self.bin_centers, self.binned_beta_OFF[i]     , 'o', markersize=2.5, color='r', alpha = 0.8, marker = 'o', label = 'OFF')
+        #plt.plot(self.bin_centers, self.binned_beta_ON[i]      , 'o', markersize=2.5,  color='b', alpha = 0.8, marker = 'o', label = 'ON')
+        plt.xticks([])
+        plt.yticks([50, 100, 150, 200, 250, 300, 350, 400])
         
-        plt.plot(fit_xs,  fit_fs, color='k',linewidth = 2, alpha = 1., label = 'paras: m=' + str(round(fit_paras[0], 2)) + ' b=' + str(round(fit_paras[1], 2)) + ' A=' + str(round(fit_paras[2], 2)) + r" $x_{0}$=" + str(round(fit_paras[3], 2)) + r' $\sigma$=' + str(round(fit_paras[4], 2)) + ' L=' + str(self.cost) )
-        plt.plot(fit_xs2,  fit_fs2, color='r',linewidth = 2, alpha = 1., label = '+')
-        plt.plot(fit_xs3,  fit_fs3, color='blue',linewidth = 2, alpha = 1., label = '-')
-        
-        plt.plot(self.bin_centers, self.binned_beta_combined[i], '.', markersize=4.5, color='k', alpha = 0.9, marker = 'o', label = 'C')
-        plt.plot(self.bin_centers, self.binned_beta_OFF[i]     , 'o', markersize=2.0, color='r', alpha = 0.8, marker = 'o', label = 'OFF')
-        plt.plot(self.bin_centers, self.binned_beta_ON[i]      , 'o', markersize=2.0, color='b', alpha = 0.8, marker = 'o', label = 'ON')
-        
-        plt.legend()
+        ax2 = plt.subplot(212)
+        plt.ylabel("Star Count")
+        plt.xlabel(r"$\beta_{Orphan}$")
+        plt.xlim(self.lower - 0.5 , self.upper + 0.5)
+        plt.ylim(0.0, 400)
+        plt.bar(self.bin_centers, self.binned_beta_combined[i], width=w, color='k', alpha = 1., label = 'combined')
+        plt.bar(self.bin_centers, self.binned_beta_OFF[i], width=w, color='r', alpha = 0.5, label = 'OFF')
+        plt.bar(self.bin_centers, self.binned_beta_ON[i], width=w, color='b', alpha = 0.5, label = 'ON')
+        plt.yticks([50, 100, 150,  200, 250, 300, 350])
+        #plt.legend()
         plt.savefig('stream_beta_plots/lambda_dots_' + str(i) + '_(' + str(self.lmda_bnd.bin_lowers[i]) + ',' + str(self.lmda_bnd.bin_centers[i]) + ',' +  str(self.lmda_bnd.bin_uppers[i]) + ').png', format = 'png')
+        plt.savefig('stream_beta_plots/lambda_dots_' + str(i) + '.png', format = 'png')
         plt.close()
     
     

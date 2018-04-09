@@ -35,17 +35,17 @@ args_run_comp = [3.9, 0.2, 0.2, 12, 0.2]
 # # # # # # # # # # # # # # # # # # # # # # # #
 #              Standard Run switches          #
 # # # # # # # # # # # # # # # # # # # # # # # #
-run_nbody                 = n                 #
+run_nbody                 = y                 #
 remake                    = n                 #
 run_and_compare           = n                 #
-match_histograms          = y                 #
+match_histograms          = n                 #
 run_from_checkpoint       = n                 #
 # # # # # # # # # # # # # # # # # # # # # # # #
 
 # # # # # # # # # # # # # # # # # # # # # # # #
 #              Hist Plot Switches             #
 # # # # # # # # # # # # # # # # # # # # # # # #
-plot_hists                = y                 #
+plot_hists                = n                 #
 plot_veldisp_switch       = n                 #
 vlos_plot_switch          = n                 #
 # # # # # # # # # # # # # # # # # # # # # # # #
@@ -78,8 +78,8 @@ compare_hist = 'data_hist_spring_2018'
 
 #    hist name for the nbody run: either set them manually or use from the list above #
 folder = path + 'quick_plots/hists_outs/'
-correctans_hist = folder + 'arg_3.95_0.2_0.2_12_0.2_correct2'
-simulations_hist = folder + 'arg_3.95_0.2_0.2_12_0.2_correct1'
+correctans_hist = folder + 'fun'
+simulations_hist = folder + '3.9'
 
 plot_name = compare_hist
 
@@ -131,17 +131,17 @@ def main():
     standard_run()
     
     if(lb_plot_switch):
-        lb_plot(output)
+        lb_plot(correctans_hist)
     
     if(lambda_beta_plot_switch):
-        lambda_beta_plot(output)
+        lambda_beta_plot(correctans_hist)
     
-    nb = nbody_running_env(lua, version, path)
-    dat = 'data_hist_spring_2018'
-    sim = 'arg_3.95_0.2_0.2_12_0.2_correct'
+    #nb = nbody_running_env(lua, version, path)
+    dat = folder + 'data_hist_spring_2018'
+    sim = folder + 'arg_3.95_0.2_0.2_12_0.2_correct'
     
-    nb.run(args_run, 'test1', dat)
-    nb.run(args_run, 'test2', sim)
+    #nb.run(args_run, folder + 'test1', dat)
+    #nb.run(args_run, folder + 'test2', sim)
     
     
         

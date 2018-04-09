@@ -28,7 +28,7 @@ def plot_binned_counts(dat):
     plt.xlim(50, -50)
     plt.ylim(0, 1500)
     plt.xlabel("$\Lambda_{Orphan}$")
-    plt.ylabel("N")
+    plt.ylabel("Star Count")
     plt.xticks( [50, 40, 30, 20, 10, 0, -10, -20, -30, -40, -50])
     #plt.tick_params(which='minor', length=4, color='r')
     w = 2.6
@@ -46,7 +46,7 @@ def plot_binned_counts(dat):
 
 def plot_simN_normed(dat):
     plt.xlim(50, -50)
-    #plt.ylim(0, 1500)
+    plt.ylim(0, 0.3)
     plt.xlabel("$\Lambda_{Orphan}$")
     plt.ylabel("N")
     plt.xticks( [50, 40, 30, 20, 10, 0, -10, -20, -30, -40, -50])

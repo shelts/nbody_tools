@@ -22,7 +22,7 @@ def plot(hist1, hist2, name, label1, label2): #plots two histograms.
     xlower = 50 
     xupper = -50
     w_overlap = 2.5
-    w_adjacent = 3.5
+    w_adjacent = 2.5
     folder = 'quick_plots/hists_outs/'
     #folder = ''
     #folder = 'like_surface/'
@@ -45,12 +45,12 @@ def plot(hist1, hist2, name, label1, label2): #plots two histograms.
     #plt.subplot(211)
     plt.bar(hist1.lbins, hist1.counts, width = w_overlap, color='k', alpha=1,    label= label1)
     plt.bar(hist2.lbins, hist2.counts, width = w_overlap, color='r', alpha=0.75, label= label2)
-    plt.title('Histogram of Light Matter Distribution After 4 Gy')
+    #plt.title('Histogram of Light Matter Distribution After 4 Gy')
     plt.xlim((xlower, xupper))
     plt.ylim((0.0, ylimit))
     plt.ylabel('N')
-    plt.xlabel(r'$\Lambda$')
-    plt.legend()
+    plt.xlabel(r'$\Lambda_{Orphan}$')
+    #plt.legend()
     plt.savefig(save_folder_ove + name + '_overlapping.png', format='png')
     plt.clf()
     #plt.show()
@@ -59,7 +59,7 @@ def plot(hist1, hist2, name, label1, label2): #plots two histograms.
     plt.subplot(211)
     #f, (f1, f2) = plt.subplots(2, sharex = True, sharey = True)
     plt.bar(hist1.lbins, hist1.counts, width = w_adjacent, color='k')
-    plt.legend(handles=[mpatches.Patch(color='b', label= label1)])
+    #plt.legend(handles=[mpatches.Patch(color='b', label= label1)])
     #plt.title('Milkyway@home')
     plt.xlim((xlower, xupper))
     plt.ylim((0.0, ylimit))
@@ -67,8 +67,8 @@ def plot(hist1, hist2, name, label1, label2): #plots two histograms.
     #plt.xlabel(r'$\Lambda$')
     
     plt.subplot(212)
-    plt.bar(hist2.lbins, hist2.counts, width = w_adjacent, color='k')
-    plt.legend(handles=[mpatches.Patch(color='k', label= label2)])
+    plt.bar(hist2.lbins, hist2.counts, width = w_adjacent, color='r')
+    #plt.legend(handles=[mpatches.Patch(color='k', label= label2)])
     #plt.title('')
     plt.xlim((xlower, xupper))
     plt.ylim((0.0, ylimit))
@@ -80,6 +80,129 @@ def plot(hist1, hist2, name, label1, label2): #plots two histograms.
     #plt.show()
     return 1
 # # 
+def plot_disps(file1):#plots the dispersions from the histograms with lambda beta on top
+    ylimit = 1
+    xlower = -36 
+    xupper = 36
+    w_overlap = 2.5
+    w_adjacent = 1.5
+    #folder = 'like_surface/'
+    save_folder = '/home/sidd/Desktop/research/quick_plots/publish_plots/'
+    save_folder_adj = '/home/sidd/Desktop/research/quick_plots/comp_hist_plots/adj/'
+
+    print "plot histogram 1: ", file1
+
+    print("plotting histograms\n")
+    hist1 = nbody_histograms(file1 + ".hist")
+    out1 = nbody_outputs(file1 + ".out")
+    
+    out1.dark_light_split()
+    out1.convert_lambda_beta(True)    
+    
+    
+    f, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, sharex='col', sharey='row')
+    f.subplots_adjust(hspace=0)
+    f.subplots_adjust(wspace=0)
+    
+    
+    
+    ax1 = plt.subplot(411)
+    plt.xlim((xlower, xupper))
+    plt.ylim((-10, 10))
+    #plt.xlabel(r'$\Lambda_{Orphan}$')
+    plt.ylabel(r'$\beta_{Orphan}$')
+    #plt.title(r'Simulated Orphan Stream')
+    #plt.plot(out1.dark_lambda, out1.dark_beta, '.', markersize = .75, color = 'red', alpha=1., marker = '.', label = 'Dark Matter')
+    plt.plot(out1.light_lambda, out1.light_beta, '.', markersize = .75, color = 'b', alpha=.75, marker = '.', label = 'Stars')
+    plt.yticks([-10, 0, 10])
+    
+    ax2 = plt.subplot(412)
+    plt.bar(hist1.lbins, hist1.counts, width = w_adjacent, color='b')
+    #plt.legend(handles=[mpatches.Patch(color='b', label= 'Counts')])
+    #plt.title('Line of Sight Vel Disp Distribution')
+    #plt.xlim((xlower, xupper))
+    #plt.ylim((0.0, ylimit))
+    plt.ylabel('N')
+    plt.xticks([])
+    plt.yticks([0.1, 0.2])
+    #plt.xlabel(r'\sigma_{v_{los}} (km/s)')
+    
+    ax3 = plt.subplot(413)
+    #f, (f1, f2) = plt.subplots(2, sharex = True, sharey = True)
+    plt.bar(hist1.lbins, hist1.bd, width = w_adjacent, color='b')
+    #plt.legend(handles=[mpatches.Patch(color='b', label= plot_hist1)])
+    #plt.title('Line of Sight Vel Disp Distribution')
+    plt.xlim((xlower, xupper))
+    plt.ylim((0.0, 2.0))
+    plt.ylabel(r'$\sigma_{\beta_{Orphan}}$')
+    #plt.xlabel('Lambda')
+    plt.xticks([])
+    plt.yticks([0.5, 1, 1.5])
+    
+    ax4 = plt.subplot(414)
+    plt.bar(hist1.lbins, hist1.vd, width = w_adjacent, color='k')
+    #plt.legend(handles=[mpatches.Patch(color='k', label= plot_hist1)])
+    plt.xlim((xlower, xupper))
+    plt.ylim((0.0, 5))
+    plt.xlabel('l')
+    plt.ylabel(r'$\sigma_{v_{los}}$ (km/s)')
+    plt.xlabel(r'$\Lambda_{Orphan}$')
+    plt.savefig(save_folder + 'disps.png', format='png')
+    plt.clf()
+    #plt.show()
+    return 1
+
+
+def plot_2betadisps(file1, file2):#plots the dispersions from the histograms with lambda beta on top
+    ylimit = 1
+    xlower = -36 
+    xupper = 36
+    w_overlap = 2.5
+    w_adjacent = 2
+    #folder = 'like_surface/'
+    save_folder = '/home/sidd/Desktop/research/quick_plots/publish_plots/'
+
+    print "plot histogram 1: ", file1
+    print "plot histogram 2: ", file2
+    
+    print("plotting histograms\n")
+    hist1 = nbody_histograms(file1 + ".hist")
+    hist2 = nbody_histograms(file2 + ".hist")
+    
+    f, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, sharex='col', sharey='row')
+    f.subplots_adjust(hspace=0)
+    f.subplots_adjust(wspace=0)
+
+    ax1 = plt.subplot(211)
+    plt.bar(hist1.lbins, hist1.bd, width = w_adjacent, color='b')
+    plt.ylabel(r'$\sigma_{\beta_{Orphan}}$')
+    plt.xlim((xlower, xupper))
+    plt.ylim((0.0, 2.0))
+    plt.xticks([])
+    plt.yticks([0.5, 1, 1.5])
+    
+    ax2 = plt.subplot(212)
+    plt.bar(hist2.lbins, hist2.bd, width = w_adjacent, color='k')
+    plt.xlim((xlower, xupper))
+    plt.ylim((0.0,  2.0))
+    plt.ylabel(r'$\sigma_{\beta_{Orphan}}$')
+    plt.xlabel(r'$\Lambda_{Orphan}$')
+    plt.savefig(save_folder + 'two_beta_disps.png', format='png')
+    plt.clf()
+    
+    plt.bar(hist1.lbins, hist1.bd, width = w_adjacent, color='orange', alpha = 1)
+    plt.bar(hist2.lbins, hist2.bd, width = w_adjacent, color='b',  alpha = 0.5)
+    plt.xlim((xlower, xupper))
+    plt.ylim((0.0,  2.0))
+    plt.ylabel(r'$\sigma_{\beta_{Orphan}}$')
+    plt.xlabel(r'$\Lambda_{Orphan}$')
+    plt.savefig(save_folder + 'two_beta_disps_adj.png', format='png')
+    
+    
+    #plt.show()
+    return 1
+
+
 def plot_veldisp(hist1, hist2, name, label1, label2):#plots the velocity dispersion from the histograms
     ylimit = 100
     xlower = 180 
@@ -173,6 +296,9 @@ def plot_single(hist1, name):
 #        NON-histogram plot               #
 # # # # # # # # # # # # # # # # # # # # # #
 # #
+
+
+
 def vlos_plot_single(file1):#plots the line of sight velocity from outputs with hist counts
     ylimit = 100
     xlower = 180 
@@ -396,14 +522,12 @@ def vlos_plot(file1, file2):
     return 1
 
 def lambda_beta_plot(file_name):#plots the outputs in lambda beta. uses the nbody output class to convert lb to lambda beta
-    path_charles = 'quick_plots/outputs/'
-    path = 'quick_plots/'
     print file_name
-    plot_lbr = y
-    plot_light_and_dark = y
-    plot_dm_alone = n
+    plot_lbr = True
+    plot_light_and_dark = True
+    plot_dm_alone = False
     
-    out = nbody_outputs(path_charles + file_name + '.out')
+    out = nbody_outputs(file_name + '.out')
     out.dark_light_split()
     out.convert_lambda_beta(True)
     
@@ -454,19 +578,20 @@ def lambda_beta_plot(file_name):#plots the outputs in lambda beta. uses the nbod
  
 def lb_plot(file_name): #plots lb from output
     path_charles = 'quick_plots/outputs/'
-    path = 'quick_plots/'
+    path = ''
     print file_name
-    plot_lbr = y
-    plot_light_and_dark = y
-    plot_dm = n
-    plot_xyz = n
-    
-    out = nbody_outputs(path_charles + file_name + '.out')
+    plot_lbr = False
+    plot_light_and_dark = True
+    plot_dm_only = False
+    plot_xyz = False
+    plot_xyz_3d = True
+    out = nbody_outputs(path + file_name + '.out')
     out.rescale_l()
     out.dark_light_split()
     
     fig = plt.figure()
-    fig.subplots_adjust(hspace = 0.8, wspace = 0.8)
+    fig.subplots_adjust(hspace = 1., wspace = 0.8)
+    
     # # # # # # # # # #
     if(plot_lbr):
         plt.figure(figsize=(10, 10))
@@ -482,7 +607,7 @@ def lb_plot(file_name): #plots lb from output
         #default to just plot lm
         plt.plot(out.light_l, out.light_b, '.', markersize = 1., color = 'b', alpha=1.0, marker = '.', label = 'baryons')
         plt.legend()
-        plt.savefig('/home/sidd/Desktop/research/quick_plots/' + file_name, format='png')
+        plt.savefig(file_name, format='png')
         print "plotting:", len(out.light_l), " points"
         # # # # # # # # # #
         if(plot_light_and_dark):#plot lm and dm overlapping
@@ -493,10 +618,10 @@ def lb_plot(file_name): #plots lb from output
             plt.title('l vs b')
             plt.plot(out.dark_l, out.dark_b, '.', markersize = 1, color = 'red', alpha=.25, marker = '.', label = 'dark matter')
             plt.legend()
-            plt.savefig('/home/sidd/Desktop/research/quick_plots/' + file_name, format='png')
+            plt.savefig(file_name, format='png')
             print "plotting:", len(out.light_l) + len(out.dark_l), " points"
         # # # # # # # # # #
-        if(plot_dm):#to plot just dm
+        if(plot_dm_only):#to plot just dm
             plt.clf()
             plt.figure(figsize=(20, 20))
             plt.xlim((xlower, xupper))
@@ -505,51 +630,82 @@ def lb_plot(file_name): #plots lb from output
             plt.ylabel('b')
             plt.title('l vs b')
             plt.plot(out.dark_l, out.dark_b, '.', markersize = 1, color = 'b', marker = '+')
-            plt.savefig('/home/sidd/Desktop/research/quick_plots/tidal_stream_lbr_dark', format='png')
+            plt.savefig(file_name + '_tidal_stream_lbr_dark', format='png')
             
     if(plot_xyz):
-        xlower = 50
-        xupper = -50
-        fig.tight_layout()
+        plt.figure(figsize=(10, 15))
+        xlower = 10
+        xupper = -10
+        ylower = -10
+        yupper = 10
+        ms = 0.5
+        #fig.tight_layout()
         plt.axes().set_aspect('equal')
-        plt.subplot(131, aspect='equal')
-        plt.plot(out.light_x, out.light_y, '.', markersize = 1, color = 'r', marker = 'o')
-        
+        plt.subplot(311, aspect='equal')
+        plt.subplot(311)
         if(plot_light_and_dark == True):
-            plt.plot(out.dark_x, out.dark_y, '.', markersize = 1, color = 'b', marker = '+')
+            plt.plot(out.dark_x, out.dark_y, '.', markersize = ms, color = 'b', marker = '.')
+        plt.plot(out.light_x, out.light_y, '.', markersize = ms, color = 'r', marker = '.')
         
         plt.xlim((xlower, xupper))
-        plt.ylim((-80, 80))
+        plt.ylim((ylower, yupper))
         plt.xlabel('x')
         plt.ylabel('y')
-        plt.title('x vs y')
+        #plt.title('x vs y')
         
-        plt.subplot(132,aspect='equal')
-        
-        plt.plot(out.light_x, out.light_z, '.', markersize = 1, color = 'r', marker = 'o')
-        
+        plt.subplot(312,aspect='equal')
+        plt.subplot(312)
         if(plot_light_and_dark == True):
-            plt.plot(out.dark_x, out.dark_z, '.', markersize = 1, color = 'b', marker = '+')
+            plt.plot(out.dark_x, out.dark_z, '.', markersize = ms, color = 'b', marker = '.')
+        
+        plt.plot(out.light_x, out.light_z, '.', markersize = ms, color = 'r', marker = '.')
         
         plt.xlim((xlower, xupper))
-        plt.ylim((-80, 80))
+        plt.ylim((ylower, yupper))
         plt.xlabel('x')
         plt.ylabel('z')
-        plt.title('x vs z')
+        #plt.title('x vs z')
         
-        plt.subplot(133, aspect='equal')
-        
-        plt.plot(out.light_z, out.light_y, '.', markersize = 1, color = 'r', marker = 'o')
+        plt.subplot(313, aspect='equal')
+        plt.subplot(313)
         if(plot_light_and_dark == True):
-            plt.plot(out.dark_z, out.dark_y, '.', markersize = 1, color = 'b', marker = '+')
+            plt.plot(out.dark_z, out.dark_y, '.', markersize = ms, color = 'b', marker = '.')
+        plt.plot(out.light_z, out.light_y, '.', markersize = ms, color = 'r', marker = '.')
         
         plt.xlim((xlower, xupper))
-        plt.ylim((-80, 80))
+        plt.ylim((ylower, yupper))
         plt.xlabel('z')
         plt.ylabel('y')
-        plt.title('z vs y')
-        plt.savefig('/home/sidd/Desktop/research/quick_plots/tidal_stream_xyz', format='png')
+        #plt.title('z vs y')
+        plt.savefig(file_name + 'tidal_stream_xyz.png', format='png')
     
+    
+    if(plot_xyz_3d):
+        xlower = 5
+        xupper = -5
+        ylower = -10
+        yupper = 10
+        ms = 0.5
+        #fig.tight_layout()
+        fig =  plt.figure()
+        ax = fig.add_subplot(111, projection='3d')
+        ax.set_xlim(xlower, xupper)
+        ax.set_ylim(xlower, xupper)
+        ax.set_zlim(xlower, xupper)
+        ax.set_xlabel('X ')
+        ax.set_ylabel('Y ')
+        ax.set_zlabel('Z ')
+        ax.scatter(out.light_x, out.light_y, out.light_z, s = ms, color = 'r', marker = '.')
+        plt.savefig(file_name + 'tidal_stream_xyz_3d_light.png', format='png', dpi=200)
+        
+        ms = 1.1
+        ax.scatter(out.dark_x, out.dark_y, out.dark_z,  s= ms, color = 'b', alpha = 1, marker = '.')
+        ax.scatter(out.light_x, out.light_y, out.light_z, s = 0.5, color = 'r', marker = 'o')
+        
+        plt.savefig(file_name + 'tidal_stream_xyz_3d.png', format='png', dpi=200)
+        #plt.show()
+    
+        
     return 0
 
 
@@ -688,13 +844,12 @@ def plot_hist_lambda_beta_single(file1, file_name = None):
     return 0 
 
 def plot_lmda_beta(file1, file2):
-    path = '/home/sidd/Desktop/research/quick_plots/hists_outs/'
+    individual = True
+    out1 = nbody_outputs(file1 + ".out")
+    out2 = nbody_outputs(file2 + ".out")
     
-    out1 = nbody_outputs(path + file1 + ".out")
-    out2 = nbody_outputs(path + file2 + ".out")
-    
-    hist1 = nbody_histograms(path + file1 + ".hist")
-    hist2 = nbody_histograms(path + file2 + ".hist")
+    hist1 = nbody_histograms(file1 + ".hist")
+    hist2 = nbody_histograms(file2 + ".hist")
     
     w_overlap = 2.5
     w_adjacent = 1.5
@@ -706,60 +861,64 @@ def plot_lmda_beta(file1, file2):
     out2.convert_lambda_beta(True)
     
     xlower = -100.0
-    xupper = 50.0
-    ylower = -60
-    yupper = 40
+    xupper = 100.0
+    ylower = -20
+    yupper = 20
     
-    plt.figure(figsize=(10, 5))
+    plt.figure(figsize=(20, 20))
     plt.subplot(211)
     plt.xlim((xlower, xupper))
     plt.ylim((ylower, yupper))
-    plt.ylabel(r'$\beta_{Orphan}$')
-    plt.title(r'Simulated Stream and Best Fit Stream')
-    plt.plot(out1.dark_lambda, out1.dark_beta, '.', markersize = .75, color = 'red', alpha=1, marker = '.', label = 'Simulated Dark Matter ')
+    plt.ylabel(r'$\beta_{Orphan}$', fontsize=24)
+    plt.tick_params(axis='y', which='major', labelsize=24)
+    plt.tick_params(axis='x', which='major', labelsize=24)
+    #plt.title(r'Simulated Stream and Best Fit Stream')
+    #plt.plot(out1.dark_lambda, out1.dark_beta, '.', markersize = .75, color = 'red', alpha=1, marker = '.', label = 'Simulated Dark Matter ')
     plt.plot(out1.light_lambda, out1.light_beta, '.', markersize = .75, color = 'b', alpha=0.75, marker = '.', label = 'Simulated Stars')
-    plt.legend()
+    #plt.legend()
     #plt.subplots(4, sharex = True, sharey = True)
     
     
     ax2 = plt.subplot(212)
     plt.xlim((xlower, xupper))
     plt.ylim((ylower, yupper))
-    plt.xlabel(r'$\Lambda_{Orphan}$')
-    plt.ylabel(r'$\beta_{Orphan}$')
+    plt.xlabel(r'$\Lambda_{Orphan}$', fontsize=24)
+    plt.ylabel(r'$\beta_{Orphan}$', fontsize=24)
+    plt.tick_params(axis='y', which='major', labelsize=24)
+    plt.tick_params(axis='x', which='major', labelsize=24)
     #plt.title(r'$\Lambda$ vs $\beta$')
-    plt.plot(out2.dark_lambda, out2.dark_beta, '.', markersize = .75, color = 'red', alpha=1, marker = '.', label = 'Best Fit  Dark Matter')
+    #plt.plot(out2.dark_lambda, out2.dark_beta, '.', markersize = .75, color = 'red', alpha=1, marker = '.', label = 'Best Fit  Dark Matter')
     plt.plot(out2.light_lambda, out2.light_beta, '.', markersize = .75, color = 'b', alpha=.75, marker = '.',label = 'Best Fit  Stars')
-    plt.legend()
-    plt.savefig('/home/sidd/Desktop/research/quick_plots/for_heidi/both_lambda_beta_init', format='png')
+    #plt.legend()
+    plt.savefig('/home/sidd/Desktop/research/quick_plots/publish_plots/both_lambda_beta_light.png', format='png')
     #plt.show()
     
-    
-    plt.clf()
-    plt.figure(figsize=(10, 5))
-    plt.xlim((xlower, xupper))
-    plt.ylim((ylower, yupper))
-    plt.xlabel(r'$\Lambda_{Orphan}$')
-    plt.ylabel(r'$\beta_{Orphan}$')
-    plt.title(r'Simulated Orphan Stream')
-    plt.plot(out1.dark_lambda, out1.dark_beta, '.', markersize = .75, color = 'red', alpha=1., marker = '.', label = 'Dark Matter')
-    plt.plot(out1.light_lambda, out1.light_beta, '.', markersize = .75, color = 'b', alpha=.75, marker = '.', label = 'Stars')
-    #plt.legend(handles=[mpatches.Patch(color='red', label= 'Dark Matter', color='b', label='Stars')])
-    plt.legend()
-    plt.savefig('/home/sidd/Desktop/research/quick_plots/for_heidi/mw_lambda_beta_init', format='png')
-    
-    
-    plt.clf() 
-    plt.figure(figsize=(10, 5))
-    plt.xlim((xlower, xupper))
-    plt.ylim((ylower, yupper))
-    plt.xlabel(r'$\Lambda_{Orphan}$')
-    plt.ylabel(r'$\beta_{Orphan}$')
-    plt.title(r'MilkyWay@home Best Fit')
-    plt.plot(out2.dark_lambda, out2.dark_beta, '.', markersize = .75, color = 'red', alpha=1, marker = '.', label = 'Dark Matter')
-    plt.plot(out2.light_lambda, out2.light_beta, '.', markersize = .75, color = 'b', alpha=.75, marker = '.',label = 'Stars')
-    plt.legend()
-    plt.savefig('/home/sidd/Desktop/research/quick_plots/for_heidi/best_fit_lambda_beta_init', format='png')
+    if(individual):
+        plt.clf()
+        plt.figure(figsize=(10, 5))
+        plt.xlim((xlower, xupper))
+        plt.ylim((ylower, yupper))
+        plt.xlabel(r'$\Lambda_{Orphan}$')
+        plt.ylabel(r'$\beta_{Orphan}$')
+        #plt.title(r'Simulated Orphan Stream')
+        #plt.plot(out1.dark_lambda, out1.dark_beta, '.', markersize = .75, color = 'red', alpha=1., marker = '.', label = 'Dark Matter')
+        plt.plot(out1.light_lambda, out1.light_beta, '.', markersize = .75, color = 'b', alpha=.75, marker = '.', label = 'Stars')
+        #plt.legend(handles=[mpatches.Patch(color='red', label= 'Dark Matter', color='b', label='Stars')])
+        #plt.legend()
+        plt.savefig('/home/sidd/Desktop/research/quick_plots/publish_plots/lambda_beta1_light.png', format='png')
+        
+        
+        plt.clf() 
+        plt.figure(figsize=(10, 5))
+        plt.xlim((xlower, xupper))
+        plt.ylim((ylower, yupper))
+        plt.xlabel(r'$\Lambda_{Orphan}$')
+        plt.ylabel(r'$\beta_{Orphan}$')
+        #plt.title(r'MilkyWay@home Best Fit')
+        #plt.plot(out2.dark_lambda, out2.dark_beta, '.', markersize = .75, color = 'red', alpha=1, marker = '.', label = 'Dark Matter')
+        plt.plot(out2.light_lambda, out2.light_beta, '.', markersize = .75, color = 'b', alpha=.75, marker = '.',label = 'Stars')
+        plt.legend()
+        plt.savefig('/home/sidd/Desktop/research/quick_plots/publish_plots/lambda_beta2_light.png', format='png')
     
 
 def veldisp(file1):#plots the velocity dispersion from the histograms
@@ -868,6 +1027,50 @@ def veldisp_lbda_beta(file1):#plots the velocity dispersion from the histograms
     plt.clf()
     #plt.show()
 
+def piechart():
+    labels = 'Mass Cost', 'Geometry', 'Dispersion'
+    sizes = [120, 120, 120]
+    colors = ['red', 'yellow', 'cyan']
+    explode = (0.0, 0, 0, 0)  # explode 1st slice
+    fig = plt.figure(facecolor='b', edgecolor='k')
+    fig.patch.set_facecolor('grey')
+
+    plt.pie(sizes, colors=colors, shadow=False, startangle=140)
+    plt.axis('equal')
+    plt.savefig('/home/sidd/Desktop/research/quick_plots/publish_plots/piechart.png', format='png')
+
+def plum_pot():
+    r = -2.0
+    rs = 0.3
+    M = 10
+    M2 = M / 100.0
+    pi = mt.pi
+    pots = []
+    rvals = []
+    pots2 = []
+    for i in range(1000000):
+        pot =  -M / mt.sqrt( r * r + rs * rs)
+        pot2 = -M2 / r
+        pots.append(pot)
+        rvals.append(r)
+        pots2.append(pot2)
+        r += 0.01
+    plt.xlim(-1, 1)
+    plt.ylim(-100, 100)
+    plt.yticks([])
+    plt.xticks([])
+    plt.plot(rvals, pots, color = 'k', linewidth = 4)
+    plt.plot(rvals, pots2, color = 'b', linewidth = 2)
+    plt.savefig('/home/sidd/Desktop/research/quick_plots/publish_plots/pot2.png', format='png')
+    
+    
+    
+    
+    
+    
+    
+    
+    
 def chi_sq_dist_plot():
     k = 50.0
     cf = (k / 2.0) - 1.0
@@ -896,11 +1099,11 @@ def chi_sq_dist_plot():
     plt.xlim((0, 400))
     plt.xlabel(r'N$_{\sigma}$$^{2}$')
     plt.ylabel('Probability')
-    plt.plot(xs, func1s, color='k', linestyle = 'solid', alpha = 1, linewidth = 2)
+    #plt.plot(xs, func1s, color='k', linestyle = 'solid', alpha = 1, linewidth = 2)
+    #plt.plot(xs, func2s, color='b', linestyle = 'dashed', alpha = .5, linewidth = 2)
     plt.plot(xs, func3s, color='r', linestyle = 'dotted', alpha = 1, linewidth = 4)
-    plt.plot(xs, func2s, color='b', linestyle = 'dashed', alpha = .5, linewidth = 2)
     
-    plt.savefig('/home/sidd/Desktop/research/quick_plots/chi_sq_func', format='png')
+    plt.savefig('/home/sidd/Desktop/research/quick_plots/publish_plots/chi_sq_func3.png', format='png')
     #plt.show()
 # #
 
@@ -966,24 +1169,32 @@ def single_xyz(file_name):
 
 
 def main():
-    file1 = 'arg_3.95_0.2_0.2_12_0.2_correct2'
-    file2 = 'arg_3.95_0.2_0.2_12_0.2_correct1'
+    path = '/home/sidd/Desktop/research/'
+
+    folder = path + 'quick_plots/hists_outs/'
+    #file1 = 'arg_3.95_0.2_0.2_12_0.2_correct2'
+    #file2 = 'arg_3.95_0.2_0.2_12_0.2_correct1'
     
     #plot_hist_lambda_beta(file1, file2)
     
-    #plot_lmda_beta(file1, file2)
+    hist1 = folder + '3.95'
+    hist2 = folder + '3.9'
+    #plot_lmda_beta(hist1, hist2)
     #veldisp(file2)
     #veldisp_lbda_beta(file1)
     
+    #plot_disps(hist1)
+    #plot_2betadisps(hist1,hist2)
+    
     #chi_sq_dist_plot()
-    hist1 = 'hist_v168_3p95_0p2_0p2_12_0p2__1_31_18_diffSeed'
-    hist2 = 'mw@home_best_fit'
-    name = 'mwh_hist'
+    #piechart()
+    #plum_pot()
+    #name = 'mwh_hist'
     #plot_single(hist1, name)
     #plot(hist1, hist2, 'mw@home_best_fit', 'MilkyWay@home', 'Best Fit')
     #plot_hist_lambda_beta_single(hist2, True)
     
-    file1 = "dist_test"
+    #file1 = "dist_test"
     #single_xyz(file1)
     
     return 0 
