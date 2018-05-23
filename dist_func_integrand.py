@@ -115,7 +115,7 @@ def main():
     md = 12.
     
     chosen_r = [0.1, 0.25, 0.5, 0.75]
-    chosen_vfrac = [0.1, 0.2, 0.25, 0.3, 0.4, 0.5, 0.6, 0.7, 0.75, 0.8, 0.9]#fraction of the escape speed
+    chosen_vfrac = [0.1, 0.25, 0.4, 0.6, 0.75, 0.8, 0.9]#fraction of the escape speed
     
     vals = []
     for i in range(0, len(chosen_r)):
@@ -139,7 +139,7 @@ def main():
     plt.figure(figsize=(20, 10))
     for i in range(0, len(chosen_r)):
         plt.subplot(subplot_i + i)
-        plt.ylim(0,1.)
+        #plt.ylim(0 ,1.)
         plt.xlim(0, 3)
         plt.tick_params(axis='y', which='major', labelsize=24)
         plt.tick_params(axis='x', which='major', labelsize=24)
@@ -150,7 +150,11 @@ def main():
             
         for j in range(0, len(chosen_vfrac)):
             plt.plot(vals[i].vfs[j].integral_rs, vals[i].vfs[j].integral_vals, label = v_labels[j], linewidth = 4, linestyle = '-')
-        plt.legend()
+        
+        #plt.figlegend( lines, labels, loc = 'lower center', ncol=5, labelspacing=0. )
+    plt.legend(bbox_to_anchor=(0.8,0.65), loc='lower left', borderaxespad=0.,  prop={'size': 20}, framealpha=1)
+
+        #plt.legend()
     plt.savefig('dist_func.png', format = 'png')
 
 main()
