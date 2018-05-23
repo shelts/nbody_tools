@@ -115,7 +115,7 @@ def main():
     md = 12.
     
     chosen_r = [0.1, 0.25, 0.5, 0.75]
-    chosen_vfrac = [0.25, 0.5, 0.75, 0.9]#fraction of the escape speed
+    chosen_vfrac = [0.1, 0.2, 0.25, 0.3, 0.4 0.5, 0.6, 0.7, 0.75, 0.8 0.9]#fraction of the escape speed
     
     vals = []
     for i in range(0, len(chosen_r)):
