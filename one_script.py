@@ -88,7 +88,8 @@ plot_name = compare_hist
 #    run specfics   #
 #version = '_1.68_x86_64-pc-linux-gnu__mt'
 version  = ''
-lua = path + 'lua/' + "full_control.lua"
+lua = path + 'lua/' + "full_control.lua"-
+#lua = path + 'milkywayathome_client/nbody/sample_workunits/for_dev_manual_body.lua'
 #lua = "manual_body_input.lua"
 #lua = path + 'lua/' + "halo_object_dev.lua"
 #lua = path + 'lua/' + "EMD_v168.lua"
