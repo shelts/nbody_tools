@@ -80,7 +80,7 @@ def plot(hist1, hist2, name, label1, label2): #plots two histograms.
     #plt.show()
     return 1
 # # 
-def plot_disps(file1):#plots the dispersions from the histograms with lambda beta on top
+def plot_disps(file1):#plots the dispersions from the histogram with lambda beta on top
     ylimit = 1
     xlower = -36 
     xupper = 36
@@ -153,7 +153,7 @@ def plot_disps(file1):#plots the dispersions from the histograms with lambda bet
     return 1
 
 
-def plot_2betadisps(file1, file2):#plots the dispersions from the histograms with lambda beta on top
+def plot_2betadisps(file1, file2):#plots the dispersions from the histograms with lambda beta on top. for 2 hists
     ylimit = 1
     xlower = -36 
     xupper = 36
@@ -265,7 +265,7 @@ def plot_veldisp(hist1, hist2, name, label1, label2):#plots the velocity dispers
     return 1
 # # 
 
-def plot_single(hist1, name):
+def plot_single(hist1, name):#plot single hist
     ylimit = 0.6
     xlower = 100 
     xupper = -100
@@ -520,6 +520,12 @@ def vlos_plot(file1, file2):
     #plt.show()
     
     return 1
+
+
+# # # # # # # # # # # # # # # # # # # # # #
+#        Standard needed plots            #
+# # # # # # # # # # # # # # # # # # # # # #
+
 
 def lambda_beta_plot(file_name):#plots the outputs in lambda beta. uses the nbody output class to convert lb to lambda beta
     print file_name

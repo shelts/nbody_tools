@@ -2,6 +2,7 @@
 #/* Copyright (c) 2018 Siddhartha Shelton */
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 # Hessian matrix implementation for calculating error in fits             #
+# This is internally consistent with the data histogram creation code     #
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 import numpy as np
 from numpy.linalg import inv
@@ -16,7 +17,7 @@ def function(p):
     return f
 
 class hessian:
-    def __init__(self, cost, parameters, step_sizes = None):
+    def __init__(self, cost, parameters, step_sizes = None):#(link to cost function, best fit parameters, optimizing step sizes)
         self.cost = cost
         self.paras = parameters
         self.steps = step_sizes #
@@ -36,7 +37,7 @@ class hessian:
        
     def calc_derivative(self, i, j):
         n = len(self.paras)
-        if(self.steps):
+        if(self.steps):#optimizing step sizes or fix step size
             h1 = self.steps[i]
             h2 = self.steps[j]
         else:
