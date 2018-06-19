@@ -23,9 +23,9 @@ args_run_comp = [3.9, 0.2, 0.2, 12, 0.2]
 # # # # # # # # # # # # # # # # # # # # # # # #
 run_nbody                 = y                 #
 remake                    = n                 #
+full_remake               = n
 run_and_compare           = n                 #
 match_histograms          = n                 #
-run_from_checkpoint       = n                 #
 # # # # # # # # # # # # # # # # # # # # # # # #
 
 # # # # # # # # # # # # # # # # # # # # # # # #
@@ -53,9 +53,8 @@ plot_name = compare_hist
 #version = '_1.68_x86_64-pc-linux-gnu__mt'
 version  = ''
 lua = path + 'lua/' + "full_control.lua"
+manual_body_list = "~/Desktop/research/nbody_tools/disk.out"
 #lua = path + 'milkywayathome_client/nbody/sample_workunits/for_dev_manual_body.lua'
-#lua = "manual_body_input.lua"
-#lua = path + 'lua/' + "halo_object_dev.lua"
 #lua = path + 'lua/' + "EMD_v168.lua"
 
 
@@ -66,24 +65,27 @@ def standard_run():
     nbody = nbody_running_env(lua, version, path)
     
     if(remake):
-        nbody.build(False)#true for complete rebuild
-        
+        if(full_remake):
+            nbody.build(True)#true for complete rebuild
+        else:
+            nbody.build(False)
+
     if(run_nbody):
-        nbody.run(args_run, correctans_hist)
+        nbody.run(args_run, correctans_hist, None, None, manual_body_list)
     
     if(run_and_compare):
-        nbody.run(args_run_comp, simulations_hist, correctans_hist)
+        nbody.run(args_run_comp, simulations_hist, correctans_hist, None, manual_body_list)
     
     if(match_histograms):
         nbody.match_hists(simulations_hist, correctans_hist)
-        
-    if(plot_hists):
-        plot(correctans_hist , simulations_hist, plot_name, '1', '2')
     
     return 0
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #    
 standard_run()
+
+if(plot_hists):
+    plot(correctans_hist , simulations_hist, plot_name, '1', '2')
 
 if(lb_plot_switch):
     lb_plot(correctans_hist)

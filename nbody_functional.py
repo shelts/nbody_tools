@@ -29,7 +29,7 @@ class nbody_running_env:
         os.chdir("../")
     
     
-    def run(self, parameters, simulation_hist, comparison_hist = None, pipe = None):#running function. 2 optional parameters. 
+    def run(self, parameters, simulation_hist, comparison_hist = None, pipe = None, manual_body_list = ''):#running function. 2 optional parameters. 
         ft    = str(parameters[0])
         bt    = str(1.0)
         rl    = str(parameters[1])
@@ -47,18 +47,17 @@ class nbody_running_env:
                          -o " +  simulation_hist + ".out "
         
         #final piece to the run command. includes the number of threads, output format, and visualizer args
-        end_piece = "-n 10 -b -u --visualizer-bin=" + self.path + "nbody_test/bin/milkyway_nbody_graphics -i " + (ft) + " " + bt + " " + rl + " " + rr + " " + ml + " " + mr 
-        end_piece = "-n 10 -b -u --visualizer-bin=" + self.path + "nbody_test/bin/milkyway_nbody_graphics -i " + (ft) + " " + bt + " " + rl + " " + rr + " " + ml + " " + mr + " " + "~/Desktop/research/nbody_tools/disk.out"
-        if(not comparison_hist): ##this willl produce a single run of nbody, without comparing the end result to anything
+        end_piece = "-n 10 -b -u --visualizer-bin=" + self.path + "nbody_test/bin/milkyway_nbody_graphics -i " + ft + " " + bt + " " + rl + " " + rr + " " + ml + " " + mr + " " + manual_body_list
+        
+        if(not comparison_hist): ##this will produce a single run of nbody, without comparing the end result to anything
             run_command += end_piece #completing the run command
        
         elif(comparison_hist):#this willl produce a single run of nbody, comparing the end result to given histogram
             compare_hist_flag = " -h " + comparison_hist + ".hist  " #adding the input argument flag
             run_command +=  compare_hist_flag + end_piece
-       
          
         if(pipe): 
-            piping = " 2>> " + pipe  #adding the piping piece to the command
+            piping = " 2>> " + pipe  #adding the piping piece to the command to pipe output
             os.system(run_command + piping)
         else:
             os.system(run_command)
@@ -87,7 +86,7 @@ class nbody_outputs:#a class that takes in data from nbody output files and make
         self.file_name = file_name
         self.get_data()
         
-    def get_data(self):
+    def get_data(self):# read in output file
         self.xs = []; self.ys = []; self.zs = []
         self.ls = []; self.bs = []; self.rs = []
         self.vxs = []; self.vys = []; self.vzs = []
@@ -184,7 +183,7 @@ class nbody_outputs:#a class that takes in data from nbody output files and make
             self.lambdas = []
         
         for i in range(0, len(self.ls)):
-            lmbda_tmp, beta_tmp = self.convert_to_Lambda_Beta(self.ls[i], self.bs[i], self.rs[i], False)
+            lmbda_tmp, beta_tmp = convert_to_Lambda_Beta(self.ls[i], self.bs[i], self.rs[i], False)
             if(split):
                 if(self.tps[i] == 0):
                     self.light_lambda.append(lmbda_tmp)
@@ -197,67 +196,7 @@ class nbody_outputs:#a class that takes in data from nbody output files and make
                 self.lambdas.append(lmbda_tmp)
                 self.betas.append(beta_tmp)
             
-        
-        
-    def convert_to_Lambda_Beta(self, x1, x2, x3, cartesian):#can convert l,b or x,y,z to lambda beta
-        # note: this uses a left handed coordinate system #
-        # it assumes that xyz are lefted handed. l,b are  #
-        # assumed to be right handed. stupid              #
-        left_handed = False                                #
-        # this is the system that is used in MW@home.     #
-    
-        phi   = mt.radians(128.79)
-        theta = mt.radians(54.39)
-        psi   = mt.radians(90.70)
-        
-        if(cartesian):
-            x_coor = x1
-            y_coor = x2
-            z_coor = x3
-            if(left_handed):
-                x_coor += 8.0 #convert to solar centric
-            else:
-                x_coor -= 8.0 
-        else:
-            l = mt.radians(x1)
-            b = mt.radians(x2)
-            
-            x_coor = mt.cos(l) * mt.cos(b) #this is solar centered x
-            y_coor = mt.sin(l) * mt.cos(b) #also, the r doesn't really matter. It cancels
-            z_coor = mt.sin(b)
-        
-        #A = MB
-        B = [x_coor, y_coor, z_coor]
-        
-        M_row1 = [mt.cos(psi) * mt.cos(phi) - mt.cos(theta) * mt.sin(phi) * mt.sin(psi),
-                mt.cos(psi) * mt.sin(phi) + mt.cos(theta) * mt.cos(phi) * mt.sin(psi),
-                mt.sin(psi) * mt.sin(theta)]
-        
-        M_row2 = [-mt.sin(psi) * mt.cos(phi) - mt.cos(theta) * mt.sin(phi) * mt.cos(psi),
-                -mt.sin(psi) * mt.sin(phi) + mt.cos(theta) * mt.cos(phi) * mt.cos(psi),
-                mt.cos(psi) * mt.sin(theta)]
-        
-        M_row3 = [mt.sin(theta) * mt.sin(phi), 
-                -mt.sin(theta) * mt.cos(phi),
-                mt.cos(theta)]
-        
-        A1 = M_row1[0] * B[0] + M_row1[1] * B[1] + M_row1[2] * B[2]
-        A2 = M_row2[0] * B[0] + M_row2[1] * B[1] + M_row2[2] * B[2]
-        A3 = M_row3[0] * B[0] + M_row3[1] * B[1] + M_row3[2] * B[2]
-        
-        if(left_handed):
-            A3 = -A3
-
-        beta = mt.asin(A3 / mt.sqrt(A1 * A1 + A2 * A2 + A3 * A3))
-        lamb = mt.atan2(A2, A1)
-        
-        beta = mt.degrees(beta)
-        lamb = mt.degrees(lamb)
-        
-        return lamb, beta
-    
-    
-    def binner_vlos(self, angle_cuttoffs):
+    def binner_vlos(self, angle_cuttoffs):#bins the line of sight vel between angular cuttoffs
         self.binned_vlos = []
         self.which_bin   = []
         
@@ -292,7 +231,7 @@ class nbody_histograms:#a class that takes in data from nbody histogram files an
         self.file_name = file_name
         self.get_data()
         
-    def get_data(self):
+    def get_data(self):#read in the histogram
         self.lbins = []; self.counts = []; self.count_err = []; self.bd = []; self.bd_error = []; self.vd = []; self.vd_error = []
         read_data = False
 
@@ -318,7 +257,67 @@ class nbody_histograms:#a class that takes in data from nbody histogram files an
                     self.vd_error.append( float(ss[8]))
                     
         lines.close()
+    
+    
+    
+def convert_to_Lambda_Beta(self, x1, x2, x3, cartesian):#can convert l,b or x,y,z to lambda beta
+    # note: this uses a left handed coordinate system #
+    # it assumes that xyz are lefted handed. l,b are  #
+    # assumed to be right handed. stupid              #
+    left_handed = False                                #
+    # this is the system that is used in MW@home.     #
+
+    phi   = mt.radians(128.79)
+    theta = mt.radians(54.39)
+    psi   = mt.radians(90.70)
+    
+    if(cartesian):
+        x_coor = x1
+        y_coor = x2
+        z_coor = x3
+        if(left_handed):
+            x_coor += 8.0 #convert to solar centric
+        else:
+            x_coor -= 8.0 
+    else:
+        l = mt.radians(x1)
+        b = mt.radians(x2)
         
+        x_coor = mt.cos(l) * mt.cos(b) #this is solar centered x
+        y_coor = mt.sin(l) * mt.cos(b) #also, the r doesn't really matter. It cancels
+        z_coor = mt.sin(b)
+    
+    #A = MB
+    B = [x_coor, y_coor, z_coor]
+    
+    M_row1 = [mt.cos(psi) * mt.cos(phi) - mt.cos(theta) * mt.sin(phi) * mt.sin(psi),
+            mt.cos(psi) * mt.sin(phi) + mt.cos(theta) * mt.cos(phi) * mt.sin(psi),
+            mt.sin(psi) * mt.sin(theta)]
+    
+    M_row2 = [-mt.sin(psi) * mt.cos(phi) - mt.cos(theta) * mt.sin(phi) * mt.cos(psi),
+            -mt.sin(psi) * mt.sin(phi) + mt.cos(theta) * mt.cos(phi) * mt.cos(psi),
+            mt.cos(psi) * mt.sin(theta)]
+    
+    M_row3 = [mt.sin(theta) * mt.sin(phi), 
+            -mt.sin(theta) * mt.cos(phi),
+            mt.cos(theta)]
+    
+    A1 = M_row1[0] * B[0] + M_row1[1] * B[1] + M_row1[2] * B[2]
+    A2 = M_row2[0] * B[0] + M_row2[1] * B[1] + M_row2[2] * B[2]
+    A3 = M_row3[0] * B[0] + M_row3[1] * B[1] + M_row3[2] * B[2]
+    
+    if(left_handed):
+        A3 = -A3
+
+    beta = mt.asin(A3 / mt.sqrt(A1 * A1 + A2 * A2 + A3 * A3))
+    lamb = mt.atan2(A2, A1)
+    
+    beta = mt.degrees(beta)
+    lamb = mt.degrees(lamb)
+    
+    return lamb, beta
+
+
 class sweep_data:
     class sweep_val:
         def __init__(self, parameter_val, likelihood, parameter_val2 = None):
