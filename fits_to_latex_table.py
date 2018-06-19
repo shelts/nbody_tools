@@ -98,13 +98,13 @@ def main():
                         ]
     
     folder = '/home/sidd/Desktop/research/like_surface/run_stats/'
-    runs = folder + 'runs_data_3_22_18_pulled_4_18_18/'
-    data_files = [runs + 'de_nbody_3_22_2018_v168_20k__data_1',\
-                  runs + 'de_nbody_3_22_2018_v168_20k__data_2',\
-                  runs + 'de_nbody_3_22_2018_v168_20k__data_3' \
+    runs = folder + 'runs_data_5_1_18_pulled_5_31_18/'
+    data_files = [runs + 'de_nbody_5_1_2018_v168_20k__data_1',\
+                  runs + 'de_nbody_5_1_2018_v168_20k__data_2',\
+                  runs + 'de_nbody_5_1_2018_v168_20k__data_3' \
                       ]
     
-    write_file = 'latex_table.txt'
+    write_file = 'latex_table3.txt'
     
     make_latex_table(data_files, write_file, search_range)
     

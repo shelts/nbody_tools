@@ -96,12 +96,12 @@ class sampling:
         plt.xlim(0.0, 1.5)
         plt.tick_params(axis='y', which='major', labelsize=24)
         plt.tick_params(axis='x', which='major', labelsize=24)
-        plt.xlabel('Radius (kpc)', fontsize=24)
-        plt.ylabel(r'r$^2$ $\rho$', fontsize=24)
+        plt.xlabel('Radius (kpc)', fontsize=28)
+        plt.ylabel(r'r$^2$ $\rho$', fontsize=28)
         plt.plot(self.radii, self.funcp, '+', markersize = 1, color = 'g', marker = '+')
         plt.plot(self.throw_away_r, self.throw_away_funcp, '.', markersize = 1.0, color = 'r', marker = 'o')
         plt.plot(self.rs, self.fs, color = 'k', linewidth = 2.5, linestyle = '-')
-        plt.savefig("sampling_plot" + plot_name + ".png", format='png')
+        plt.savefig("sampling_plot" + plot_name + ".eps", format='eps')
         plt.clf()
     
     def plot_hists(self, counts, bins, plot_name):

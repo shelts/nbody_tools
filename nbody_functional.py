@@ -47,8 +47,8 @@ class nbody_running_env:
                          -o " +  simulation_hist + ".out "
         
         #final piece to the run command. includes the number of threads, output format, and visualizer args
-        end_piece = "-n 10 -b -u --visualizer-bin=" + self.path + "nbody_test/bin/milkyway_nbody_graphics -i " + (ft) + " " + bt + " " + rl + " " + rr + " " + ml + " " + mr
-        
+        end_piece = "-n 10 -b -u --visualizer-bin=" + self.path + "nbody_test/bin/milkyway_nbody_graphics -i " + (ft) + " " + bt + " " + rl + " " + rr + " " + ml + " " + mr 
+        end_piece = "-n 10 -b -u --visualizer-bin=" + self.path + "nbody_test/bin/milkyway_nbody_graphics -i " + (ft) + " " + bt + " " + rl + " " + rr + " " + ml + " " + mr + " " + "~/Desktop/research/nbody_tools/disk.out"
         if(not comparison_hist): ##this willl produce a single run of nbody, without comparing the end result to anything
             run_command += end_piece #completing the run command
        

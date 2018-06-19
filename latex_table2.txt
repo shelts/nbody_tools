@@ -1,0 +1,42 @@
+\begin{center}
+\begin{table}[!ht]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+Parameters& Evolve Time & $R_B$ & Radius Ratio ($\frac{R_B}{R_B + R_D}$) & $M_B$ & Mass Ratio ($\frac{M_B}{M_B + M_D}$)\\
+\hline \hline
+Search Range	& [3.0 - 6.0] & [0.1 - 0.5] & [0.1 - 0.5] & [1.0 - 100.0] & [0.01 - 0.95] \\
+\hline
+Histogram 1 & 3.8499 & 0.1006 & 0.4532 & 1.0725 & 0.012 \\
+\hline
+Histogram 1 & 4.0355 & 0.1021 & 0.416 & 1.1234 & 0.0102 \\
+\hline
+Histogram 1 & 4.1168 & 0.1 & 0.3919 & 1.1255 & 0.0116 \\
+\hline
+\end{tabular}
+\caption{}
+\label{table:}
+\end{table}
+\end{center}
+
+
+
+
+\begin{center}
+\begin{table}[!ht]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+Parameters& Evolve Time (Gy) & $R_B$ (kpc) & $R_D$ (kpc) & $M_B$ ($M_\odot$)& $M_D$ ($M_\odot$)\\
+\hline \hline
+Histogram 1 & 3.8499 & 0.1006 & 0.1214 & 238411.6645 & 19616704.8623 \\
+\hline
+Histogram 1 & 4.0355 & 0.1021 & 0.1433 & 249718.031 & 24351773.4662 \\
+\hline
+Histogram 1 & 4.1168 & 0.1 & 0.1552 & 250175.6786 & 21392708.5044 \\
+\hline
+\end{tabular}
+\caption{}
+\label{table:}
+\end{table}
+\end{center}

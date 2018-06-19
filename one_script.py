@@ -13,7 +13,7 @@ import subprocess
 import math as mt
 import random
 from nbody_functional import *
-from nbody_useful_plots import *
+#from nbody_useful_plots import *
 random.seed(a = 12345678)
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
                 #/# # # # # # # # # # # # # # \#
@@ -29,7 +29,7 @@ sid_dir = '/home/sidd/Desktop/research/'
 sgr_dir = '/Users/master/sidd_research/'
 path = sid_dir
 
-args_run = [3.95, 0.2, 0.2, 12, 0.2] 
+args_run = [3.95, 0.006, 0.02, 0.027, 0.001] 
 args_run_comp = [3.9, 0.2, 0.2, 12, 0.2] 
 #args_run_comp = [3.94243049428117, 0.204575760168173, 0.179013230102704, 12.0318620456042, 0.140573755762348]
 # # # # # # # # # # # # # # # # # # # # # # # #
@@ -78,7 +78,7 @@ compare_hist = 'data_hist_spring_2018'
 
 #    hist name for the nbody run: either set them manually or use from the list above #
 folder = path + 'quick_plots/hists_outs/'
-correctans_hist = folder + 'fun'
+correctans_hist = folder + 'ultrafaint'
 simulations_hist = folder + '3.9'
 
 plot_name = compare_hist
@@ -88,7 +88,7 @@ plot_name = compare_hist
 #    run specfics   #
 #version = '_1.68_x86_64-pc-linux-gnu__mt'
 version  = ''
-lua = path + 'lua/' + "full_control.lua"-
+lua = path + 'lua/' + "full_control.lua"
 #lua = path + 'milkywayathome_client/nbody/sample_workunits/for_dev_manual_body.lua'
 #lua = "manual_body_input.lua"
 #lua = path + 'lua/' + "halo_object_dev.lua"

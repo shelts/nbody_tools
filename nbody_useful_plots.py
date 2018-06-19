@@ -583,8 +583,8 @@ def lb_plot(file_name): #plots lb from output
     plot_lbr = False
     plot_light_and_dark = True
     plot_dm_only = False
-    plot_xyz = False
-    plot_xyz_3d = True
+    plot_xyz = True
+    plot_xyz_3d = False
     out = nbody_outputs(path + file_name + '.out')
     out.rescale_l()
     out.dark_light_split()
@@ -633,58 +633,64 @@ def lb_plot(file_name): #plots lb from output
             plt.savefig(file_name + '_tidal_stream_lbr_dark', format='png')
             
     if(plot_xyz):
-        plt.figure(figsize=(10, 15))
-        xlower = 10
-        xupper = -10
-        ylower = -10
-        yupper = 10
+        plt.figure(figsize=(10, 20))
+        xlower = .5
+        xupper = -.5
+        ylower = -.5
+        yupper = .5
         ms = 0.5
         #fig.tight_layout()
         plt.axes().set_aspect('equal')
         plt.subplot(311, aspect='equal')
-        plt.subplot(311)
+        #plt.subplot(311)
+        plt.tick_params(axis='y', which='major', labelsize=22)
+        plt.tick_params(axis='x', which='major', labelsize=22)
         if(plot_light_and_dark == True):
-            plt.plot(out.dark_x, out.dark_y, '.', markersize = ms, color = 'b', marker = '.')
-        plt.plot(out.light_x, out.light_y, '.', markersize = ms, color = 'r', marker = '.')
+            plt.plot(out.dark_x, out.dark_y, '.', markersize = ms, color = 'k', marker = '.')
+        plt.plot(out.light_x, out.light_y, '.', markersize = ms, color = 'b', marker = '.')
         
         plt.xlim((xlower, xupper))
         plt.ylim((ylower, yupper))
-        plt.xlabel('x')
-        plt.ylabel('y')
+        plt.xlabel('x', fontsize=24)
+        plt.ylabel('y', fontsize=24)
         #plt.title('x vs y')
         
         plt.subplot(312,aspect='equal')
-        plt.subplot(312)
+        #plt.subplot(312)
+        plt.tick_params(axis='y', which='major', labelsize=22)
+        plt.tick_params(axis='x', which='major', labelsize=22)
         if(plot_light_and_dark == True):
-            plt.plot(out.dark_x, out.dark_z, '.', markersize = ms, color = 'b', marker = '.')
+            plt.plot(out.dark_x, out.dark_z, '.', markersize = ms, color = 'k', marker = '.')
         
-        plt.plot(out.light_x, out.light_z, '.', markersize = ms, color = 'r', marker = '.')
+        plt.plot(out.light_x, out.light_z, '.', markersize = ms, color = 'b', marker = '.')
         
         plt.xlim((xlower, xupper))
         plt.ylim((ylower, yupper))
-        plt.xlabel('x')
-        plt.ylabel('z')
+        plt.xlabel('x', fontsize=24)
+        plt.ylabel('z', fontsize=24)
         #plt.title('x vs z')
         
         plt.subplot(313, aspect='equal')
-        plt.subplot(313)
+        #plt.subplot(313)
+        plt.tick_params(axis='y', which='major', labelsize=22)
+        plt.tick_params(axis='x', which='major', labelsize=22)
         if(plot_light_and_dark == True):
-            plt.plot(out.dark_z, out.dark_y, '.', markersize = ms, color = 'b', marker = '.')
-        plt.plot(out.light_z, out.light_y, '.', markersize = ms, color = 'r', marker = '.')
+            plt.plot(out.dark_z, out.dark_y, '.', markersize = ms, color = 'k', marker = '.')
+        plt.plot(out.light_z, out.light_y, '.', markersize = ms, color = 'b', marker = '.')
         
         plt.xlim((xlower, xupper))
         plt.ylim((ylower, yupper))
-        plt.xlabel('z')
-        plt.ylabel('y')
+        plt.xlabel('z', fontsize=24)
+        plt.ylabel('y', fontsize=24)
         #plt.title('z vs y')
-        plt.savefig(file_name + 'tidal_stream_xyz.png', format='png')
+        plt.savefig(file_name + 'ultrafaint_tidal_stream_xyz.png', format='png')
     
     
     if(plot_xyz_3d):
-        xlower = 5
-        xupper = -5
-        ylower = -10
-        yupper = 10
+        xlower = .5
+        xupper = -.5
+        ylower = -.5
+        yupper = .5
         ms = 0.5
         #fig.tight_layout()
         fig =  plt.figure()
@@ -695,14 +701,14 @@ def lb_plot(file_name): #plots lb from output
         ax.set_xlabel('X ')
         ax.set_ylabel('Y ')
         ax.set_zlabel('Z ')
-        ax.scatter(out.light_x, out.light_y, out.light_z, s = ms, color = 'r', marker = '.')
-        plt.savefig(file_name + 'tidal_stream_xyz_3d_light.png', format='png', dpi=200)
+        ax.scatter(out.light_x, out.light_y, out.light_z, s = ms, color = 'b', marker = '.')
+        plt.savefig(file_name + 'ultrafaint_tidal_stream_xyz_3d_light.png', format='png', dpi=200)
         
         ms = 1.1
-        ax.scatter(out.dark_x, out.dark_y, out.dark_z,  s= ms, color = 'b', alpha = 1, marker = '.')
-        ax.scatter(out.light_x, out.light_y, out.light_z, s = 0.5, color = 'r', marker = 'o')
+        ax.scatter(out.light_x, out.light_y, out.light_z, s = 0.5, color = 'b', marker = 'o')
+        ax.scatter(out.dark_x, out.dark_y, out.dark_z,  s= ms, color = 'k', alpha = 1, marker = '.')
         
-        plt.savefig(file_name + 'tidal_stream_xyz_3d.png', format='png', dpi=200)
+        plt.savefig(file_name + 'ultrafaint_tidal_stream_xyz_3d.png', format='png', dpi=200)
         #plt.show()
     
         
@@ -1064,13 +1070,6 @@ def plum_pot():
     plt.savefig('/home/sidd/Desktop/research/quick_plots/publish_plots/pot2.png', format='png')
     
     
-    
-    
-    
-    
-    
-    
-    
 def chi_sq_dist_plot():
     k = 50.0
     cf = (k / 2.0) - 1.0
@@ -1114,7 +1113,7 @@ def single_xyz(file_name):
     plot_light_and_dark = True
     plot_dm = True
     
-    out = nbody_outputs(path + file_name + '.out')
+    out = nbody_outputs(file_name + '.out')
     out.rescale_l()
     out.dark_light_split()
     
@@ -1122,8 +1121,10 @@ def single_xyz(file_name):
     fig.subplots_adjust(hspace = 0.8, wspace = 0.8)
     # # # # # # # # # #
             
-    xlower = 50
-    xupper = -50
+    xlower = 1
+    xupper = -1
+    ylower = 1
+    yupper = -1
     #fig.tight_layout()
     #plt.axes().set_aspect('equal')
     plt.figure(figsize=(10, 10))
@@ -1134,7 +1135,7 @@ def single_xyz(file_name):
         plt.plot(out.dark_x, out.dark_y, '.', markersize = 1, color = 'b', marker = '+')
     
     plt.xlim((xlower, xupper))
-    plt.ylim((-80, 80))
+    plt.ylim((ylower, yupper))
     plt.xlabel('x')
     plt.ylabel('y')
     plt.title('x vs y')
@@ -1147,7 +1148,8 @@ def single_xyz(file_name):
         plt.plot(out.dark_x, out.dark_z, '.', markersize = 1, color = 'b', marker = '+')
     
     plt.xlim((xlower, xupper))
-    plt.ylim((-80, 80))
+    plt.ylim((ylower
+              , yupper))
     plt.xlabel('x')
     plt.ylabel('z')
     plt.title('x vs z')
@@ -1159,11 +1161,11 @@ def single_xyz(file_name):
         plt.plot(out.dark_z, out.dark_y, '.', markersize = 1, color = 'b', marker = '+')
     
     plt.xlim((xlower, xupper))
-    plt.ylim((-80, 80))
+    plt.ylim((ylower, yupper))
     plt.xlabel('z')
     plt.ylabel('y')
     plt.title('z vs y')
-    plt.savefig('/home/sidd/Desktop/research/quick_plots/tidal_stream_xyz', format='png')
+    plt.savefig('/home/sidd/Desktop/research/quick_plots/ultrafaint_tidal_stream_xyz', format='png')
 
     return 0
 
@@ -1172,7 +1174,7 @@ def main():
     path = '/home/sidd/Desktop/research/'
 
     folder = path + 'quick_plots/hists_outs/'
-    #file1 = 'arg_3.95_0.2_0.2_12_0.2_correct2'
+    file1 = folder + 'ultrafaint'
     #file2 = 'arg_3.95_0.2_0.2_12_0.2_correct1'
     
     #plot_hist_lambda_beta(file1, file2)
@@ -1196,7 +1198,7 @@ def main():
     
     #file1 = "dist_test"
     #single_xyz(file1)
-    
+    lb_plot(file1)
     return 0 
 
 main()
