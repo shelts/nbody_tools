@@ -41,20 +41,21 @@ histogram_v168 = 'hist_v168_3p95_0p2_0p2_12_0p2__1_31_18_diffSeed'
 
 folder = path + 'quick_plots/hists_outs/'
 
-# name for non comparing hist file or the sim data hist for the compare runs #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+# correctans_hist: name for non comparing hist file or the sim data hist for the compare runs #
+# simulations_hist: name for the comparison hist file for comparison runs                     #
 correctans_hist = folder + 'ultrafaint'
-
-# name for the comparison hist file for comparison runs #
 simulations_hist = folder + '3.9'
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
-plot_name = compare_hist
+# optional run arguements #
+manual_body_list = None #"~/Desktop/research/nbody_tools/disk.out"
+piping_file = None
 
 #    run specfics   #
 #version = '_1.68_x86_64-pc-linux-gnu__mt'
 version  = ''
 lua = path + 'lua/' + "full_control.lua"
-manual_body_list = "~/Desktop/research/nbody_tools/disk.out"
-#lua = path + 'milkywayathome_client/nbody/sample_workunits/for_dev_manual_body.lua'
 #lua = path + 'lua/' + "EMD_v168.lua"
 
 
@@ -71,10 +72,10 @@ def standard_run():
             nbody.build(False)
 
     if(run_nbody):
-        nbody.run(args_run, correctans_hist, None, None, manual_body_list)
+        nbody.run(args_run, correctans_hist, None, piping_file, manual_body_list)#normally used to create the correctans_hist
     
     if(run_and_compare):
-        nbody.run(args_run_comp, simulations_hist, correctans_hist, None, manual_body_list)
+        nbody.run(args_run_comp, simulations_hist, correctans_hist, piping_file, manual_body_list)
     
     if(match_histograms):
         nbody.match_hists(simulations_hist, correctans_hist)
@@ -85,7 +86,7 @@ def standard_run():
 standard_run()
 
 if(plot_hists):
-    plot(correctans_hist , simulations_hist, plot_name, '1', '2')
+    plot(correctans_hist , simulations_hist, simulations_hist, '1', '2')
 
 if(lb_plot_switch):
     lb_plot(correctans_hist)

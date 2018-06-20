@@ -29,7 +29,7 @@ class nbody_running_env:
         os.chdir("../")
     
     
-    def run(self, parameters, simulation_hist, comparison_hist = None, pipe = None, manual_body_list = ''):#running function. 2 optional parameters. 
+    def run(self, parameters, output_hist, comparison_hist = None, pipe = None, manual_body_list = ''):#running function. 2 optional parameters. 
         ft    = str(parameters[0])
         bt    = str(1.0)
         rl    = str(parameters[1])
@@ -43,11 +43,11 @@ class nbody_running_env:
         #it is incomplete. It has the lua file flag, the output hist flag, and outfile flag
         run_command  = "./milkyway_nbody" + self.version + " \
                          -f " +  self.lua_file + " \
-                         -z " +  simulation_hist + ".hist \
-                         -o " +  simulation_hist + ".out "
+                         -z " +  output_hist + ".hist \
+                         -o " +  output_hist + ".out "
         
         #final piece to the run command. includes the number of threads, output format, and visualizer args
-        end_piece = "-n 10 -b -u --visualizer-bin=" + self.path + "nbody_test/bin/milkyway_nbody_graphics -i " + ft + " " + bt + " " + rl + " " + rr + " " + ml + " " + mr + " " + manual_body_list
+        end_piece = "-n 10 -b --visualizer-bin=" + self.path + "nbody_test/bin/milkyway_nbody_graphics -i " + ft + " " + bt + " " + rl + " " + rr + " " + ml + " " + mr + " " + manual_body_list
         
         if(not comparison_hist): ##this will produce a single run of nbody, without comparing the end result to anything
             run_command += end_piece #completing the run command
