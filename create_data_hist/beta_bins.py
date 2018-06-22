@@ -17,7 +17,7 @@ from hessian import *
 
 class bin_betas:#class to make histogram of betas in each bin
     def __init__(self, beta_coors_ON, beta_coors_OFF, lmda_bnd):#(on field beta coordinates, Off field beta coordinates, lambda bin parameters)
-        run_optimization = False
+        run_optimization = True
         plot_each_bin = True
         den_correction = False
         
@@ -244,7 +244,7 @@ class bin_betas:#class to make histogram of betas in each bin
         fig, axes = plt.subplots(ncols=2, sharex=True, sharey=True)
         fig.subplots_adjust(hspace=0)
         ax1 = plt.subplot(211)
-        plt.ylabel("Star Count")
+        plt.ylabel("Star Count", fontsize=16)
         plt.xlim(self.lower - 0.5 , self.upper + 0.5)
         plt.ylim(0.0, 400)
         plt.plot(fit_xs,  fit_fs, color='k',linewidth = 2, alpha = 1., label = '' )
@@ -255,17 +255,27 @@ class bin_betas:#class to make histogram of betas in each bin
         plt.yticks([50, 100, 150, 200, 250, 300, 350, 400])
         
         ax2 = plt.subplot(212)
-        plt.ylabel("Star Count")
-        plt.xlabel(r"$\beta_{Orphan}$")
+        plt.ylabel("Star Count", fontsize=16)
+        plt.xlabel(r"$\beta_{Orphan}$", fontsize=16)
         plt.xlim(self.lower - 0.5 , self.upper + 0.5)
         plt.ylim(0.0, 400)
-        plt.bar(self.bin_centers, self.binned_beta_combined[i], width=w, color='k', alpha = 1., label = 'combined')
-        plt.bar(self.bin_centers, self.binned_beta_OFF[i], width=w, color='r', alpha = 0.5, label = 'OFF')
-        plt.bar(self.bin_centers, self.binned_beta_ON[i], width=w, color='b', alpha = 0.5, label = 'ON')
+        plt.bar(self.bin_centers, self.binned_beta_combined[i], width=w, color='w', edgecolor = "k", hatch='xxxxx', alpha = 1., label = 'Combined')
+        plt.bar(self.bin_centers, self.binned_beta_OFF[i],      width=w, color='w', edgecolor = "firebrick", hatch='\\\\\\\\', alpha = 1., label = 'OFF')
+        plt.bar(self.bin_centers, self.binned_beta_ON[i],       width=w, color='w', edgecolor = "b", hatch='////', alpha = 1., label = 'ON')
         plt.yticks([50, 100, 150,  200, 250, 300, 350])
         #plt.legend()
+        if(i== 0 ):
+            plt.legend(bbox_to_anchor=(0.65,0.7), loc='lower left', borderaxespad=0.,  prop={'size': 14}, framealpha=1)
+        elif(i == 1 ):
+            plt.legend(bbox_to_anchor=(0.65,0.87), loc='lower left', borderaxespad=0.,  prop={'size': 14}, framealpha=1)
+        elif(i == 2 ):
+            plt.legend(bbox_to_anchor=(0.65,0.87), loc='lower left', borderaxespad=0.,  prop={'size': 14}, framealpha=1)
+        elif(i == 3 ):
+            plt.legend(bbox_to_anchor=(0.65,0.4), loc='lower left', borderaxespad=0.,  prop={'size': 14}, framealpha=1)
+            
         plt.savefig('stream_beta_plots/lambda_dots_' + str(i) + '_(' + str(self.lmda_bnd.bin_lowers[i]) + ',' + str(self.lmda_bnd.bin_centers[i]) + ',' +  str(self.lmda_bnd.bin_uppers[i]) + ').png', format = 'png')
-        plt.savefig('stream_beta_plots/lambda_dots_' + str(i) + '.png', format = 'png')
+        plt.savefig('stream_beta_plots/dots/lambda_dots_' + str(i) + '.pdf', format = 'pdf')
+        plt.savefig('stream_beta_plots/dots/lambda_dots_' + str(i) + '.png', format = 'png')
         plt.close()
     
     

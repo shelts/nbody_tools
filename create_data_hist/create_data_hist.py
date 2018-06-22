@@ -235,7 +235,7 @@ class data:#class system for reading in data and making a data histogram
     
 def main():
     use_vgsr = False
-    use_custom_bins = False
+    use_custom_bins = True
     calc_beta_dispersions = True
     make_hist = False
     normalize_counts =  False
@@ -248,7 +248,7 @@ def main():
     on_field_counts_file = "l270soxlbfgcxNTbcorr.newon"
     off_field_counts_file = "l270soxlbfgcxNTbcorr.newoff"
     bin_data = "data_from_yanny.dat"
-    #bin_data = "custom_bins3.dat"
+    bin_data = "custom_bins3.dat"
     
     dat = data(on_field_counts_file, off_field_counts_file)
     lamda_beta_plot(dat)

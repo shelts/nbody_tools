@@ -43,7 +43,7 @@ class hessian:
         b = self.paras[j]
         p = list(self.paras)
         f = open(self.cost.likelihood_file, 'a')
-        f.write('working on element ' + str(i) + ',' + str(j))
+        f.write('working on element ' + str(i) + ',' + str(j) + '\n')
         f.write('starting parameters:  ' + str(p[0]) + ' ' + str(p[1]) + ' ' + str(p[2]) + ' ' + str(p[3]) + ' ' + str(p[4]) + '\n')
         if(i == j): # straight up second derivative
             f.write('derivative parameters:  ' + str(p[0]) + ' ' + str(p[1]) + ' ' + str(p[2]) + ' ' + str(p[3]) + ' ' + str(p[4]) + '\n')
