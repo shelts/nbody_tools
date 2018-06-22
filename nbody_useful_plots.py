@@ -1039,78 +1039,6 @@ def veldisp_lbda_beta(file1):#plots the velocity dispersion from the histograms
     plt.clf()
     #plt.show()
 
-def piechart():
-    labels = 'Mass Cost', 'Geometry', 'Dispersion'
-    sizes = [120, 120, 120]
-    colors = ['red', 'yellow', 'cyan']
-    explode = (0.0, 0, 0, 0)  # explode 1st slice
-    fig = plt.figure(facecolor='b', edgecolor='k')
-    fig.patch.set_facecolor('grey')
-
-    plt.pie(sizes, colors=colors, shadow=False, startangle=140)
-    plt.axis('equal')
-    plt.savefig('/home/sidd/Desktop/research/quick_plots/publish_plots/piechart.png', format='png')
-
-def plum_pot():
-    r = -2.0
-    rs = 0.3
-    M = 10
-    M2 = M / 100.0
-    pi = mt.pi
-    pots = []
-    rvals = []
-    pots2 = []
-    for i in range(1000000):
-        pot =  -M / mt.sqrt( r * r + rs * rs)
-        pot2 = -M2 / r
-        pots.append(pot)
-        rvals.append(r)
-        pots2.append(pot2)
-        r += 0.01
-    plt.xlim(-1, 1)
-    plt.ylim(-100, 100)
-    plt.yticks([])
-    plt.xticks([])
-    plt.plot(rvals, pots, color = 'k', linewidth = 4)
-    plt.plot(rvals, pots2, color = 'b', linewidth = 2)
-    plt.savefig('/home/sidd/Desktop/research/quick_plots/publish_plots/pot2.png', format='png')
-    
-    
-def chi_sq_dist_plot():
-    k = 50.0
-    cf = (k / 2.0) - 1.0
-    x = 0.1
-    xs = []
-    func1s = []
-    func2s = []
-    func3s = []
-    while(1):
-        func1 = cf * mt.log(x) - x / 2.0
-        func2 = func1 - cf * (mt.log(2.0 * cf) - 1.0) 
-        if(x < 2.0 * cf):
-            func3 = 0.0
-        else:
-            func3 = func2
-            
-        xs.append(x)
-        func1s.append(func1)
-        func2s.append(func2)
-        func3s.append(func3)
-        if(x > 1000):
-            break
-        else:
-            x += 0.1
-    plt.ylim((-200, 100))
-    plt.xlim((0, 400))
-    plt.xlabel(r'N$_{\sigma}$$^{2}$')
-    plt.ylabel('Probability')
-    #plt.plot(xs, func1s, color='k', linestyle = 'solid', alpha = 1, linewidth = 2)
-    #plt.plot(xs, func2s, color='b', linestyle = 'dashed', alpha = .5, linewidth = 2)
-    plt.plot(xs, func3s, color='r', linestyle = 'dotted', alpha = 1, linewidth = 4)
-    
-    plt.savefig('/home/sidd/Desktop/research/quick_plots/publish_plots/chi_sq_func3.png', format='png')
-    #plt.show()
-# #
 
 
 def single_xyz(file_name):
@@ -1194,9 +1122,6 @@ def main():
     #plot_disps(hist1)
     #plot_2betadisps(hist1,hist2)
     
-    #chi_sq_dist_plot()
-    #piechart()
-    #plum_pot()
     #name = 'mwh_hist'
     #plot_single(hist1, name)
     #plot(hist1, hist2, 'mw@home_best_fit', 'MilkyWay@home', 'Best Fit')

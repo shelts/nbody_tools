@@ -22,7 +22,7 @@ args_run_comp = [3.9, 0.2, 0.2, 12, 0.2]
 #              Standard Run switches          #
 # # # # # # # # # # # # # # # # # # # # # # # #
 run_nbody                 = y                 #
-remake                    = n                 #
+remake                    = y                 #
 full_remake               = n
 run_and_compare           = n                 #
 match_histograms          = n                 #
@@ -44,12 +44,12 @@ folder = path + 'quick_plots/hists_outs/'
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # correctans_hist: name for non comparing hist file or the sim data hist for the compare runs #
 # simulations_hist: name for the comparison hist file for comparison runs                     #
-correctans_hist = folder + 'ultrafaint'
+correctans_hist = folder + 'test'
 simulations_hist = folder + '3.9'
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
 # optional run arguements #
-manual_body_list = None #"~/Desktop/research/nbody_tools/disk.out"
+manual_body_list = '' #"~/Desktop/research/nbody_tools/disk.out"
 piping_file = None
 
 #    run specfics   #

@@ -14,7 +14,6 @@ class hessian:
         self.cost = cost
         self.paras = parameters
         self.steps = step_sizes #
-        ##self.paras = [2.0, 3.0, 4.0]
         self.dim = len(self.paras)
         self.create_matrix()
         self.invert()
@@ -43,21 +42,19 @@ class hessian:
         a = self.paras[i]
         b = self.paras[j]
         p = list(self.paras)
-        print 'starting paras', p
         f = open(self.cost.likelihood_file, 'a')
+        f.write('working on element ' + str(i) + ',' + str(j))
+        f.write('starting parameters:  ' + str(p[0]) + ' ' + str(p[1]) + ' ' + str(p[2]) + ' ' + str(p[3]) + ' ' + str(p[4]) + '\n')
         if(i == j): # straight up second derivative
-            print p
-            f.write(str(p[0]) + ' ' + str(p[1]) + ' ' + str(p[2]) + ' ' + str(p[3]) + ' ' + str(p[4]) + '\n')
+            f.write('derivative parameters:  ' + str(p[0]) + ' ' + str(p[1]) + ' ' + str(p[2]) + ' ' + str(p[3]) + ' ' + str(p[4]) + '\n')
             f1 = self.cost.get_likelihood(p)
             
             p[i] = a + h1
-            print p
-            f.write(str(p[0]) + ' ' + str(p[1]) + ' ' + str(p[2]) + ' ' + str(p[3]) + ' ' + str(p[4]) + '\n')
+            f.write('derivative parameters:  ' + str(p[0]) + ' ' + str(p[1]) + ' ' + str(p[2]) + ' ' + str(p[3]) + ' ' + str(p[4]) + '\n')
             f2 = self.cost.get_likelihood(p)
             
             p[i] = a - h1
-            print p
-            f.write(str(p[0]) + ' ' + str(p[1]) + ' ' + str(p[2]) + ' ' + str(p[3]) + ' ' + str(p[4]) + '\n')
+            f.write('derivative parameters:  ' + str(p[0]) + ' ' + str(p[1]) + ' ' + str(p[2]) + ' ' + str(p[3]) + ' ' + str(p[4]) + '\n')
             f3 = self.cost.get_likelihood(p)
             
             der = ((f2)) - 2.0 * ((f1)) + ((f3))
@@ -67,26 +64,22 @@ class hessian:
         else: # second partial derivative
             p[i] = a + h1
             p[j] = b + h2
-            print p
-            f.write(str(p[0]) + ' ' + str(p[1]) + ' ' + str(p[2]) + ' ' + str(p[3]) + ' ' + str(p[4]) + '\n')
+            f.write('derivative parameters:  ' + str(p[0]) + ' ' + str(p[1]) + ' ' + str(p[2]) + ' ' + str(p[3]) + ' ' + str(p[4]) + '\n')
             f1 = self.cost.get_likelihood(p)
         
             p[i] = a + h1
             p[j] = b - h2
-            print p
-            f.write(str(p[0]) + ' ' + str(p[1]) + ' ' + str(p[2]) + ' ' + str(p[3]) + ' ' + str(p[4]) + '\n')
+            f.write('derivative parameters:  ' + str(p[0]) + ' ' + str(p[1]) + ' ' + str(p[2]) + ' ' + str(p[3]) + ' ' + str(p[4]) + '\n')
             f2 = self.cost.get_likelihood(p)
             
             p[i] = a - h1
             p[j] = b + h2
-            print p
-            f.write(str(p[0]) + ' ' + str(p[1]) + ' ' + str(p[2]) + ' ' + str(p[3]) + ' ' + str(p[4]) + '\n')
+            f.write('derivative parameters:  ' + str(p[0]) + ' ' + str(p[1]) + ' ' + str(p[2]) + ' ' + str(p[3]) + ' ' + str(p[4]) + '\n')
             f3 = self.cost.get_likelihood(p)
             
             p[i] = a - h1
             p[j] = b - h2
-            print p
-            f.write(str(p[0]) + ' ' + str(p[1]) + ' ' + str(p[2]) + ' ' + str(p[3]) + ' ' + str(p[4]) + '\n')
+            f.write('derivative parameters:  ' + str(p[0]) + ' ' + str(p[1]) + ' ' + str(p[2]) + ' ' + str(p[3]) + ' ' + str(p[4]) + '\n')
             f4 = self.cost.get_likelihood(p)
             
             der = ((f1)) - ((f2)) - ((f3)) + ((f4))
@@ -108,7 +101,7 @@ class hessian:
         for i in range(0, self.dim):
             errs = ( abs(H_inv[i][i]))**0.5
             self.errs.append(errs)
-        f.write('ERRORS: ' + str(errs[0]) + ' ' + str(errs[1]) + ' ' + str(errs[2]) + ' ' + str(errs[3]) + ' ' + str(errs[4]) + '\n')
+        f.write('ERRORS: ' + str(self.errs[0]) + ' ' + str(self.errs[1]) + ' ' + str(self.errs[2]) + ' ' + str(self.errs[3]) + ' ' + str(self.errs[4]) + '\n')
         print errs
         f.close()
           
@@ -133,7 +126,7 @@ class nbody_cost:
         l = open(self.likelihood_file, 'r')
         
         for line in l:
-            if (line.startswith("<search_likelihood")):
+            if(line.startswith("<search_likelihood")):
                 ss = line.split('<search_likelihood>')#splits the line between the two sides the delimiter
                 ss = ss[1].split('</search_likelihood>')#chooses the second of the split parts and resplits
                 ss = ss[0].split('\n') 
@@ -151,7 +144,7 @@ def main():
     lua = path + 'lua/' + "full_control.lua"
     piping_file = 'hessian_run_likelihoods.txt'
     hist_name = 'mw_best_fit'
-    fit_parameters = [4.03545444101925, 1, 0.102054233253449, 0.415975899916935, 1.12339623813343, 0.0101505240447525]#best fit parameters from mw@h
+    fit_parameters = [4.03545444101925, 0.102054233253449, 0.415975899916935, 1.12339623813343, 0.0101505240447525]#best fit parameters from mw@h
     
     if(create_best_fit_hist):
         nb = nbody_running_env(lua, '', path)
@@ -160,16 +153,15 @@ def main():
     
     #initialize the cost function
     nb_cost = nbody_cost(piping_file, lua, hist_name)
-    
-    hess = hessian(nb_cost, fit_parameters, None) #get initial errors
+    errs = [mt.sqrt(abs(2.74946424e-07)), mt.sqrt(abs(-9.82330531e-08)), mt.sqrt(abs(-5.67039708e-08)), mt.sqrt(abs(2.27250996e-07)), mt.sqrt(abs(-3.20844368e-08)) ]
+    hess = hessian(nb_cost, fit_parameters, errs) #get initial errors
     
     i = 0
-    f = open(piping_file, 'a')
+    #f = open(piping_file, 'a')
     while(1):#iterate errors until errors equal step size
         hess = hessian(nb_cost, fit_parameters, hess.errs)
-        ##print hess.errs
         print i
         i += 1
         
-        
+    
 main()
