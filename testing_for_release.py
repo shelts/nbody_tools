@@ -18,7 +18,7 @@ args_comp2 = [4.0, 0.3, 0.4, 11., 0.3]
 
 lua = path + 'lua/' + "EMD_v170.lua"
 
-versions = ['_1.68_x86_64-pc-linux-gnu__mt', '_1.68_x86_64-pc-linux-gnu', '_1.68_windows_x86_64__mt.exe', '_1.68_windows_x86_64.exe']
+versions = ['_1.70_x86_64-pc-linux-gnu__mt', '_1.70_x86_64-pc-linux-gnu', '_1.70_windows_x86_64__mt.exe', '_1.70_windows_x86_64.exe']
 
 correctans_hist = 'testing'
 
