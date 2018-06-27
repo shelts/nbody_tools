@@ -35,7 +35,7 @@ if(windows):
     else:
         version = versions[3]
         
-nbody = nbody_running_env(lua, '', path)
+nbody = nbody_running_env(lua, version, path)
 simulations_hist = version + '_1'
 nbody.run(args_comp1, simulations_hist, correctans_hist, 'likes.txt', '')
 
