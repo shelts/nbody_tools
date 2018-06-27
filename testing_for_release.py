@@ -16,8 +16,7 @@ args_run = [4.0, 0.2, 0.2, 12., 0.2]
 args_comp1 = [4.0, 0.2, 0.2, 12., 0.2]
 args_comp2 = [4.0, 0.3, 0.4, 11., 0.3]
 
-lua = path + 'lua/' + "EMD_v168.lua"
-nbody = nbody_running_env(lua, '', path)
+lua = path + 'lua/' + "EMD_v170.lua"
 
 versions = ['_1.68_x86_64-pc-linux-gnu__mt', '_1.68_x86_64-pc-linux-gnu', '_1.68_windows_x86_64__mt.exe', '_1.68_windows_x86_64.exe']
 
@@ -36,6 +35,7 @@ if(windows):
     else:
         version = versions[3]
         
+nbody = nbody_running_env(lua, '', path)
 simulations_hist = version + '_1'
 nbody.run(args_comp1, simulations_hist, correctans_hist, 'likes.txt', '')
 
