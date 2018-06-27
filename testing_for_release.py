@@ -5,7 +5,7 @@ from nbody_functional import *
 lmc_dir = '/home/shelts/research/'
 sid_dir = '/home/sidd/Desktop/research/'
 sgr_dir = '/Users/master/sidd_research/'
-path = sid_dir
+path = lmc_dir
 
 linux   = True
 windows = False
