@@ -37,7 +37,7 @@ if(windows):
         version = versions[3]
         
 simulations_hist = version + '_1'
-nbody.run(args_comp1, simulations_hist, correctans_hist, 'likes.txt', None, '')
+nbody.run(args_comp1, simulations_hist, correctans_hist, 'likes.txt', '')
 
 simulations_hist = version + '_2'
-nbody.run(args_comp2, simulations_hist, correctans_hist, 'likes.txt', None, '')
+nbody.run(args_comp2, simulations_hist, correctans_hist, 'likes.txt', '')
