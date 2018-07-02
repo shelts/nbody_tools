@@ -1082,8 +1082,7 @@ def single_xyz(file_name):
         plt.plot(out.dark_x, out.dark_z, '.', markersize = 1, color = 'b', marker = '+')
     
     plt.xlim((xlower, xupper))
-    plt.ylim((ylower
-              , yupper))
+    plt.ylim((ylower, yupper))
     plt.xlabel('x')
     plt.ylabel('z')
     plt.title('x vs z')
