@@ -47,7 +47,7 @@ class nbody_running_env:
                          -o " +  output_hist + ".out "
         
         #final piece to the run command. includes the number of threads, output format, and visualizer args
-        end_piece = "-n 10 -b -u --visualizer-bin=" + self.path + "nbody_test/bin/milkyway_nbody_graphics -i " + ft + " " + bt + " " + rl + " " + rr + " " + ml + " " + mr + " " + manual_body_list
+        end_piece = "-n 10 -b  --visualizer-bin=" + self.path + "nbody_test/bin/milkyway_nbody_graphics -i " + ft + " " + bt + " " + rl + " " + rr + " " + ml + " " + mr + " " + manual_body_list
         
         if(not comparison_hist): ##this will produce a single run of nbody, without comparing the end result to anything
             run_command += end_piece #completing the run command
@@ -65,7 +65,7 @@ class nbody_running_env:
    
    
     def match_hists(self, hist1, hist2, pipe = None):#will compare to hist without running nbody simulation.
-        print "matching histograms: "
+        print("matching histograms: ")
         command = " " + self.path + "nbody_test/bin/milkyway_nbody" + self.version \
                 + " -h " + hist2 + '.hist' \
                 + " -S " + hist1 + '.hist'
@@ -77,8 +77,8 @@ class nbody_running_env:
         else:#will pipe the result of the comparison to a file
             call([command], shell=True)
         
-        print hist1, "\n", hist2
-        print "\n"
+        print( hist1, "\n", hist2)
+        print ("\n")
         return 0
     
 class nbody_outputs:#a class that takes in data from nbody output files and makes them available
@@ -176,8 +176,8 @@ class nbody_outputs:#a class that takes in data from nbody output files and make
     
     def convert_lambda_beta(self, split):#to convert l,b to lambda, beta
         if(split):#if the data was split between light and dark
-            self.light_lambda = []; self.light_beta = []
-            self.dark_lambda  = []; self.dark_beta = []
+            self.light_lambdas = []; self.light_betas = []
+            self.dark_lambdas  = []; self.dark_betas = []
         else:
             self.betas   = []
             self.lambdas = []
@@ -186,12 +186,12 @@ class nbody_outputs:#a class that takes in data from nbody output files and make
             lmbda_tmp, beta_tmp = convert_to_Lambda_Beta(self.ls[i], self.bs[i], self.rs[i], False)
             if(split):
                 if(self.tps[i] == 0):
-                    self.light_lambda.append(lmbda_tmp)
-                    self.light_beta.append(beta_tmp)
+                    self.light_lambdas.append(lmbda_tmp)
+                    self.light_betas.append(beta_tmp)
                     
                 if(self.tps[i] == 1):
-                    self.dark_lambda.append(lmbda_tmp)
-                    self.dark_beta.append(beta_tmp)
+                    self.dark_lambdas.append(lmbda_tmp)
+                    self.dark_betas.append(beta_tmp)
             else:
                 self.lambdas.append(lmbda_tmp)
                 self.betas.append(beta_tmp)
@@ -210,7 +210,7 @@ class nbody_outputs:#a class that takes in data from nbody output files and make
             mid_bins.append(mid_bin)
             
         #transform to lambda beta coordinates from lbr
-        self.convert_lambda_beta(False)
+        self.convert_lambda_beta(True)
         
         for i in range(0, len(self.lambdas)):#go through the different lambda coordinates
             if(self.betas[i] >= angle_cuttoffs[3] and self.betas[i] <= angle_cuttoffs[4]):#if it is between the beta cuttoffs
@@ -225,7 +225,70 @@ class nbody_outputs:#a class that takes in data from nbody output files and make
                         which_lambda.append(self.lambdas[i])#the coordinate that was put there
                         which_beta.append(self.betas[i])
                         break 
+                    
+    def binner(self, angle_cuttoffs):#bins the line of sight vel between angular cuttoffs
+        self.binned_bm = [] #baryonic matter
+        self.which_bin_bm   = [] #baryonic matter bin centers
+        
+        self.binned_dm = [] #dark matter
+        self.which_bin_dm = []   # dm bin centers
+        
+        total_bm = 0
+        total_dm = 0
+        
+        lambda_lower = angle_cuttoffs[0]
+        lambda_upper = angle_cuttoffs[1]
+        lambda_N     = angle_cuttoffs[2]
+        beta_lower   = angle_cuttoffs[3]
+        beta_upper   = angle_cuttoffs[4]
+        beta_N       = angle_cuttoffs[5]
+        
+        bin_size = abs(lambda_lower - lambda_upper) / lambda_N
+        self.mid_bins = []
 
+        #setting up the mid bin coordinates
+        for i in range(0, lambda_N):
+            self.binned_dm.append(0)
+            self.binned_bm.append(0)
+            mid_bin = lambda_lower + i * bin_size + bin_size / 2.0
+            self.mid_bins.append(mid_bin)
+            
+        # transform to lambda beta coordinates from lbr
+        self.dark_light_split()
+        self.convert_lambda_beta(True)
+        
+        for i in range(0, len(self.light_lambdas)):#go through the different lambda coordinates
+            if(self.light_betas[i] >= beta_lower and self.light_betas[i] <= beta_upper):#if it is between the beta cuttoffs
+                for j in range(0, len(self.mid_bins)):#go through the bin coordinates
+                    left_edge  = self.mid_bins[j] - bin_size / 2.0 #edges of the bin
+                    right_edge = self.mid_bins[j] + bin_size / 2.0 #edges of the bin
+                    
+                    if(self.light_lambdas[i] >= left_edge and self.light_lambdas[i] <= right_edge):#check if the lambda coor falls in the bin
+                        self.which_bin_bm.append(self.mid_bins[j])#which mid bin it should be 
+                        self.binned_bm[j] += 1#the line of sight vel
+                        total_bm += 1.0
+                        break 
+                    
+        for i in range(0, len(self.dark_lambdas)):#go through the different lambda coordinates
+            if(self.dark_betas[i] >= beta_lower and self.dark_betas[i] <= beta_upper):#if it is between the beta cuttoffs
+                for j in range(0, len(self.mid_bins)):#go through the bin coordinates
+                    left_edge  = self.mid_bins[j] - bin_size / 2.0 #edges of the bin
+                    right_edge = self.mid_bins[j] + bin_size / 2.0 #edges of the bin
+                    
+                    if(self.dark_lambdas[i] >= left_edge and self.dark_lambdas[i] <= right_edge):#check if the lambda coor falls in the bin
+                        self.which_bin_dm.append(self.mid_bins[j])#which mid bin it should be 
+                        self.binned_dm[j] += 1 #the line of sight vel
+                        total_dm += 1.0
+                        break
+                    
+        self.bm_normed = []
+        self.dm_normed = []
+        print('baryons included: ', total_bm, 'DM included: ', total_dm)
+        for i in range(0, lambda_N):
+            self.bm_normed.append(self.binned_bm[i] / total_bm)
+            self.dm_normed.append(self.binned_dm[i] / total_dm)
+                    
+                    
 class nbody_histograms:#a class that takes in data from nbody histogram files and makes them available
     def __init__(self, file_name):
         self.file_name = file_name
@@ -260,7 +323,7 @@ class nbody_histograms:#a class that takes in data from nbody histogram files an
     
     
     
-def convert_to_Lambda_Beta(self, x1, x2, x3, cartesian):#can convert l,b or x,y,z to lambda beta
+def convert_to_Lambda_Beta(x1, x2, x3, cartesian):#can convert l,b or x,y,z to lambda beta
     # note: this uses a left handed coordinate system #
     # it assumes that xyz are lefted handed. l,b are  #
     # assumed to be right handed. stupid              #
@@ -366,8 +429,8 @@ class sweep_data:
             counter_g +=1
             
         if(counter_l != counter_g):
-            print counter_l, counter_g
-            print 'WARNING: likelihood_data and parameter_val data length mismatch'
+            print( counter_l, counter_g)
+            print( 'WARNING: likelihood_data and parameter_val data length mismatch')
         else:
             self.dataN = counter_l
             

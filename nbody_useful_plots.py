@@ -112,8 +112,8 @@ def plot_disps(file1):#plots the dispersions from the histogram with lambda beta
     #plt.xlabel(r'$\Lambda_{Orphan}$')
     plt.ylabel(r'$\beta_{Orphan}$')
     #plt.title(r'Simulated Orphan Stream')
-    #plt.plot(out1.dark_lambda, out1.dark_beta, '.', markersize = .75, color = 'red', alpha=1., marker = '.', label = 'Dark Matter')
-    plt.plot(out1.light_lambda, out1.light_beta, '.', markersize = .75, color = 'b', alpha=.75, marker = '.', label = 'Stars')
+    #plt.plot(out1.dark_lambdas, out1.dark_betas, '.', markersize = .75, color = 'red', alpha=1., marker = '.', label = 'Dark Matter')
+    plt.plot(out1.light_lambdas, out1.light_betas, '.', markersize = .75, color = 'b', alpha=.75, marker = '.', label = 'Stars')
     plt.yticks([-10, 0, 10])
     
     ax2 = plt.subplot(412)
@@ -552,7 +552,7 @@ def lambda_beta_plot(file_name):#plots the outputs in lambda beta. uses the nbod
         plt.ylabel(r'$\beta$')
         plt.title(r'$\Lambda$ vs $\beta$')
         #default to just plot lm
-        plt.plot(out.light_lambda, out.light_beta, '.', markersize = .75, color = 'b', alpha=1.0, marker = '.',label = 'baryons')
+        plt.plot(out.light_lambdas, out.light_betas, '.', markersize = .75, color = 'b', alpha=1.0, marker = '.',label = 'baryons')
         plt.legend()
         plt.savefig('/home/sidd/Desktop/research/quick_plots/' + file_name + '_lambdabeta_nodark', format='png')
         print "plotting:", len(out.light_l), " points"
@@ -563,7 +563,7 @@ def lambda_beta_plot(file_name):#plots the outputs in lambda beta. uses the nbod
             plt.xlabel(r'$\Lambda$')
             plt.ylabel(r'$\beta$')
             plt.title(r'$\Lambda$ vs $\beta$')
-            plt.plot(out.dark_lambda, out.dark_beta, '.', markersize = .5, color = 'black', alpha=.75, marker = '.', label = 'dark matter')
+            plt.plot(out.dark_lambdas, out.dark_betas, '.', markersize = .5, color = 'black', alpha=.75, marker = '.', label = 'dark matter')
             plt.legend()
             plt.savefig('/home/sidd/Desktop/research/quick_plots/' + file_name + '_lambdabeta', format='png')
             print "plotting:", len(out.light_l) + len(out.dark_l), " points"
@@ -576,7 +576,7 @@ def lambda_beta_plot(file_name):#plots the outputs in lambda beta. uses the nbod
             plt.xlabel(r'$\Lambda$')
             plt.ylabel(r'$\beta$')
             plt.title(r'$\Lambda$ vs $\beta$')
-            plt.plot(out.dark_lambda, out.dark_beta, '.', markersize = 1, color = 'b', marker = '+')
+            plt.plot(out.dark_lambdas, out.dark_betas, '.', markersize = 1, color = 'b', marker = '+')
             plt.legend()
             plt.savefig('/home/sidd/Desktop/research/quick_plots/tidal_stream_lambdabeta_dark', format='png')
             
@@ -727,6 +727,122 @@ def lb_plot(file_name): #plots lb from output
 # #
 
 
+def lambda_beta_light_dark_histogram_plot(file_name):
+    out = nbody_outputs(file_name + '.out')
+    angle_cuttoffs = [-150.0, 150.0, 50, -15.0, 15.0, 1]
+    out.binner(angle_cuttoffs)
+    baryon_color = 'r'
+    dm_color = 'k'
+    labsiz = 20
+    fntsiz = 26
+    xlower = -180.0
+    xupper = 180.0
+    ylower = -15
+    yupper = 15
+    
+    coor  = 310
+    coori = 1
+    
+    f, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, sharex='col', sharey='row', figsize=(15, 10))
+    f.subplots_adjust(hspace=0)
+    #f.subplots_adjust(wspace=0)
+    params = {'legend.fontsize': 20,
+            'legend.handlelength': 1}
+    plt.rcParams.update(params)
+    
+    
+    
+    
+    #plt.subplot(coor + coori)
+    #plt.xlim((xlower, xupper))
+    #plt.ylim((ylower, yupper))
+    #plt.title(r'$\Lambda$ vs $\beta$', fontsize = 30)
+    #plt.ylabel(r'$\beta$', fontsize = fntsiz)
+    
+    #plt.tick_params(axis='y', which='major', labelsize=labsiz)
+    #plt.tick_params(axis='x', which='major', labelsize=labsiz)
+    #plt.plot(out.dark_lambdas, out.dark_betas, '.', markersize = .5, color = dm_color, alpha=.75, marker = '.', label = 'dark matter')
+    #plt.plot(out.light_lambdas, out.light_betas, '.', markersize = .75, color = baryon_color, alpha=1.0, marker = '.',label = 'baryons')
+    #plt.legend()
+    #coori += 1
+    
+    plt.subplot(coor + coori)
+    plt.xlim((xlower, xupper))
+    plt.ylim((ylower, yupper))
+    plt.ylabel(r'$\beta$', fontsize = fntsiz)
+    
+    plt.tick_params(axis='y', which='major', labelsize=labsiz)
+    plt.tick_params(axis='x', which='major', labelsize=labsiz)
+    plt.plot(out.light_lambdas, out.light_betas, '.', markersize = .75, color = baryon_color, alpha=0.75, marker = '.',label = 'Baryonic Matter')
+    plt.legend()
+    coori += 1
+    
+    plt.subplot(coor + coori)
+    plt.xlim((xlower, xupper))
+    plt.ylim((ylower, yupper))
+    plt.ylabel(r'$\beta$', fontsize = fntsiz)
+    
+    plt.tick_params(axis='y', which='major', labelsize=labsiz)
+    plt.tick_params(axis='x', which='major', labelsize=labsiz)
+    plt.plot(out.dark_lambdas, out.dark_betas, '.', markersize = .5, color = dm_color, alpha=.75, marker = '.', label = 'Dark Matter')
+    plt.legend()
+    coori += 1
+
+
+    plt.subplot(coor + coori)
+    plt.xlim((xlower, xupper))
+    #plt.ylim((0, 0.3))
+    plt.xlabel(r'$\Lambda$', fontsize = fntsiz)
+    plt.ylabel(r'$\beta$', fontsize = fntsiz)
+    
+    plt.tick_params(axis='y', which='major', labelsize=labsiz)
+    plt.tick_params(axis='x', which='major', labelsize=labsiz)
+    plt.bar(out.mid_bins, out.dm_normed, width = 5., color=dm_color,hatch="xxx", alpha=0.75, label = 'Dark Matter')
+    plt.bar(out.mid_bins, out.bm_normed, width = 5., color=baryon_color, hatch="\\\\", alpha=0.5, label = 'Baryonic Matter')
+    plt.legend()
+    coori += 1
+
+    plt.savefig(file_name + '_lambdabeta_hist', format='png', dpi = 300)
+    
+    
+    
+    
+    
+    
+    
+    # just plotting the overlapping lambda beta and the histograms.
+    plt.clf()
+    plt.subplot(211)
+    plt.tick_params(axis='y', which='major', labelsize=labsiz)
+    plt.tick_params(axis='x', which='major', labelsize=labsiz)
+    plt.xlim((xlower, xupper))
+    plt.ylim((ylower, yupper))
+    plt.title(r'$\Lambda$ vs $\beta$', fontsize = 26)
+    plt.ylabel(r'$\beta$', fontsize = fntsiz)
+    
+    plt.tick_params(axis='y', which='major', labelsize=labsiz)
+    plt.tick_params(axis='x', which='major', labelsize=labsiz)
+    plt.plot(out.dark_lambdas, out.dark_betas, '.', markersize = 1, color = dm_color, alpha=.75, marker = '.', label = 'dark matter')
+    plt.plot(out.light_lambdas, out.light_betas, '.', markersize = 1.25, color = baryon_color, alpha=1.0, marker = '.',label = 'baryons')
+    plt.legend()
+
+    plt.subplot(212)
+    plt.tick_params(axis='y', which='major', labelsize=labsiz)
+    plt.tick_params(axis='x', which='major', labelsize=labsiz)
+    plt.xlim((xlower, xupper))
+    #plt.ylim((0, 0.3))
+    plt.xlabel(r'$\Lambda$', fontsize = fntsiz)
+    plt.ylabel(r'$\beta$', fontsize = fntsiz)
+    
+    plt.tick_params(axis='y', which='major', labelsize=labsiz)
+    plt.tick_params(axis='x', which='major', labelsize=labsiz)
+    plt.bar(out.mid_bins, out.dm_normed, width = 5., color=dm_color, hatch="xxx", alpha=0.75, label = 'dark matter')
+    plt.bar(out.mid_bins, out.bm_normed, width = 5., color=baryon_color, hatch="\\\\", alpha=0.5, label = 'baryons')
+    plt.legend()
+
+    plt.savefig(file_name + '_lambdabeta_hist2', format='png', dpi = 300)
+
+
 def plot_hist_lambda_beta(file1, file2, file_name = None):
     path = '/home/sidd/Desktop/research/quick_plots/hists_outs/'
     
@@ -760,8 +876,8 @@ def plot_hist_lambda_beta(file1, file2, file_name = None):
     plt.title(r'$\Lambda$ vs $\beta$')
     #default to just plot lm
     if(not file_name):
-        plt.plot(out1.dark_lambda, out1.dark_beta, '.', markersize = .5, color = 'black', alpha=.75, marker = '.', label = 'dark matter')
-    plt.plot(out1.light_lambda, out1.light_beta, '.', markersize = .75, color = 'b', alpha=1.0, marker = '.', label = 'baryons')
+        plt.plot(out1.dark_lambdas, out1.dark_betas, '.', markersize = .5, color = 'black', alpha=.75, marker = '.', label = 'dark matter')
+    plt.plot(out1.light_lambdas, out1.light_betas, '.', markersize = .75, color = 'b', alpha=1.0, marker = '.', label = 'baryons')
     plt.legend()
     #plt.subplots(4, sharex = True, sharey = True)
     
@@ -773,8 +889,8 @@ def plot_hist_lambda_beta(file1, file2, file_name = None):
     #plt.ylabel(r'$\beta$')
     plt.title(r'$\Lambda$ vs $\beta$')
     if(not file_name):
-        plt.plot(out2.dark_lambda, out2.dark_beta, '.', markersize = .5, color = 'black', alpha=.75, marker = '.', label = 'dark matter')
-    plt.plot(out2.light_lambda, out2.light_beta, '.', markersize = .75, color = 'b', alpha=1.0, marker = '.',label = 'baryons')
+        plt.plot(out2.dark_lambdas, out2.dark_betas, '.', markersize = .5, color = 'black', alpha=.75, marker = '.', label = 'dark matter')
+    plt.plot(out2.light_lambdas, out2.light_betas, '.', markersize = .75, color = 'b', alpha=1.0, marker = '.',label = 'baryons')
     
     ax5 = plt.subplot(223)
     plt.bar(hist1.lbins, hist1.counts, width = w_adjacent, color='b')
@@ -834,8 +950,8 @@ def plot_hist_lambda_beta_single(file1, file_name = None):
     plt.yticks( [ 20, 10, 0, -10, -20])
     #default to just plot lm
     if(not file_name):
-        plt.plot(out1.dark_lambda, out1.dark_beta, '.', markersize = .5, color = 'black', alpha=.75, marker = '.', label = 'dark matter')
-    plt.plot(out1.light_lambda, out1.light_beta, '.', markersize = .75, color = 'b', alpha=1.0, marker = '.', label = 'baryons')
+        plt.plot(out1.dark_lambdas, out1.dark_betas, '.', markersize = .5, color = 'black', alpha=.75, marker = '.', label = 'dark matter')
+    plt.plot(out1.light_lambdas, out1.light_betas, '.', markersize = .75, color = 'b', alpha=1.0, marker = '.', label = 'baryons')
     plt.legend()
     #plt.subplots(4, sharex = True, sharey = True)
     
@@ -885,8 +1001,8 @@ def plot_lmda_beta(file1, file2):
     plt.tick_params(axis='y', which='major', labelsize=24)
     plt.tick_params(axis='x', which='major', labelsize=24)
     #plt.title(r'Simulated Stream and Best Fit Stream')
-    #plt.plot(out1.dark_lambda, out1.dark_beta, '.', markersize = .75, color = 'red', alpha=1, marker = '.', label = 'Simulated Dark Matter ')
-    plt.plot(out1.light_lambda, out1.light_beta, '.', markersize = .75, color = 'b', alpha=0.75, marker = '.', label = 'Simulated Stars')
+    #plt.plot(out1.dark_lambdas, out1.dark_betas, '.', markersize = .75, color = 'red', alpha=1, marker = '.', label = 'Simulated Dark Matter ')
+    plt.plot(out1.light_lambdas, out1.light_betas, '.', markersize = .75, color = 'b', alpha=0.75, marker = '.', label = 'Simulated Stars')
     #plt.legend()
     #plt.subplots(4, sharex = True, sharey = True)
     
@@ -899,8 +1015,8 @@ def plot_lmda_beta(file1, file2):
     plt.tick_params(axis='y', which='major', labelsize=24)
     plt.tick_params(axis='x', which='major', labelsize=24)
     #plt.title(r'$\Lambda$ vs $\beta$')
-    #plt.plot(out2.dark_lambda, out2.dark_beta, '.', markersize = .75, color = 'red', alpha=1, marker = '.', label = 'Best Fit  Dark Matter')
-    plt.plot(out2.light_lambda, out2.light_beta, '.', markersize = .75, color = 'b', alpha=.75, marker = '.',label = 'Best Fit  Stars')
+    #plt.plot(out2.dark_lambdas, out2.dark_betas, '.', markersize = .75, color = 'red', alpha=1, marker = '.', label = 'Best Fit  Dark Matter')
+    plt.plot(out2.light_lambdas, out2.light_betas, '.', markersize = .75, color = 'b', alpha=.75, marker = '.',label = 'Best Fit  Stars')
     #plt.legend()
     plt.savefig('/home/sidd/Desktop/research/quick_plots/publish_plots/both_lambda_beta_light.png', format='png')
     #plt.show()
@@ -913,8 +1029,8 @@ def plot_lmda_beta(file1, file2):
         plt.xlabel(r'$\Lambda_{Orphan}$')
         plt.ylabel(r'$\beta_{Orphan}$')
         #plt.title(r'Simulated Orphan Stream')
-        #plt.plot(out1.dark_lambda, out1.dark_beta, '.', markersize = .75, color = 'red', alpha=1., marker = '.', label = 'Dark Matter')
-        plt.plot(out1.light_lambda, out1.light_beta, '.', markersize = .75, color = 'b', alpha=.75, marker = '.', label = 'Stars')
+        #plt.plot(out1.dark_lambdas, out1.dark_betas, '.', markersize = .75, color = 'red', alpha=1., marker = '.', label = 'Dark Matter')
+        plt.plot(out1.light_lambdas, out1.light_betas, '.', markersize = .75, color = 'b', alpha=.75, marker = '.', label = 'Stars')
         #plt.legend(handles=[mpatches.Patch(color='red', label= 'Dark Matter', color='b', label='Stars')])
         #plt.legend()
         plt.savefig('/home/sidd/Desktop/research/quick_plots/publish_plots/lambda_beta1_light.png', format='png')
@@ -927,8 +1043,8 @@ def plot_lmda_beta(file1, file2):
         plt.xlabel(r'$\Lambda_{Orphan}$')
         plt.ylabel(r'$\beta_{Orphan}$')
         #plt.title(r'MilkyWay@home Best Fit')
-        #plt.plot(out2.dark_lambda, out2.dark_beta, '.', markersize = .75, color = 'red', alpha=1, marker = '.', label = 'Dark Matter')
-        plt.plot(out2.light_lambda, out2.light_beta, '.', markersize = .75, color = 'b', alpha=.75, marker = '.',label = 'Stars')
+        #plt.plot(out2.dark_lambdas, out2.dark_betas, '.', markersize = .75, color = 'red', alpha=1, marker = '.', label = 'Dark Matter')
+        plt.plot(out2.light_lambdas, out2.light_betas, '.', markersize = .75, color = 'b', alpha=.75, marker = '.',label = 'Stars')
         plt.legend()
         plt.savefig('/home/sidd/Desktop/research/quick_plots/publish_plots/lambda_beta2_light.png', format='png')
     
@@ -1011,8 +1127,8 @@ def veldisp_lbda_beta(file1):#plots the velocity dispersion from the histograms
     plt.ylim((ylower, yupper))
     plt.ylabel(r'$\beta_{Orphan}$')
     plt.title(r'Simulated Stream and Best Fit Stream')
-    plt.plot(out1.dark_lambda, out1.dark_beta, '.', markersize = .75, color = 'red', alpha=1, marker = '.', label = 'Dark Matter ')
-    plt.plot(out1.light_lambda, out1.light_beta, '.', markersize = .75, color = 'b', alpha=0.75, marker = '.', label = 'Stars')
+    plt.plot(out1.dark_lambdas, out1.dark_betas, '.', markersize = .75, color = 'red', alpha=1, marker = '.', label = 'Dark Matter ')
+    plt.plot(out1.light_lambdas, out1.light_betas, '.', markersize = .75, color = 'b', alpha=0.75, marker = '.', label = 'Stars')
     plt.legend()
         
             
@@ -1128,7 +1244,12 @@ def main():
     
     #file1 = "dist_test"
     #single_xyz(file1)
-    lb_plot(file1)
+    #lb_plot(file1)
+    
+    file1 = folder + 'hist_v170_3p95_0p2_0p2_12_0p2__7_17_18_diffSeed2'
+    file1 = folder + 'hist_v170_3p95_0p2_0p2_12_0p2__7_17_18_diffSeed3'
+    lambda_beta_light_dark_histogram_plot(file1)
+    
     return 0 
 
 main()

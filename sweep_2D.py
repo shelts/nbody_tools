@@ -12,7 +12,7 @@ random.seed(a = 687651463)#teletraan
 lmc_dir = '/home/shelts/research/'
 sid_dir = '/home/sidd/Desktop/research/'
 sgr_dir = '/Users/master/sidd_research/'
-path = sid_dir
+path = lmc_dir
 
 folder        = path + "like_surface/hists/"
 binary        = path + "nbody_test/bin/milkyway_nbody"
@@ -34,15 +34,15 @@ n = False
 
 #choose what to run
 make_folders      = y
-rebuild_binary    = n
-make_correct_hist = y
+rebuild_binary    = y
+make_correct_hist = n
 random_iter       = y
 
-run_ft = y
+run_ft = n
 run_r  = n
-run_rr = n
+run_rr = y
 run_m  = n
-run_mr = n
+run_mr = y
 which_sweeps1 = [run_ft, run_r, run_rr, run_m, run_mr]
 which_sweeps2 = [run_ft, run_r, run_rr, run_m, run_mr]
 #--------------------------------------------------------------------------------------------------

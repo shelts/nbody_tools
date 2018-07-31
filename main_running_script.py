@@ -17,6 +17,7 @@ sgr_dir = '/Users/master/sidd_research/'
 path = sid_dir
 
 args_run = [3.95, 0.006, 0.02, 0.027, 0.001] 
+args_run = [1.5, 0.2, 0.2, 11, 0.2] 
 args_run_comp = [3.9, 0.2, 0.2, 12, 0.2] 
 # # # # # # # # # # # # # # # # # # # # # # # #
 #              Standard Run switches          #
@@ -44,7 +45,7 @@ folder = path + 'quick_plots/hists_outs/'
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # correctans_hist: name for non comparing hist file or the sim data hist for the compare runs #
 # simulations_hist: name for the comparison hist file for comparison runs                     #
-correctans_hist = folder + 'test'
+correctans_hist = folder + 'slightly_disrupt'
 simulations_hist = folder + '3.9'
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
