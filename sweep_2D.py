@@ -14,12 +14,13 @@ sid_dir = '/home/sidd/Desktop/research/'
 sgr_dir = '/Users/master/sidd_research/'
 path = lmc_dir
 
-folder        = path + "like_surface/hists/"
+folder        = path + "like_surface/2D_hists/"
 binary        = path + "nbody_test/bin/milkyway_nbody"
 lua           = path + "lua/full_control.lua"
 
 args = [3.95, 0.2, 0.2, 12, 0.2]
-input_hist    = folder + "arg_" + str(args[0]) + "_" + str(args[1]) + "_" + str(args[2]) + "_" + str(args[3]) + "_" + str(args[4]) + "_correct"
+#input_hist    = folder + "arg_" + str(args[0]) + "_" + str(args[1]) + "_" + str(args[2]) + "_" + str(args[3]) + "_" + str(args[4]) + "_correct"
+input_hist    = folder + "hist_v170_3p95_0p2_0p2_12_0p2__7_23_18_diffSeed"
 parameters_names = ['ft', 'r', 'rr', 'm', 'mr']
 
 ranges  = [ [2.0, 6.0],  \
@@ -34,29 +35,35 @@ n = False
 
 #choose what to run
 make_folders      = y
-rebuild_binary    = y
+rebuild_binary    = n
 make_correct_hist = n
 random_iter       = y
 
-run_ft = n
-run_r  = n
-run_rr = y
-run_m  = n
-run_mr = y
-which_sweeps1 = [run_ft, run_r, run_rr, run_m, run_mr]
-which_sweeps2 = [run_ft, run_r, run_rr, run_m, run_mr]
+run1_ft = n
+run1_r  = n
+run1_rr = y
+run1_m  = n
+run1_mr = n
+which_sweeps1 = [run1_ft, run1_r, run1_rr, run1_m, run1_mr]
+
+run2_ft = n
+run2_r  = n
+run2_rr = n
+run2_m  = n
+run2_mr = y
+which_sweeps2 = [run2_ft, run2_r, run2_rr, run2_m, run2_mr]
 #--------------------------------------------------------------------------------------------------
 
     
 class sweep:
     def __init__(self, p1, p2, nbody):
-        os.system("mkdir " + path + "like_surface/hists/parameter_sweep")
+        os.system("mkdir " + path + "like_surface/2D_hists/parameter_sweep")
         
         self.p1 = p1 #parameter index
         self.p2 = p2
         self.data_vals1 = []
         self.data_vals2 = []
-        self.data_val_file = path + "like_surface/hists/parameter_sweep" + "/" + parameters_names[self.p1] + "_" + parameters_names[self.p2] + "_vals.txt"
+        self.data_val_file = path + "like_surface/2D_hists/parameter_sweep" + "/" + parameters_names[self.p1] + "_" + parameters_names[self.p2] + "_vals.txt"
         
         self.get_data_vals()
         self.run_sweep(nbody)
@@ -84,15 +91,18 @@ class sweep:
     
     def write_data_vals(self):
         f = open(self.data_val_file, 'w')
-        for i in range(0, len(self.data_vals)):
+        for i in range(0, len(self.data_vals1)):
             f.write("%0.15f\t%0.15f\n" % (self.data_vals1[i], self.data_vals2[i]))
         f.close()
         
 def mk_dirs():
     os.chdir(path + "like_surface")
-    os.system("mkdir hists")
-    for i in range(0, len(parameters_names)):
-        os.system("mkdir hists/" + parameters_names[i] + "_hists")
+    os.system("mkdir 2D_hists")
+    for i in range(0, len(which_sweeps1)):
+        for j in range(0, len(which_sweeps2)):
+            if(which_sweeps1[i] and which_sweeps2[j] and i != j):    
+                os.system("mkdir 2D_hists/" + parameters_names[i] + "_" + parameters_names[j] + "_hists")
+    
     return 0
 
 def main():
@@ -109,7 +119,7 @@ def main():
     
     for i in range(0, len(which_sweeps1)):
         for j in range(0, len(which_sweeps2)):
-            if(which_sweeps1[i] and which_sweeps2[j]):
+            if(which_sweeps1[i] and which_sweeps2[j] and i != j):
                 sweeper = sweep(i, j, nbody)
                 del sweeper
             
