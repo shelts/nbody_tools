@@ -12,7 +12,7 @@ random.seed(a = 687651463)#teletraan
 lmc_dir = '/home/shelts/research/'
 sid_dir = '/home/sidd/Desktop/research/'
 sgr_dir = '/Users/master/sidd_research/'
-path = lmc_dir
+path = sid_dir
 
 folder        = path + "like_surface/2D_hists/"
 binary        = path + "nbody_test/bin/milkyway_nbody"
@@ -29,12 +29,12 @@ ranges  = [ [2.0, 6.0],  \
             [1., 60.0,], \
             [.01, .95,],   \
           ]   
-search_N = [5, 5, 5, 5, 5]
+search_N = [50, 50, 50, 50, 50]
 y = True
 n = False
 
 #choose what to run
-make_folders      = y
+make_folders      = n
 rebuild_binary    = n
 make_correct_hist = n
 random_iter       = y
@@ -87,7 +87,7 @@ class sweep:
             
             output_hist = folder + parameters_names[self.p1] + "_" + parameters_names[self.p2] + "_hists/" + "arg_" + str(paras[0]) + "_" + str(paras[1]) + "_" + str(paras[2]) + "_" + str(paras[3]) + "_" + str(paras[4])
             pipe_name = folder + "parameter_sweep/" + parameters_names[self.p1] + "_" + parameters_names[self.p2] + ".txt"
-            nbody.run(paras, output_hist, input_hist, pipe_name)
+            #nbody.run(paras, output_hist, input_hist, pipe_name)
     
     def write_data_vals(self):
         f = open(self.data_val_file, 'w')

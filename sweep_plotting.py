@@ -11,15 +11,15 @@ from nbody_functional import *
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 y = True
 n = False
-plot_1D = y
-plot_2D = n
+plot_1D = n
+plot_2D = y
 
 path = '/home/sidd/Desktop/research/'
 folder = path + "like_surface/"
 name_of_sweeps = 'parameter_sweep_beta_dispersions'
 name_of_sweeps = 'parameter_sweep_data_hist_spring_2018'
 name_of_sweeps = 'parameter_sweep_check'
-name_of_sweeps = 'hists'
+name_of_sweeps = '2D_hists'
 
 #name_of_sweeps = '_2d'
 
@@ -60,6 +60,21 @@ ranges  = [ [3.5, 6.0],  \
 plot_dim = [0, 5]
 
 plot_dim2 = [4, 5]
+
+
+run1_ft = n
+run1_r  = n
+run1_rr = y
+run1_m  = n
+run1_mr = n
+which_sweeps1 = [run1_ft, run1_r, run1_rr, run1_m, run1_mr]
+
+run2_ft = n
+run2_r  = n
+run2_rr = n
+run2_m  = n
+run2_mr = y
+which_sweeps2 = [run2_ft, run2_r, run2_rr, run2_m, run2_mr]
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
                 #/# # # # # # # # # # # # # # \#
@@ -102,24 +117,27 @@ def twoD_plot():
     l = -200
     fig = plt.figure(figsize=(20, 10))
     ax = fig.add_subplot(111, projection='3d')
-    for i in range(plot_dim[0], plot_dim[1]):
-        for j in range(plot_dim2[0], plot_dim2[1]):
-            print 'this ran'
-            name = oneD_names[i] + '_' + oneD_names[j]
-            print name
-            sweep = sweep_data(folder, name_of_sweeps, name, 2)
-            sweep.plottable_list(correct[i])
-            
-            #ax.title(titles[i], fontsize=24)
-            ax.set_xlabel(titles[i], fontsize=16)
-            ax.set_ylabel(titles[i + 1], fontsize=16)
-            ax.set_zlabel('Likelihood', fontsize=16)
-            ax.set_xlim(ranges[i][0], ranges[i][1])
-            ax.set_ylim(ranges[i + 1][0], ranges[i + 1][1])
-            ax.set_zlim(l, 0)
-            ax.scatter(sweep.vals, sweep.liks, marker = 'o', s = 4, color ='r')
-            plt.plot(sweep.corr, sweep.cor2, linestyle = '-', linewidth = 1, color ='k', alpha = 1)
-            plt.savefig(folder + name_of_sweeps + '/multiplot.png', format = 'png')
+    for i in range(len(which_sweeps1)):
+        for j in range(len(which_sweeps2)):
+            if(which_sweeps1[i] and which_sweeps2[j]):
+                print 'this ran'
+                name = oneD_names[i] + '_' + oneD_names[j]
+                print name
+                sweep = sweep_data(folder, name_of_sweeps, name, 2)
+                sweep.plottable_list(correct[i])
+                
+                #ax.title(titles[i], fontsize=24)
+                ax.set_xlabel(titles[i], fontsize=16)
+                ax.set_ylabel(titles[j], fontsize=16)
+                ax.set_zlabel('Likelihood', fontsize=16)
+                ax.set_xlim(ranges[i][0], ranges[i][1])
+                ax.set_ylim(ranges[j][0], ranges[j][1])
+                ax.set_zlim(l, 0)
+                #print(sweep.vals, '\n\n\n', sweep.liks)
+                ax.scatter(sweep.vals, sweep.vals2, sweep.liks, marker = 'o', s = 4, color ='r')
+                #plt.plot(sweep.corr, sweep.cor2, linestyle = '-', linewidth = 1, color ='k', alpha = 1)
+                plt.show()
+                plt.savefig(folder + name_of_sweeps + '/multiplot.png', format = 'png')
     return 0
 
 def main():

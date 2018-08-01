@@ -476,7 +476,7 @@ class sweep_data:
                     unsorted = True
         return 0
     
-    def plottable_list(self, correct_value):
+    def plottable_list(self, correct_value = None):
         self.vals = []
         self.liks = []
         self.corr = []
@@ -487,8 +487,10 @@ class sweep_data:
         for i in range(0, self.dataN):
             self.vals.append(self.values[i].val)
             self.liks.append(self.values[i].lik)
-            self.corr.append(correct_value)
-            self.cor2.append(-10.0 * i)
+            
+            if(correct_value):
+                self.corr.append(correct_value)
+                self.cor2.append(-10.0 * i)
             if(self.dim > 1):
                 self.vals2.append(self.values[i].val2)
                 
