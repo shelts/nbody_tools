@@ -44,27 +44,95 @@ def contour(sweep):
     
 
 
-
+class half_light:
+    def __init__(self):
+        self.ml_correct = 12.0
+        self.rl_correct = 0.2
+        self.rr_correct = 0.2
+        self.mr_correct = 0.2
+        
+        self.rd_correct = (self.rl_correct / self.rr_correct) * (1.0 - self.rr_correct)
+        self.md_correct = (self.ml_correct / self.mr_correct) * (1.0 - self.mr_correct)
+        
+        self.half_mass_radius()
+        self.density_half_light_rad()
+        
+    def half_mass_radius(self):#finding the half light radius
+        print 'Calculating the half light radius: '
+        r = 0.001
+        baryonic_mass_enclosed = self.ml_correct * r**3.0 / (r**2. + self.rl_correct**2.)**(3.0 / 2.0)
+        while(baryonic_mass_enclosed <= (0.5 * self.ml_correct)):#check if the baryonic mass enclosed is half the total.
+            r += 0.01
+            baryonic_mass_enclosed = self.ml_correct * r**3.0 / (r**2. + self.rl_correct**2.)**(3.0 / 2.0)
+        
+        print 'half_light_radius: ', r
+        print 'baryonic mass enclosed: ', baryonic_mass_enclosed
+        self.half_mass_radius = r
+    
+    def density_half_light_rad(self):
+        self.rrs    = []
+        self.mrs    = []
+        self.mdencs = []
+        
+        print 'Generating constant dark matter mass region'
+        r = 0.001
+        threshold = 0.3# threshold for the dark matter enclosed region
+        
+        #dark matter mass enclosed within the half light radius
+        
+        dark_mass_enclosed_half_light = self.md_correct * self.half_mass_radius**3.0 / (self.half_mass_radius**2. + self.rd_correct**2.)**(3.0 / 2.0)
+        
+        print 'Dark matter mass enclosed within the half light radius: ', dark_mass_enclosed_half_light
+        
+        mr = 0.05
+        while(mr < 0.95):
+            rr = 0.05
+            while(rr < 0.5):
+                rad_dark_current = (self.rl_correct / rr) * (1.0 - rr)
+                mass_dark_current = (self.ml_correct / mr) * (1.0 - mr)
+                #mdenc = (3.0 / (4.0 * mt.pi * rd_f**3.0)) * md_f / (1.0 + (r * r)/ (rd_f * rd_f))**(5.0 / 2.0)
+                
+                dark_mass_enc = mass_dark_current * self.half_mass_radius**3.0 / (self.half_mass_radius**2. + rad_dark_current**2.)**(3.0 / 2.0)
+                if(dark_mass_enc > (dark_mass_enclosed_half_light - threshold) and dark_mass_enc < (dark_mass_enclosed_half_light + threshold) ):
+                    self.rrs.append(rr)
+                    self.mrs.append(mr)
+                    self.mdencs.append(dark_mass_enc)
+                
+                rr += 0.001
+            mr += 0.001
+    
+    
 
 def imshow(sweep):
-    out1 = [[0.2, 0.25], [0.23, 0.185], [.243,.234]]#test values
+    fitted = [[0.232420964882834,0.259547435646423], [0.183881619186761, 0.168896086739161], [0.184036020601296, 0.185490490608526]]#test values
+    const_half_light = half_light()
+    
+    likelihood_cutoff = -25
+    
     x = np.asarray(sweep.vals)
     y = np.asarray(sweep.vals2)
     z = np.asarray(sweep.liks) 
     
-    nInterp = 50
+    nInterp = 75
     xi, yi = np.linspace(x.min(), x.max(), nInterp), np.linspace(y.min(), y.max(), nInterp)
     xi, yi = np.meshgrid(xi, yi)
     zi = scipy.interpolate.griddata((x, y), z, (xi, yi), method='linear')
 
-    
+    plt.figsize=(20, 10)
     plt.xlabel(titles[coori])
     plt.ylabel(titles[coorj])        
     
-    for i in range(len(out1)):
-        plt.scatter(out1[i][0], out1[i][1], s=20, marker= 'o',  color='k', alpha=1, edgecolors='none')
+    #constant DM mass region:
+    plt.plot(const_half_light.rrs, const_half_light.mrs, linestyle = '-', linewidth = 5, color ='grey', alpha = 0.5)
     
-    plt.imshow(zi, vmin=-50, vmax=0, origin='lower', cmap ='GnBu'  , extent=[x.min(), x.max(), y.min(), y.max()])
+    #fitted points:
+    for i in range(len(fitted)):
+        plt.scatter(fitted[i][0], fitted[i][1], s=20, marker= 'o',  color='k', alpha=1, edgecolors='none')
+    
+    #correct answer:
+    plt.scatter(0.2, 0.2, s=20, marker= 'x',  color='k', alpha=1, edgecolors='none')
+    
+    plt.imshow(zi, vmin=likelihood_cutoff, vmax=0, origin='lower', cmap ='winter'  , extent=[x.min(), x.max(), y.min(), y.max()])
     plt.colorbar()
     #plt.show()
     plt.savefig(folder + name_of_sweeps + '/heat_map.png', format='png', dpi = 300)
