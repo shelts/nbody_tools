@@ -111,7 +111,7 @@ def imshow(sweep):
     plt.tick_params(axis='x', which='major', labelsize=lblsize)
     #plt.xlabel(titles[coori], fontsize = fntsiz)
     plt.ylabel(titles[coorj], fontsize = fntsiz)        
-    plt.xticks( [ 0.1, 0.2,0.3, 0.4])
+    plt.xticks( [ 0.2, 0.4])
     #plt.plot(const_half_light.rrs, const_half_light.mrs, linestyle = '-', linewidth = 5, color ='grey', alpha = 0.5)
     plt.imshow(zi, vmin=likelihood_cutoff, vmax=0, origin='lower', cmap ='winter'  , extent=[x.min(), x.max(), y.min(), y.max()],aspect="auto")
     
@@ -122,7 +122,7 @@ def imshow(sweep):
     plt.tick_params(axis='x', which='major', labelsize=lblsize)
     #constant DM mass region:
     plt.plot(const_half_light.rrs, const_half_light.mrs, linestyle = '-', linewidth = 5, color ='grey', alpha = 0.5)
-    plt.xticks( [ 0.1, 0.2,0.3, 0.4])
+    plt.xticks( [  0.2, 0.4])
     #fitted points:
     for i in range(len(fitted)):
         plt.scatter(fitted[i][0], fitted[i][1], s=20, marker= 'o',  color='k', alpha=1, edgecolors='none')
