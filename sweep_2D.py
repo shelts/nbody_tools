@@ -71,7 +71,7 @@ class sweep:
         
     def get_data_vals(self):
         self.data_vals1.append(args[self.p1]) #correct value
-        self.data_vals2.append(args[self.p2])    
+        self.data_vals2.append(args[self.p2])
         
         for i in range(0, search_N[self.p1] * search_N[self.p2]):
             val1 = random.uniform(0.0, 1.0) * (ranges[self.p1][1] - ranges[self.p1][0]) + ranges[self.p1][0]
@@ -81,7 +81,7 @@ class sweep:
             
     def run_sweep(self, nbody):
         paras = list(args)
-        for i in range(0, search_N[self.p1] * search_N[self.p2]):
+        for i in range(0, search_N[self.p1] * search_N[self.p2] + 1): #the number of runs stated aboce plus the initial correct value run
             paras[self.p1] = self.data_vals1[i]
             paras[self.p2] = self.data_vals2[i]
             

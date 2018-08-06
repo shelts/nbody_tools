@@ -22,9 +22,9 @@ args_run_comp = [3.9, 0.2, 0.2, 12, 0.2]
 # # # # # # # # # # # # # # # # # # # # # # # #
 #              Standard Run switches          #
 # # # # # # # # # # # # # # # # # # # # # # # #
-run_nbody                 = n                 #
+run_nbody                 = y                 #
 remake                    = y                 #
-full_remake               = y
+full_remake               = n
 run_and_compare           = n                 #
 match_histograms          = n                 #
 # # # # # # # # # # # # # # # # # # # # # # # #

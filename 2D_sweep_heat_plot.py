@@ -9,39 +9,12 @@ from scipy.interpolate import griddata
 path = '/home/sidd/Desktop/research/'
 folder = path + "like_surface/"
 #name_of_sweeps = '2D_hists'
-name_of_sweeps = 'parameter_sweep_2d'
+name_of_sweeps = 'parameter_sweep_2d_v170'
 twoD_names   = ['rr_mr']
 titles  = ['Backward Evolve Time (Gyr)',  'Baryon Scale Radius (kpc)', r'Scale Radius Ratio ($R_{B}/(R_{B}+R_{D})$)', 'Baryonic Mass (SMU)',  'Mass Ratio (Baryonic/Total)']
 coori = 2
 coorj = 4
 
-def contour(sweep):
-    #print sweep.vals
-    #print sweep.vals2
-    #print sweep.liks
-    X, Y, Z, = np.array([]), np.array([]), np.array([])
-    for i in range(len(sweep.vals)):
-            X = np.append(X,sweep.vals[i])
-            Y = np.append(Y,sweep.vals2[i])
-            Z = np.append(Z,sweep.liks[i])
-
-    # create x-y points to be used in heatmap
-    xi = np.linspace(X.min(),X.max(),1000)
-    yi = np.linspace(Y.min(),Y.max(),1000)
-
-    # Z is a matrix of x-y values
-    zi = griddata((X, Y), Z, (xi[None,:], yi[:,None]), method='nearest')
-
-    # colorbar range
-    zmin = -50
-    zmax = 0
-    zi[(zi<zmin) | (zi>zmax)] = None
-
-    # Create the contour plot
-    plt.contourf(xi, yi, zi, 100, cmap=plt.cm.rainbow, vmax=zmax, vmin=zmin)
-    plt.colorbar()  
-    plt.savefig(folder + name_of_sweeps + '/heat_map.png', format='png', dpi = 300)   
-    
 
 
 class half_light:
@@ -107,35 +80,64 @@ def imshow(sweep):
     fitted = [[0.232420964882834,0.259547435646423], [0.183881619186761, 0.168896086739161], [0.184036020601296, 0.185490490608526]]#test values
     const_half_light = half_light()
     
-    likelihood_cutoff = -25
-    
+    likelihood_cutoff = -75
+    fntsiz  = 20
+    lblsize = 16
+    legsize = 22
     x = np.asarray(sweep.vals)
     y = np.asarray(sweep.vals2)
     z = np.asarray(sweep.liks) 
     
     nInterp = 75
+    #nInterp = 10
     xi, yi = np.linspace(x.min(), x.max(), nInterp), np.linspace(y.min(), y.max(), nInterp)
     xi, yi = np.meshgrid(xi, yi)
     zi = scipy.interpolate.griddata((x, y), z, (xi, yi), method='linear')
 
     plt.figsize=(20, 10)
-    plt.xlabel(titles[coori])
-    plt.ylabel(titles[coorj])        
+    plt.sharey=True
+    plt.sharex=True
+    f, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, sharex=True, sharey=True, figsize=(10, 10))
+    f.text(0.5, 0.04, titles[coori], ha='center', fontsize = fntsiz)
+    #f.text(0.04, 0.5, titles[coorj], ha='center', rotation='vertical', fontsize = fntsiz)
+
+    plt.subplots_adjust(wspace=0)
+    params = {'legend.fontsize': legsize,
+            'legend.handlelength': 1}
+    plt.rcParams.update(params)
     
+    plt.subplot(121)
+    plt.tick_params(axis='y', which='major', labelsize=lblsize)
+    plt.tick_params(axis='x', which='major', labelsize=lblsize)
+    #plt.xlabel(titles[coori], fontsize = fntsiz)
+    plt.ylabel(titles[coorj], fontsize = fntsiz)        
+    plt.xticks( [ 0.1, 0.2,0.3, 0.4])
+    #plt.plot(const_half_light.rrs, const_half_light.mrs, linestyle = '-', linewidth = 5, color ='grey', alpha = 0.5)
+    plt.imshow(zi, vmin=likelihood_cutoff, vmax=0, origin='lower', cmap ='winter'  , extent=[x.min(), x.max(), y.min(), y.max()],aspect="auto")
+    
+    
+    
+    plt.subplot(122)
+    plt.tick_params(axis='y', which='major', labelsize=lblsize)
+    plt.tick_params(axis='x', which='major', labelsize=lblsize)
     #constant DM mass region:
     plt.plot(const_half_light.rrs, const_half_light.mrs, linestyle = '-', linewidth = 5, color ='grey', alpha = 0.5)
-    
+    plt.xticks( [ 0.1, 0.2,0.3, 0.4])
     #fitted points:
     for i in range(len(fitted)):
         plt.scatter(fitted[i][0], fitted[i][1], s=20, marker= 'o',  color='k', alpha=1, edgecolors='none')
     
     #correct answer:
     plt.scatter(0.2, 0.2, s=20, marker= 'x',  color='k', alpha=1, edgecolors='none')
+    plt.yticks([])
+    plt.imshow(zi, vmin=likelihood_cutoff, vmax=0, origin='lower', cmap ='winter'  , extent=[x.min(), x.max(), y.min(), y.max()], aspect="auto")
+    #plt.colorbar()
+    cbar = plt.colorbar()
+    cbar.set_label('Likelihood',size=fntsiz)
+    cbar.ax.tick_params(labelsize=lblsize) 
+
     
-    plt.imshow(zi, vmin=likelihood_cutoff, vmax=0, origin='lower', cmap ='winter'  , extent=[x.min(), x.max(), y.min(), y.max()])
-    plt.colorbar()
-    #plt.show()
-    plt.savefig(folder + name_of_sweeps + '/heat_map.png', format='png', dpi = 300)
+    plt.savefig(folder + name_of_sweeps + '/heat_map.png', format='png', dpi = 300, bbox_inches='tight')
     
     
 def main():
