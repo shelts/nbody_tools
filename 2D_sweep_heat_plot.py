@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import scipy
 from scipy.interpolate import griddata
+import matplotlib.gridspec as gridspec
+
 
 path = '/home/sidd/Desktop/research/'
 folder = path + "like_surface/"
@@ -97,9 +99,8 @@ def imshow(sweep):
     plt.figsize=(20, 10)
     plt.sharey=True
     plt.sharex=True
-    f, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, sharex=True, sharey=True, figsize=(10, 10))
+    f, (ax1, ax2) = plt.subplots(nrows=1, ncols=2, sharex=True, sharey=True, figsize=(15, 15))
     f.text(0.5, 0.04, titles[coori], ha='center', fontsize = fntsiz)
-    #f.text(0.04, 0.5, titles[coorj], ha='center', rotation='vertical', fontsize = fntsiz)
 
     plt.subplots_adjust(wspace=0)
     params = {'legend.fontsize': legsize,
@@ -109,34 +110,38 @@ def imshow(sweep):
     plt.subplot(121)
     plt.tick_params(axis='y', which='major', labelsize=lblsize)
     plt.tick_params(axis='x', which='major', labelsize=lblsize)
-    #plt.xlabel(titles[coori], fontsize = fntsiz)
-    plt.ylabel(titles[coorj], fontsize = fntsiz)        
     plt.xticks( [ 0.2, 0.4])
-    #plt.plot(const_half_light.rrs, const_half_light.mrs, linestyle = '-', linewidth = 5, color ='grey', alpha = 0.5)
-    plt.imshow(zi, vmin=likelihood_cutoff, vmax=0, origin='lower', cmap ='winter'  , extent=[x.min(), x.max(), y.min(), y.max()],aspect="auto")
+    plt.ylabel(titles[coorj], fontsize = fntsiz)        
+    
+    im = plt.imshow(zi, vmin=likelihood_cutoff, vmax=0, origin='lower', cmap ='winter'  , extent=[x.min(), x.max(), y.min(), y.max()],aspect="auto")
     
     
     
     plt.subplot(122)
     plt.tick_params(axis='y', which='major', labelsize=lblsize)
     plt.tick_params(axis='x', which='major', labelsize=lblsize)
-    #constant DM mass region:
-    plt.plot(const_half_light.rrs, const_half_light.mrs, linestyle = '-', linewidth = 5, color ='grey', alpha = 0.5)
     plt.xticks( [  0.2, 0.4])
+    plt.yticks([])
+
+    #constant DM mass region:
+    plt.plot(const_half_light.rrs, const_half_light.mrs, linestyle = '-', linewidth = 5, color ='grey', alpha = 0.6)
+
     #fitted points:
     for i in range(len(fitted)):
-        plt.scatter(fitted[i][0], fitted[i][1], s=20, marker= 'o',  color='k', alpha=1, edgecolors='none')
+        plt.scatter(fitted[i][0], fitted[i][1], s=80, marker= 'o',  color='crimson', alpha=1, edgecolors='none')
     
     #correct answer:
-    plt.scatter(0.2, 0.2, s=20, marker= 'x',  color='k', alpha=1, edgecolors='none')
-    plt.yticks([])
-    plt.imshow(zi, vmin=likelihood_cutoff, vmax=0, origin='lower', cmap ='winter'  , extent=[x.min(), x.max(), y.min(), y.max()], aspect="auto")
-    #plt.colorbar()
-    cbar = plt.colorbar()
+    plt.scatter(0.2, 0.2, s=80, marker= 'x',  color='crimson', alpha=1, edgecolors='none')
+    im = plt.imshow(zi, vmin=likelihood_cutoff, vmax=0, origin='lower', cmap ='winter'  , extent=[x.min(), x.max(), y.min(), y.max()], aspect="auto")
+
+
+
+    cb_ax = f.add_axes([0.905, 0.11, 0.03, 0.77])
+    cbar = f.colorbar(im, cax=cb_ax)
     cbar.set_label('Likelihood',size=fntsiz)
     cbar.ax.tick_params(labelsize=lblsize) 
 
-    
+    #plt.tight_layout()
     plt.savefig(folder + name_of_sweeps + '/heat_map.png', format='png', dpi = 300, bbox_inches='tight')
     
     

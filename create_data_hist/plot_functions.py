@@ -47,8 +47,8 @@ def plot_binned_counts(dat):
         plt.bar(dat.bnd.bin_centers, dat.bin_diff.counts, width = w, color = "cyan", edgecolor = "b", alpha = 1, hatch='xx', label = 'Difference')
         #plt.bar(dat.bnd.bin_centers, dat.bnd.bin_N, width = w, color = "k", edgecolor = "b", alpha = 0.5)
     plt.legend()
-    plt.savefig('plots/figure5_recreation.png', format='png')
-    plt.savefig('plots/figure5_recreation.pdf', format='pdf')
+    plt.savefig('plots/figure5_recreation.png', format='png', bbox_inches='tight')
+    plt.savefig('plots/figure5_recreation.pdf', format='pdf', bbox_inches='tight')
     plt.clf()
     #plt.show()
 

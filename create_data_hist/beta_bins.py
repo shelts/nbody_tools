@@ -274,8 +274,8 @@ class bin_betas:#class to make histogram of betas in each bin
             plt.legend(bbox_to_anchor=(0.65,0.4), loc='lower left', borderaxespad=0.,  prop={'size': 14}, framealpha=1)
             
         plt.savefig('stream_beta_plots/lambda_dots_' + str(i) + '_(' + str(self.lmda_bnd.bin_lowers[i]) + ',' + str(self.lmda_bnd.bin_centers[i]) + ',' +  str(self.lmda_bnd.bin_uppers[i]) + ').png', format = 'png')
-        plt.savefig('stream_beta_plots/dots/lambda_dots_' + str(i) + '.pdf', format = 'pdf')
-        plt.savefig('stream_beta_plots/dots/lambda_dots_' + str(i) + '.png', format = 'png')
+        plt.savefig('stream_beta_plots/dots/lambda_dots_' + str(i) + '.pdf', format = 'pdf', bbox_inches='tight')
+        plt.savefig('stream_beta_plots/dots/lambda_dots_' + str(i) + '.png', format = 'png', bbox_inches='tight')
         plt.close()
     
     
