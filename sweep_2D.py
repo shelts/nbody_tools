@@ -21,14 +21,24 @@ lua           = path + "lua/full_control.lua"
 args = [3.95, 0.2, 0.2, 12, 0.2]
 #input_hist    = folder + "arg_" + str(args[0]) + "_" + str(args[1]) + "_" + str(args[2]) + "_" + str(args[3]) + "_" + str(args[4]) + "_correct"
 input_hist    = folder + "hist_v170_3p95_0p2_0p2_12_0p2__7_23_18_diffSeed"
+#input_hist    = folder + "data_hist_spring_2018"
 parameters_names = ['ft', 'r', 'rr', 'm', 'mr']
+
+#ranges  = [ [2.0, 6.0],  \
+            #[0.05, 0.5],  \
+            #[0.05, 0.5],  \
+            #[1., 60.0,], \
+            #[.01, .95,],   \
+          #]   
 
 ranges  = [ [2.0, 6.0],  \
             [0.05, 0.5],  \
-            [0.05, 0.5],  \
+            [0.5, 0.95],  \
             [1., 60.0,], \
-            [.01, .95,],   \
-          ]   
+            [.001, .01,],   \
+          ]
+
+
 search_N = [50, 50, 50, 50, 50]
 y = True
 n = False
