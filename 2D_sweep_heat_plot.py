@@ -11,7 +11,8 @@ import matplotlib.gridspec as gridspec
 path = '/home/sidd/Desktop/research/'
 folder = path + "like_surface/"
 #name_of_sweeps = '2D_hists'
-name_of_sweeps = 'parameter_sweep_2d_v170'
+#name_of_sweeps = 'parameter_sweep_2d_v170'
+name_of_sweeps = 'parameter_sweep_2d_v170_data'
 twoD_names   = ['rr_mr']
 titles  = ['Backward Evolve Time (Gyr)',  'Baryon Scale Radius (kpc)', r'Scale Radius Ratio ($R_{B}/(R_{B}+R_{D})$)', 'Baryonic Mass (SMU)',  'Mass Ratio (Baryonic/Total)']
 coori = 2
@@ -78,11 +79,12 @@ class half_light:
     
     
 
-def imshow(sweep):
-    fitted = [[0.232420964882834,0.259547435646423], [0.183881619186761, 0.168896086739161], [0.184036020601296, 0.185490490608526]]#test values
-    const_half_light = half_light()
+def imshow(sweep, const_half_light):
+    fitted = [[0.182490907170191,0.17381456135166], [0.198154361034153, 0.199910776768096], [0.18889116708923, 0.198743736247361]]#test values
+    fitted = [[0.5,0.01], [0.462,0.011], [.431,.01]]#test values
     
-    likelihood_cutoff = -75
+    likelihood_cutoff = -10000
+    #likelihood_cutoff = -75
     fntsiz  = 20
     lblsize = 16
     legsize = 22
@@ -123,16 +125,17 @@ def imshow(sweep):
     plt.xticks( [  0.2, 0.4])
     plt.yticks([])
 
+    im = plt.imshow(zi, vmin=likelihood_cutoff, vmax=0, origin='lower', cmap ='winter'  , extent=[x.min(), x.max(), y.min(), y.max()], aspect="auto")
+    
     #constant DM mass region:
-    plt.plot(const_half_light.rrs, const_half_light.mrs, linestyle = '-', linewidth = 5, color ='grey', alpha = 0.6)
+    plt.plot(const_half_light.rrs, const_half_light.mrs, linestyle = '-', linewidth = 5, color ='r', alpha = 0.5, zorder=1)
 
     #fitted points:
     for i in range(len(fitted)):
-        plt.scatter(fitted[i][0], fitted[i][1], s=80, marker= 'o',  color='crimson', alpha=1, edgecolors='none')
+        plt.scatter(fitted[i][0], fitted[i][1], s=80, marker= 'o',  color='k', alpha=1, edgecolors='none', zorder=2)
     
     #correct answer:
-    plt.scatter(0.2, 0.2, s=80, marker= 'x',  color='crimson', alpha=1, edgecolors='none')
-    im = plt.imshow(zi, vmin=likelihood_cutoff, vmax=0, origin='lower', cmap ='winter'  , extent=[x.min(), x.max(), y.min(), y.max()], aspect="auto")
+    plt.scatter(0.2, 0.2, s=120, marker= 'x',  color='chartreuse', alpha=1, edgecolors='none', zorder=3)
 
 
 
@@ -143,7 +146,7 @@ def imshow(sweep):
 
     #plt.tight_layout()
     plt.savefig(folder + name_of_sweeps + '/heat_map.png', format='png', dpi = 300, bbox_inches='tight')
-    
+    plt.savefig(folder + name_of_sweeps + '/heat_map.pdf', format='pdf', dpi = 300, bbox_inches='tight')
     
 def main():
     correct = [3.95, 0.2, 0.2, 12, 0.2]
@@ -151,5 +154,6 @@ def main():
     sweep.plottable_list()
     
     #contour(sweep)
-    imshow(sweep)
+    const_half_light = half_light()
+    imshow(sweep,const_half_light)
 main()

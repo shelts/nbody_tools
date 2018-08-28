@@ -80,6 +80,93 @@ def plot(hist1, hist2, name, label1, label2): #plots two histograms.
     #plt.show()
     return 1
 # # 
+
+def plot4hists(hist1, hist2, hist3, hist4):
+    h1 = nbody_histograms(hist1 + '.hist')
+    h2 = nbody_histograms(hist2 + '.hist')
+    h3 = nbody_histograms(hist3 + '.hist')
+    h4 = nbody_histograms(hist4 + '.hist')
+
+    baryon_color = 'r'
+    dm_color = 'k'
+    labsiz = 20
+    fntsiz = 26
+    xlower = -40.0
+    xupper = 40.0
+    ylower = 0
+    yupper = .2
+    wid = 2
+    coor  = 410
+    coori = 1
+    
+    f, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, sharex='col', sharey='row', figsize=(10, 10))
+    #f.text(0.04, 0.5, r'$\beta$' , va='center', fontsize = fntsiz)
+    f.subplots_adjust(hspace=0)
+    f.subplots_adjust(wspace=0)
+    params = {'legend.fontsize': 20,
+            'legend.handlelength': 1}
+    plt.rcParams.update(params)
+    
+    plt.subplot(coor + coori)
+    plt.xlim((xlower, xupper))
+    plt.ylim((ylower, yupper))
+    plt.ylabel('N', fontsize = fntsiz)
+    plt.tick_params(axis='y', which='major', labelsize=labsiz)
+    plt.tick_params(axis='x', which='major', labelsize=labsiz)
+    #plt.yticks([-10, -5, 0.0, 5, 10, 15])
+    plt.xticks([])
+    plt.bar(h1.lbins, h1.counts, width = wid, color=baryon_color,hatch="xxx", alpha=0.75, label = 'data')
+    plt.legend()
+    #plt.legend(bbox_to_anchor=(0.5,0.1), loc='center', borderaxespad=0.,  prop={'size': 20}, framealpha=1)
+    coori += 1
+    
+    
+    plt.subplot(coor + coori)
+    plt.xlim((xlower, xupper))
+    plt.ylim((ylower, yupper))
+    #plt.ylabel(r'$\beta$', fontsize = fntsiz)
+    plt.xlabel(r'$\Lambda$', fontsize = fntsiz)
+    plt.tick_params(axis='y', which='major', labelsize=labsiz)
+    plt.tick_params(axis='x', which='major', labelsize=labsiz)
+    #plt.yticks([])
+    plt.xticks([])
+    plt.bar(h2.lbins, h2.counts, width = wid, color=dm_color,hatch="xxx", alpha=0.75, label = 'Fitted 1')
+    #plt.legend(bbox_to_anchor=(0.5,0.1), loc='center', borderaxespad=0.,  prop={'size': 20}, framealpha=1)
+    plt.legend()
+    coori += 1
+    
+    plt.subplot(coor + coori)
+    plt.xlim((xlower, xupper))
+    plt.ylim((ylower, yupper))
+    plt.xlabel(r'$\Lambda$', fontsize = fntsiz)
+    plt.ylabel('N', fontsize = fntsiz)
+    plt.tick_params(axis='y', which='major', labelsize=labsiz)
+    plt.tick_params(axis='x', which='major', labelsize=labsiz)
+    #plt.yticks([0.0, 0.1, 0.2, 0.3, 0.4])
+    plt.xticks([])
+    plt.bar(h3.lbins, h3.counts, width = wid, color=dm_color,hatch="xxx", alpha=0.75, label = 'Fitted 2')
+    plt.legend()
+    coori += 1
+    
+    plt.subplot(coor + coori)
+    plt.xlim((xlower, xupper))
+    plt.ylim((ylower, yupper))
+    plt.xlabel(r'$\Lambda$', fontsize = fntsiz)
+    #plt.ylabel('N', fontsize = fntsiz)
+    plt.tick_params(axis='y', which='major', labelsize=labsiz)
+    plt.tick_params(axis='x', which='major', labelsize=labsiz)
+    #plt.yticks([])
+    plt.bar(h4.lbins, h4.counts, width = wid, color=dm_color,hatch="xxx", alpha=0.75, label = 'Fitted 3')
+    plt.legend()
+    coori += 1
+
+
+
+    plt.savefig('fitted_hists.png', format='png', dpi = 300)
+    plt.savefig('fitted_hists.pdf', format='pdf', dpi = 300)
+    
+    
+    
 def plot_disps(file1):#plots the dispersions from the histogram with lambda beta on top
     ylimit = 1
     xlower = -36 
@@ -726,7 +813,202 @@ def lb_plot(file_name): #plots lb from output
 # # # # # # # # # # # # # # # # # # # # # #
 # #
 
+def lambda_beta_4outputs_plot(f1, f2, f3):#for plotting the data and the fitted values
+    out1 = nbody_outputs(f1 + '.out')
+    out2 = nbody_outputs(f2 + '.out')
+    out3 = nbody_outputs(f3 + '.out')
+    
+    out1.dark_light_split()
+    out1.convert_lambda_beta(True)
+    
+    out2.dark_light_split()
+    out2.convert_lambda_beta(True)
+    
+    out3.dark_light_split()
+    out3.convert_lambda_beta(True)
+    
+    dat_lambdas = []
+    dat_betas = []
+    f = open('./create_data_hist/lambda_betas.dat', 'r')
+    for line in f:
+        ss = line.split('\t')
+        dat_lambdas.append(float(ss[0]))
+        dat_betas.append(float(ss[1]))
+    f.close()
+    
+    angle_cuttoffs = [-150.0, 150.0, 50, -15.0, 15.0, 1]
+    baryon_color = 'r'
+    dm_color = 'k'
+    labsiz = 20
+    fntsiz = 26
+    xlower = -100.0
+    xupper = 100.0
+    ylower = -4
+    yupper = 4
+    
+    coor  = 410
+    coori = 1
+    
+    f, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, sharex='col', sharey='row', figsize=(20, 10))
+    #f.text(0.04, 0.5, r'$\beta$' , va='center', fontsize = fntsiz)
+    f.subplots_adjust(hspace=0)
+    f.subplots_adjust(wspace=0)
+    params = {'legend.fontsize': 20,
+            'legend.handlelength': 1}
+    plt.rcParams.update(params)
+    
+    plt.subplot(coor + coori)
+    plt.xlim((xlower, xupper))
+    plt.ylim((ylower, yupper))
+    plt.ylabel(r'$\beta$', fontsize = fntsiz)
+    plt.tick_params(axis='y', which='major', labelsize=labsiz)
+    plt.tick_params(axis='x', which='major', labelsize=labsiz)
+    #plt.yticks([-10, -5, 0.0, 5, 10, 15])
+    plt.xticks([])
+    plt.plot(dat_lambdas, dat_betas, '.', markersize = .75, color = baryon_color, alpha=1, marker = '.',label = 'Data')
+    plt.legend()
+    plt.legend(bbox_to_anchor=(0.01,0.03), loc='lower left', borderaxespad=0.,  prop={'size': 20}, framealpha=1)
+    coori += 1
+    
+    
+    plt.subplot(coor + coori)
+    plt.xlim((xlower, xupper))
+    plt.ylim((ylower, yupper))
+    plt.ylabel(r'$\beta$', fontsize = fntsiz)
+    plt.tick_params(axis='y', which='major', labelsize=labsiz)
+    plt.tick_params(axis='x', which='major', labelsize=labsiz)
+    plt.xticks([])
+    plt.plot(out1.light_lambdas, out1.light_betas, '.', markersize = .5, color = baryon_color, alpha=1, marker = '.', label = 'Fit 1')
+    plt.plot(out1.dark_lambdas,  out1.dark_betas, '.', markersize = .5, color = dm_color, alpha=1, marker = '.', label = 'Fit 1')
+    plt.legend(bbox_to_anchor=(0.01,0.03), loc='lower left', borderaxespad=0.,  prop={'size': 20}, framealpha=1)
+    coori += 1
+    
+    plt.subplot(coor + coori)
+    plt.xlim((xlower, xupper))
+    plt.ylim((ylower, yupper))
+    plt.ylabel(r'$\beta$', fontsize = fntsiz)
+    plt.tick_params(axis='y', which='major', labelsize=labsiz)
+    plt.tick_params(axis='x', which='major', labelsize=labsiz)
+    #plt.yticks([])
+    plt.xticks([])
+    plt.plot(out2.light_lambdas, out2.light_betas, '.', markersize = .5, color = baryon_color, alpha=1, marker = '.', label = 'Fit 2')
+    plt.plot(out2.dark_lambdas,  out2.dark_betas, '.', markersize = .5, color = dm_color, alpha=1, marker = '.', label = 'Fit 2')
+    plt.legend(bbox_to_anchor=(0.01,0.03), loc='lower left', borderaxespad=0.,  prop={'size': 20}, framealpha=1)
+    coori += 1
+    
+    plt.subplot(coor + coori)
+    plt.xlim((xlower, xupper))
+    plt.ylim((ylower, yupper))
+    plt.ylabel(r'$\beta$', fontsize = fntsiz)
+    plt.xlabel(r'$\Lambda$', fontsize = fntsiz)
+    plt.tick_params(axis='y', which='major', labelsize=labsiz)
+    plt.tick_params(axis='x', which='major', labelsize=labsiz)
+    #plt.yticks([])
+    plt.plot(out3.light_lambdas, out3.light_betas, '.', markersize = .5, color = baryon_color, alpha=1, marker = '.', label = 'Fit 3')
+    plt.plot(out3.dark_lambdas,  out3.dark_betas, '.', markersize = .5, color = dm_color, alpha=1, marker = '.', label = 'Fit 3')
+    plt.legend(bbox_to_anchor=(0.01,0.03), loc='lower left', borderaxespad=0.,  prop={'size': 20}, framealpha=1)
+    coori += 1
 
+
+
+    #plt.savefig('fitted_lambda_beta.png', format='png', dpi = 300)
+    plt.savefig('fitted_lambda_beta.pdf', format='pdf', dpi = 300)
+    
+
+def lambda_beta_2outputs_plot(file1, file2):
+    out1 = nbody_outputs(file1 + '.out')
+    out2 = nbody_outputs(file2 + '.out')
+    hist1 = nbody_histograms(file1 + '.hist')
+    hist2 = nbody_histograms(file2 + '.hist')
+    
+    out1.dark_light_split()
+    out1.convert_lambda_beta(True)
+    
+    out2.dark_light_split()
+    out2.convert_lambda_beta(True)
+    
+    angle_cuttoffs = [-150.0, 150.0, 50, -15.0, 15.0, 1]
+    baryon_color = 'k'
+    dm_color = 'k'
+    labsiz = 20
+    fntsiz = 26
+    xlower = -180.0
+    xupper = 180.0
+    ylower = -15
+    yupper = 15
+    
+    coor  = 220
+    coori = 1
+    
+    f, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, sharex='col', sharey='row', figsize=(20, 10))
+    #f.text(0.04, 0.5, r'$\beta$' , va='center', fontsize = fntsiz)
+    f.subplots_adjust(hspace=0)
+    f.subplots_adjust(wspace=0)
+    params = {'legend.fontsize': 20,
+            'legend.handlelength': 1}
+    plt.rcParams.update(params)
+    
+    
+    
+    
+    
+    plt.subplot(coor + coori)
+    plt.xlim((xlower, xupper))
+    plt.ylim((ylower, yupper))
+    plt.ylabel(r'$\beta$', fontsize = fntsiz)
+    plt.tick_params(axis='y', which='major', labelsize=labsiz)
+    plt.tick_params(axis='x', which='major', labelsize=labsiz)
+    plt.yticks([-10, -5, 0.0, 5, 10, 15])
+    plt.plot(out1.light_lambdas, out1.light_betas, '.', markersize = .75, color = baryon_color, alpha=0.75, marker = '.',label = '2 Gyr')
+    #plt.legend()
+    plt.legend(bbox_to_anchor=(0.5,0.1), loc='center', borderaxespad=0.,  prop={'size': 20}, framealpha=1)
+    coori += 1
+    
+    
+    
+    plt.subplot(coor + coori)
+    plt.xlim((xlower, xupper))
+    plt.ylim((ylower, yupper))
+    #plt.ylabel(r'$\beta$', fontsize = fntsiz)
+    plt.xlabel(r'$\Lambda$', fontsize = fntsiz)
+    plt.tick_params(axis='y', which='major', labelsize=labsiz)
+    plt.tick_params(axis='x', which='major', labelsize=labsiz)
+    plt.yticks([])
+    plt.plot(out2.light_lambdas, out2.light_betas, '.', markersize = .5, color = dm_color, alpha=.75, marker = '.', label = '6 Gyr')
+    plt.legend(bbox_to_anchor=(0.5,0.1), loc='center', borderaxespad=0.,  prop={'size': 20}, framealpha=1)
+    #plt.legend()
+    coori += 1
+    
+    plt.subplot(coor + coori)
+    plt.xlim((xlower, xupper))
+    plt.ylim((0, 0.5))
+    plt.xlabel(r'$\Lambda$', fontsize = fntsiz)
+    plt.ylabel('N', fontsize = fntsiz)
+    plt.tick_params(axis='y', which='major', labelsize=labsiz)
+    plt.tick_params(axis='x', which='major', labelsize=labsiz)
+    plt.yticks([0.0, 0.1, 0.2, 0.3, 0.4])
+    plt.bar(hist1.lbins, hist1.counts, width = 5., color=dm_color,hatch="xxx", alpha=0.75, label = '2 Gyr')
+    #plt.legend()
+    coori += 1
+    
+    plt.subplot(coor + coori)
+    plt.xlim((xlower, xupper))
+    plt.ylim((0, 0.5))
+    plt.xlabel(r'$\Lambda$', fontsize = fntsiz)
+    #plt.ylabel('N', fontsize = fntsiz)
+    plt.tick_params(axis='y', which='major', labelsize=labsiz)
+    plt.tick_params(axis='x', which='major', labelsize=labsiz)
+    plt.yticks([])
+    plt.bar(hist2.lbins, hist2.counts, width = 5., color=dm_color,hatch="xxx", alpha=0.75, label = '6 Gyr')
+    #plt.legend()
+    coori += 1
+
+
+
+    plt.savefig(file1 + '_6gy' + '_lambdabeta.png', format='png', dpi = 300)
+    plt.savefig(file1 + '_6gy' + '_lambdabeta.pdf', format='pdf', dpi = 300)
+    
+    
 def lambda_beta_light_dark_histogram_plot(file_name):
     out = nbody_outputs(file_name + '.out')
     angle_cuttoffs = [-150.0, 150.0, 50, -15.0, 15.0, 1]
@@ -793,7 +1075,7 @@ def lambda_beta_light_dark_histogram_plot(file_name):
     plt.xlim((xlower, xupper))
     #plt.ylim((0, 0.3))
     plt.xlabel(r'$\Lambda$', fontsize = fntsiz)
-    plt.ylabel(r'$\beta$', fontsize = fntsiz)
+    plt.ylabel('N', fontsize = fntsiz)
     
     plt.tick_params(axis='y', which='major', labelsize=labsiz)
     plt.tick_params(axis='x', which='major', labelsize=labsiz)
@@ -802,12 +1084,8 @@ def lambda_beta_light_dark_histogram_plot(file_name):
     plt.legend()
     coori += 1
 
-    plt.savefig(file_name + '_lambdabeta_hist', format='png', dpi = 300)
-    
-    
-    
-    
-    
+    plt.savefig(file_name + '_lambdabeta_hist.png', format='png', dpi = 300)
+    plt.savefig(file_name + '_lambdabeta_hist.pdf', format='pdf', dpi = 300)
     
     
     # just plotting the overlapping lambda beta and the histograms.
@@ -832,7 +1110,7 @@ def lambda_beta_light_dark_histogram_plot(file_name):
     plt.xlim((xlower, xupper))
     #plt.ylim((0, 0.3))
     plt.xlabel(r'$\Lambda$', fontsize = fntsiz)
-    plt.ylabel(r'$\beta$', fontsize = fntsiz)
+    plt.ylabel('N', fontsize = fntsiz)
     
     plt.tick_params(axis='y', which='major', labelsize=labsiz)
     plt.tick_params(axis='x', which='major', labelsize=labsiz)
@@ -840,7 +1118,8 @@ def lambda_beta_light_dark_histogram_plot(file_name):
     plt.bar(out.mid_bins, out.bm_normed, width = 5., color=baryon_color, hatch="\\\\", alpha=0.5, label = 'baryons')
     plt.legend()
 
-    plt.savefig(file_name + '_lambdabeta_hist2', format='png', dpi = 300)
+    plt.savefig(file_name + '_lambdabeta_hist2.png', format='png', dpi = 300)
+    plt.savefig(file_name + '_lambdabeta_hist2.pdf', format='pdf', dpi = 200)
 
 
 def plot_hist_lambda_beta(file1, file2, file_name = None):
@@ -1246,9 +1525,23 @@ def main():
     #single_xyz(file1)
     #lb_plot(file1)
     
-    file1 = folder + 'hist_v170_3p95_0p2_0p2_12_0p2__7_17_18_diffSeed2'
+    #file1 = folder + 'hist_v170_3p95_0p2_0p2_12_0p2__7_17_18_diffSeed2'
     file1 = folder + 'hist_v170_3p95_0p2_0p2_12_0p2__7_17_18_diffSeed3'
-    lambda_beta_light_dark_histogram_plot(file1)
+    #lambda_beta_light_dark_histogram_plot(file1)
+    
+    file1 = folder + '2gy'
+    file2 = folder + '6gy'
+    #lambda_beta_2outputs_plot(file1, file2)
+    
+    
+    d1 = folder + 'data_hist_spring_2018'
+    f1 = folder + 'fit1'
+    f2 = folder + 'fit2'
+    f3 = folder + 'fit3'
+    
+    plot4hists(d1, f1, f2, f3)
+    #lambda_beta_4outputs_plot(f1, f2, f3)
+    
     
     return 0 
 

@@ -14,27 +14,26 @@ n = False
 lmc_dir = '/home/shelts/research/'
 sid_dir = '/home/sidd/Desktop/research/'
 sgr_dir = '/Users/master/sidd_research/'
-path = sid_dir
+path = lmc_dir
 
-args_run = [3.95, 0.006, 0.02, 0.027, 0.001] 
-args_run = [1.5, 0.2, 0.2, 11, 0.2] 
-args_run_comp = [3.9, 0.2, 0.2, 12, 0.2] 
+running = [3.95, 0.2, 0.2, 12., 0.2] 
+compare = [3.95, 0.2, 0.2, 12, 0.2] 
+
+#-58.79506058, 
+comp1 = [4.05909541172839,  0.101076647250668, 0.499808710932945, 1.01796641573744, 0.0108078303059573]
+#-59.41994019, 
+comp2 = [4.20187147930272,  0.101093533020864, 0.469986922137315, 1.06130375276369, 0.0102953561458289]
+#-59.67118846, 
+comp3 = [4.02651775878644, 0.102552774054781, 0.451116259004901, 1.04947097345064, 0.0101861045313143]
+
 # # # # # # # # # # # # # # # # # # # # # # # #
 #              Standard Run switches          #
 # # # # # # # # # # # # # # # # # # # # # # # #
 run_nbody                 = y                 #
-remake                    = y                 #
+remake                    = n                 #
 full_remake               = n
 run_and_compare           = n                 #
 match_histograms          = n                 #
-# # # # # # # # # # # # # # # # # # # # # # # #
-
-# # # # # # # # # # # # # # # # # # # # # # # #
-#              Plot Switches                  #
-# # # # # # # # # # # # # # # # # # # # # # # #
-plot_hists                = n                 #
-lb_plot_switch            = n                 #
-lambda_beta_plot_switch   = n                 #
 # # # # # # # # # # # # # # # # # # # # # # # #
 
 #    Histogram names      #
@@ -45,25 +44,32 @@ folder = path + 'quick_plots/hists_outs/'
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # correctans_hist: name for non comparing hist file or the sim data hist for the compare runs #
 # simulations_hist: name for the comparison hist file for comparison runs                     #
-correctans_hist = folder + 'slightly_disrupt'
-simulations_hist = folder + '3.9'
+correctans_hist = folder + 'data_hist_spring_2018'
+simulations_hist = folder + 'fit1'
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+
+
+#compares = [compare]#doing it this way because I often want to do multiple arguements with a single comparison hist
+#sim_hists = [simulations_hist]
+compares  = [comp1, comp2, comp3]
+sim_hists = ['fit1', 'fit2', 'fit3']
 
 # optional run arguements #
 manual_body_list = '' #"~/Desktop/research/nbody_tools/disk.out"
 piping_file = None
 
 #    run specfics   #
-#version = '_1.68_x86_64-pc-linux-gnu__mt'
-version  = ''
-lua = path + 'lua/' + "full_control.lua"
-#lua = path + 'lua/' + "EMD_v168.lua"
+version = '_1.70_x86_64-pc-linux-gnu__mt'
+#version  = ''
+#lua = path + 'lua/' + "full_control.lua"
+lua = path + 'lua/' + "EMD_v170_vhalounits.lua"
+#lua = path + 'lua/' + "EMD_v170.lua"
 
 
 # # # # # # # # # # # # # # # # # # # # # #
 #    standard nbody running env usage     #
 # # # # # # # # # # # # # # # # # # # # # #
-def standard_run():
+def standard_run(sim_args, sim_hist):
     nbody = nbody_running_env(lua, version, path)
     
     if(remake):
@@ -73,25 +79,18 @@ def standard_run():
             nbody.build(False)
 
     if(run_nbody):
-        nbody.run(args_run, correctans_hist, None, piping_file, manual_body_list)#normally used to create the correctans_hist
+        nbody.run(running, correctans_hist, None, piping_file, manual_body_list)#normally used to create the correctans_hist
     
     if(run_and_compare):
-        nbody.run(args_run_comp, simulations_hist, correctans_hist, piping_file, manual_body_list)
+        nbody.run(sim_args, sim_hist, correctans_hist, piping_file, manual_body_list)
     
     if(match_histograms):
-        nbody.match_hists(simulations_hist, correctans_hist)
+        nbody.match_hists(sim_hist, correctans_hist)
     
     return 0
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #    
-standard_run()
 
-if(plot_hists):
-    plot(correctans_hist , simulations_hist, simulations_hist, '1', '2')
+for i in range(len(compares)):
+    standard_run(compares[i], sim_hists[i])
 
-if(lb_plot_switch):
-    lb_plot(correctans_hist)
-
-if(lambda_beta_plot_switch):
-    lambda_beta_plot(correctans_hist)
-    

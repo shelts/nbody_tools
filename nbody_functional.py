@@ -77,8 +77,8 @@ class nbody_running_env:
         else:#will pipe the result of the comparison to a file
             call([command], shell=True)
         
-        print( hist1, "\n", hist2)
-        print ("\n")
+        print hist1, "\n", hist2
+        print "\n"
         return 0
     
 class nbody_outputs:#a class that takes in data from nbody output files and makes them available

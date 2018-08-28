@@ -236,7 +236,7 @@ class data:#class system for reading in data and making a data histogram
 def main():
     use_vgsr = False
     use_custom_bins = True
-    calc_beta_dispersions = True
+    calc_beta_dispersions = False
     make_hist = False
     normalize_counts =  False
     
@@ -252,6 +252,7 @@ def main():
     
     dat = data(on_field_counts_file, off_field_counts_file)
     lamda_beta_plot(dat)
+    write_lambda_beta(dat)
     # initiaze bins parameters #
     if(use_custom_bins):
         dat.bnd = bin_parameters(bin_data)

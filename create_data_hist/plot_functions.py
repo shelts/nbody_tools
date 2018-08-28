@@ -11,6 +11,15 @@ from matplotlib.ticker import AutoMinorLocator
 
 
 
+def write_lambda_beta(dat):
+    f = open('lambda_betas.dat', 'w')
+    
+    for i in range(len(dat.ON_star_N_lbda)):
+        f.write("%0.15f\t%0.15f\n" % (dat.ON_star_N_lbda[i], dat.ON_star_N_beta[i]))
+        
+    f.close()
+    
+
 
 # # # # # # # # # # # # # # # # # # # 
 # Serving create_data_hist          #
