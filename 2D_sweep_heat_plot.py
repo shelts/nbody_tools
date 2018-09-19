@@ -12,7 +12,7 @@ path = '/home/sidd/Desktop/research/'
 folder = path + "like_surface/"
 #name_of_sweeps = '2D_hists'
 #name_of_sweeps = 'parameter_sweep_2d_v170'
-name_of_sweeps = 'parameter_sweep_2d_v170_data'
+name_of_sweeps = 'parameter_sweep_2d'
 twoD_names   = ['rr_mr']
 titles  = ['Backward Evolve Time (Gyr)',  'Baryon Scale Radius (kpc)', r'Scale Radius Ratio ($R_{B}/(R_{B}+R_{D})$)', 'Baryonic Mass (SMU)',  'Mass Ratio (Baryonic/Total)']
 coori = 2
@@ -81,10 +81,11 @@ class half_light:
 
 def imshow(sweep, const_half_light):
     fitted = [[0.182490907170191,0.17381456135166], [0.198154361034153, 0.199910776768096], [0.18889116708923, 0.198743736247361]]#test values
-    fitted = [[0.5,0.01], [0.462,0.011], [.431,.01]]#test values
+    #fitted = [[0.5,0.01], [0.462,0.011], [.431,.01]]#test values
     
-    likelihood_cutoff = -10000
-    #likelihood_cutoff = -75
+    
+    #likelihood_cutoff = -10000
+    likelihood_cutoff = -75
     fntsiz  = 20
     lblsize = 16
     legsize = 22

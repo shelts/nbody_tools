@@ -14,17 +14,17 @@ n = False
 lmc_dir = '/home/shelts/research/'
 sid_dir = '/home/sidd/Desktop/research/'
 sgr_dir = '/Users/master/sidd_research/'
-path = lmc_dir
+path = sid_dir
 
 running = [3.95, 0.2, 0.2, 12., 0.2] 
 compare = [3.95, 0.2, 0.2, 12, 0.2] 
 
 #-58.79506058, 
-comp1 = [4.05909541172839,  0.101076647250668, 0.499808710932945, 1.01796641573744, 0.0108078303059573]
+#comp1 = [4.05909541172839,  0.101076647250668, 0.499808710932945, 1.01796641573744, 0.0108078303059573]
 #-59.41994019, 
-comp2 = [4.20187147930272,  0.101093533020864, 0.469986922137315, 1.06130375276369, 0.0102953561458289]
+#comp2 = [4.20187147930272,  0.101093533020864, 0.469986922137315, 1.06130375276369, 0.0102953561458289]
 #-59.67118846, 
-comp3 = [4.02651775878644, 0.102552774054781, 0.451116259004901, 1.04947097345064, 0.0101861045313143]
+#comp3 = [4.02651775878644, 0.102552774054781, 0.451116259004901, 1.04947097345064, 0.0101861045313143]
 
 # # # # # # # # # # # # # # # # # # # # # # # #
 #              Standard Run switches          #
@@ -49,9 +49,9 @@ simulations_hist = folder + 'fit1'
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
 
-#compares = [compare]#doing it this way because I often want to do multiple arguements with a single comparison hist
+compares = [compare]#doing it this way because I often want to do multiple arguements with a single comparison hist
 #sim_hists = [simulations_hist]
-compares  = [comp1, comp2, comp3]
+#compares  = [comp1, comp2, comp3]
 sim_hists = ['fit1', 'fit2', 'fit3']
 
 # optional run arguements #
@@ -59,10 +59,10 @@ manual_body_list = '' #"~/Desktop/research/nbody_tools/disk.out"
 piping_file = None
 
 #    run specfics   #
-version = '_1.70_x86_64-pc-linux-gnu__mt'
-#version  = ''
-#lua = path + 'lua/' + "full_control.lua"
-lua = path + 'lua/' + "EMD_v170_vhalounits.lua"
+#version = '_1.70_x86_64-pc-linux-gnu__mt'
+version  = ''
+lua = path + 'lua/' + "full_control.lua"
+#lua = path + 'lua/' + "EMD_v170_vhalounits.lua"
 #lua = path + 'lua/' + "EMD_v170.lua"
 
 
@@ -92,5 +92,5 @@ def standard_run(sim_args, sim_hist):
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #    
 
 for i in range(len(compares)):
-    standard_run(compares[i], sim_hists[i])
+    standard_run(compares[i], folder + sim_hists[i])
 
