@@ -1,6 +1,7 @@
 #!/bin/bash          
 #/* Copyright (c) 2016 Siddhartha Shelton */
 
+
 rebuild=false
 run=false
 run_compare=false
