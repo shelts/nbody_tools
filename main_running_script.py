@@ -17,17 +17,17 @@ sgr_dir = '/Users/master/sidd_research/'
 path = sid_dir
 
 running = [3.95, 0.2, 0.2, 12., 0.2] 
-compare = [3.95, 0.2, 0.2, 12, 0.2] 
+compare = [3.95, 0.2, 0.2, 12., 0.2] 
 
 
 # # # # # # # # # # # # # # # # # # # # # # # #
 #              Standard Run switches          #
 # # # # # # # # # # # # # # # # # # # # # # # #
 run_nbody                 = n                 #
-remake                    = y                 #
+remake                    = n                 #
 full_remake               = n
-run_and_compare           = n                 #
-match_histograms          = y                 #
+run_and_compare           = y                 #
+match_histograms          = n                 #
 # # # # # # # # # # # # # # # # # # # # # # # #
 
 #    Histogram names      #
@@ -38,12 +38,12 @@ folder = path + 'quick_plots/hists_outs/'
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # correctans_hist: name for non comparing hist file or the sim data hist for the compare runs #
 # simulations_hist: name for the comparison hist file for comparison runs                     #
-correctans_hist  =  'hist_v170_3p95_0p2_0p2_12_0p2__7_17_18_diffSeed3'
-simulations_hist = 'hist_v170_3p95_0p2_0p2_12_0p2__7_23_18_diffSeed'
+correctans_hist  =  'hist_v172_3p95_0p2_0p2_12_0p2__9_24_18'
+simulations_hist =  'hist_v172_3p95_0p2_0p2_12_0p2__9_24_18_diffSeed1'
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
 
-compares = [compare]#doing it this way because I often want to do multiple arguements with a single comparison hist
+compare_args = [compare]#doing it this way because I often want to do multiple arguements with a single comparison hist
 sim_hists = [simulations_hist]
 #compares  = [comp1, comp2, comp3]
 #sim_hists = ['fit1', 'fit2', 'fit3']
@@ -57,7 +57,7 @@ piping_file = None
 version  = ''
 lua = path + 'lua/' + "full_control.lua"
 #lua = path + 'lua/' + "EMD_v170_vhalounits.lua"
-#lua = path + 'lua/' + "EMD_v170.lua"
+lua = path + 'lua/' + "EMD_v172.lua"
 
 
 # # # # # # # # # # # # # # # # # # # # # #
@@ -85,6 +85,6 @@ def standard_run(sim_args, sim_hist):
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #    
 
-for i in range(len(compares)):
-    standard_run(compares[i], folder + sim_hists[i])
+for i in range(len(compare_args)):
+    standard_run(compare_args[i], folder + sim_hists[i])
 
