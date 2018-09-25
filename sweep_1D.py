@@ -16,19 +16,18 @@ path = lmc_dir
 
 folder        = path + "like_surface/hists/"
 binary        = path + "nbody_test/bin/milkyway_nbody"
-lua           = path + "lua/full_control.lua"
+lua           = path + "lua/EMD_v172.lua"
 
-args = [3.95, 0.2, 0.2, 11, 0.2]
-#args = [4.03545444101925, 0.102054233253449, 0.415975899916935, 1.12339623813343, 0.0101505240447525]
+args = [3.95, 0.2, 0.2, 12, 0.2]
 input_hist    = folder + "arg_" + str(args[0]) + "_" + str(args[1]) + "_" + str(args[2]) + "_" + str(args[3]) + "_" + str(args[4]) + "_correct"
 #input_hist  = 'data_hist_spring_2018'
 parameters_names = ['ft', 'r', 'rr', 'm', 'mr']
 
 ranges  = [ [2.0, 6.0],  \
-            [0.1, 0.5],  \
-            [0.1, 0.5],  \
-            [1, 100.0,], \
-            [.005, .95,],   \
+            [0.05, 0.5],  \
+            [0.1, 0.6],  \
+            [.1, 100.0,], \
+            [.001, .95,],   \
           ]   
 search_N = [100, 100, 100, 100, 100]
 y = True
@@ -36,15 +35,15 @@ n = False
 
 #choose what to run
 make_folders      = y
-rebuild_binary    = y
+rebuild_binary    = n
 make_correct_hist = y
 random_iter       = y
 
-run_ft = n
-run_r  = n
-run_rr = n
-run_m  = n
-run_mr = n
+run_ft = y
+run_r  = y
+run_rr = y
+run_m  = y
+run_mr = y
 which_sweeps = [run_ft, run_r, run_rr, run_m, run_mr]
 #--------------------------------------------------------------------------------------------------
 

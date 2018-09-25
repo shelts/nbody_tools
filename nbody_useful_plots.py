@@ -172,10 +172,10 @@ def plot4hists(hist1, hist2, hist3, hist4):
     
 def plot_disps(file1):#plots the dispersions from the histogram with lambda beta on top
     ylimit = 1
-    xlower = -36 
-    xupper = 36
+    xlower = -75 
+    xupper = 150
     w_overlap = 2.5
-    w_adjacent = 1.5
+    w_adjacent = 4
     #folder = 'like_surface/'
     save_folder = '/home/sidd/Desktop/research/quick_plots/publish_plots/'
     save_folder_adj = '/home/sidd/Desktop/research/quick_plots/comp_hist_plots/adj/'
@@ -204,40 +204,41 @@ def plot_disps(file1):#plots the dispersions from the histogram with lambda beta
     #plt.title(r'Simulated Orphan Stream')
     #plt.plot(out1.dark_lambdas, out1.dark_betas, '.', markersize = .75, color = 'red', alpha=1., marker = '.', label = 'Dark Matter')
     plt.plot(out1.light_lambdas, out1.light_betas, '.', markersize = .75, color = 'b', alpha=.75, marker = '.', label = 'Stars')
+    plt.xticks([])
     plt.yticks([-10, 0, 10])
     
     ax2 = plt.subplot(412)
-    plt.bar(hist1.lbins, hist1.counts, width = w_adjacent, color='b')
+    plt.bar(hist1.lbins, hist1.counts, width = w_adjacent, color='r')
     #plt.legend(handles=[mpatches.Patch(color='b', label= 'Counts')])
     #plt.title('Line of Sight Vel Disp Distribution')
     #plt.xlim((xlower, xupper))
-    #plt.ylim((0.0, ylimit))
+    plt.ylim((0.0, .2))
     plt.ylabel('N')
     plt.xticks([])
-    plt.yticks([0.1, 0.2])
+    plt.yticks([0.05, 0.1, 0.15])
     #plt.xlabel(r'\sigma_{v_{los}} (km/s)')
     
     ax3 = plt.subplot(413)
     #f, (f1, f2) = plt.subplots(2, sharex = True, sharey = True)
-    plt.bar(hist1.lbins, hist1.bd, width = w_adjacent, color='b')
+    plt.bar(hist1.lbins, hist1.bd, width = w_adjacent, color='darkgreen')
     #plt.legend(handles=[mpatches.Patch(color='b', label= plot_hist1)])
     #plt.title('Line of Sight Vel Disp Distribution')
     plt.xlim((xlower, xupper))
-    plt.ylim((0.0, 2.0))
+    plt.ylim((0.0, 2.5))
     plt.ylabel(r'$\sigma_{\beta_{Orphan}}$')
     #plt.xlabel('Lambda')
     plt.xticks([])
-    plt.yticks([0.5, 1, 1.5])
+    plt.yticks([0.5, 1, 1.5, 2.0])
     
     ax4 = plt.subplot(414)
     plt.bar(hist1.lbins, hist1.vd, width = w_adjacent, color='k')
     #plt.legend(handles=[mpatches.Patch(color='k', label= plot_hist1)])
     plt.xlim((xlower, xupper))
-    plt.ylim((0.0, 5))
-    plt.xlabel('l')
+    plt.ylim((0.0, 10))
+    plt.yticks([2.0, 4.0, 6.0, 8.0])
     plt.ylabel(r'$\sigma_{v_{los}}$ (km/s)')
     plt.xlabel(r'$\Lambda_{Orphan}$')
-    plt.savefig(save_folder + 'disps.png', format='png')
+    plt.savefig(save_folder + 'disps.png', format='png', bbox_inches='tight')
     plt.clf()
     #plt.show()
     return 1
@@ -245,10 +246,10 @@ def plot_disps(file1):#plots the dispersions from the histogram with lambda beta
 
 def plot_2betadisps(file1, file2):#plots the dispersions from the histograms with lambda beta on top. for 2 hists
     ylimit = 1
-    xlower = -36 
-    xupper = 36
+    xlower = -75 
+    xupper = 150
     w_overlap = 2.5
-    w_adjacent = 2
+    w_adjacent = 4
     #folder = 'like_surface/'
     save_folder = '/home/sidd/Desktop/research/quick_plots/publish_plots/'
 
@@ -1258,9 +1259,6 @@ def plot_lmda_beta(file1, file2):
     out1 = nbody_outputs(file1 + ".out")
     out2 = nbody_outputs(file2 + ".out")
     
-    hist1 = nbody_histograms(file1 + ".hist")
-    hist2 = nbody_histograms(file2 + ".hist")
-    
     w_overlap = 2.5
     w_adjacent = 1.5
     count_y_limit = 0.4
@@ -1283,7 +1281,7 @@ def plot_lmda_beta(file1, file2):
     plt.tick_params(axis='y', which='major', labelsize=24)
     plt.tick_params(axis='x', which='major', labelsize=24)
     #plt.title(r'Simulated Stream and Best Fit Stream')
-    #plt.plot(out1.dark_lambdas, out1.dark_betas, '.', markersize = .75, color = 'red', alpha=1, marker = '.', label = 'Simulated Dark Matter ')
+    plt.plot(out1.dark_lambdas, out1.dark_betas, '.', markersize = .75, color = 'red', alpha=1, marker = '.', label = 'Simulated Dark Matter ')
     plt.plot(out1.light_lambdas, out1.light_betas, '.', markersize = .75, color = 'b', alpha=0.75, marker = '.', label = 'Simulated Stars')
     #plt.legend()
     #plt.subplots(4, sharex = True, sharey = True)
@@ -1297,10 +1295,11 @@ def plot_lmda_beta(file1, file2):
     plt.tick_params(axis='y', which='major', labelsize=24)
     plt.tick_params(axis='x', which='major', labelsize=24)
     #plt.title(r'$\Lambda$ vs $\beta$')
-    #plt.plot(out2.dark_lambdas, out2.dark_betas, '.', markersize = .75, color = 'red', alpha=1, marker = '.', label = 'Best Fit  Dark Matter')
+    plt.plot(out2.dark_lambdas, out2.dark_betas, '.', markersize = .75, color = 'red', alpha=1, marker = '.', label = 'Best Fit  Dark Matter')
     plt.plot(out2.light_lambdas, out2.light_betas, '.', markersize = .75, color = 'b', alpha=.75, marker = '.',label = 'Best Fit  Stars')
     #plt.legend()
-    plt.savefig('/home/sidd/Desktop/research/quick_plots/publish_plots/both_lambda_beta_light.png', format='png')
+    #plt.savefig('/home/sidd/Desktop/research/quick_plots/publish_plots/both_lambda_beta_light.png', format='png', bbox_inches='tight')
+    plt.savefig('/home/sidd/Desktop/research/quick_plots/publish_plots/both_lambda_beta.png', format='png', bbox_inches='tight')
     #plt.show()
     
     if(individual):
@@ -1315,7 +1314,7 @@ def plot_lmda_beta(file1, file2):
         plt.plot(out1.light_lambdas, out1.light_betas, '.', markersize = .75, color = 'b', alpha=.75, marker = '.', label = 'Stars')
         #plt.legend(handles=[mpatches.Patch(color='red', label= 'Dark Matter', color='b', label='Stars')])
         #plt.legend()
-        plt.savefig('/home/sidd/Desktop/research/quick_plots/publish_plots/lambda_beta1_light.png', format='png')
+        plt.savefig('/home/sidd/Desktop/research/quick_plots/publish_plots/lambda_beta1_light.png', format='png', bbox_inches='tight')
         
         
         plt.clf() 
@@ -1328,7 +1327,7 @@ def plot_lmda_beta(file1, file2):
         #plt.plot(out2.dark_lambdas, out2.dark_betas, '.', markersize = .75, color = 'red', alpha=1, marker = '.', label = 'Dark Matter')
         plt.plot(out2.light_lambdas, out2.light_betas, '.', markersize = .75, color = 'b', alpha=.75, marker = '.',label = 'Stars')
         plt.legend()
-        plt.savefig('/home/sidd/Desktop/research/quick_plots/publish_plots/lambda_beta2_light.png', format='png')
+        plt.savefig('/home/sidd/Desktop/research/quick_plots/publish_plots/lambda_beta2_light.png', format='png', bbox_inches='tight')
     
 
 def veldisp(file1):#plots the velocity dispersion from the histograms
@@ -1508,16 +1507,17 @@ def main():
     file1 = folder + 'ultrafaint'
     #file2 = 'arg_3.95_0.2_0.2_12_0.2_correct1'
     
+    
     #plot_hist_lambda_beta(file1, file2)
     
-    hist1 = folder + '3.95'
-    hist2 = folder + '3.9'
+    hist1 = folder + 'hist_v172_3p95_0p2_0p2_12_0p2__9_24_18'
+    hist2 = folder + 'hist_v172_4_0p2_0p2_12_0p2__9_25_18'
     #plot_lmda_beta(hist1, hist2)
     #veldisp(file2)
     #veldisp_lbda_beta(file1)
     
     #plot_disps(hist1)
-    #plot_2betadisps(hist1,hist2)
+    plot_2betadisps(hist1,hist2)
     
     #name = 'mwh_hist'
     #plot_single(hist1, name)
@@ -1542,7 +1542,7 @@ def main():
     f2 = folder + 'fit2'
     f3 = folder + 'fit3'
     
-    plot4hists(d1, f1, f2, f3)
+    #plot4hists(d1, f1, f2, f3)
     #lambda_beta_4outputs_plot(f1, f2, f3)
     
     
