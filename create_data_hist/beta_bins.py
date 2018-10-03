@@ -259,12 +259,12 @@ class bin_betas:#class to make histogram of betas in each bin
         plt.xlabel(r"$\beta_{Orphan}$", fontsize=16)
         plt.xlim(self.lower - 0.5 , self.upper + 0.5)
         plt.ylim(0.0, 400)
-        plt.bar(self.bin_centers, self.binned_beta_combined[i], width=w, color='w', edgecolor = "k", hatch='xxxxx', alpha = 1., label = 'Combined')
+        #plt.bar(self.bin_centers, self.binned_beta_combined[i], width=w, color='w', edgecolor = "k", hatch='xxxxx', alpha = 1., label = 'Combined')
         plt.bar(self.bin_centers, self.binned_beta_OFF[i],      width=w, color='w', edgecolor = "firebrick", hatch='\\\\\\\\', alpha = 1., label = 'OFF')
         plt.bar(self.bin_centers, self.binned_beta_ON[i],       width=w, color='w', edgecolor = "b", hatch='////', alpha = 1., label = 'ON')
         plt.yticks([50, 100, 150,  200, 250, 300, 350])
         #plt.legend()
-        if(i== 0 ):
+        if(i == 0 ):
             plt.legend(bbox_to_anchor=(0.65,0.7), loc='lower left', borderaxespad=0.,  prop={'size': 14}, framealpha=1)
         elif(i == 1 ):
             plt.legend(bbox_to_anchor=(0.65,0.87), loc='lower left', borderaxespad=0.,  prop={'size': 14}, framealpha=1)
@@ -273,6 +273,9 @@ class bin_betas:#class to make histogram of betas in each bin
         elif(i == 3 ):
             plt.legend(bbox_to_anchor=(0.65,0.4), loc='lower left', borderaxespad=0.,  prop={'size': 14}, framealpha=1)
             
+        plt.title(str(self.lmda_bnd.bin_lowers[i]) + r'$^o$<$\Lambda$<'+ str(self.lmda_bnd.bin_uppers[i]) + r'$^o$',  y=1, x=.2, fontsize=16)
+        if(i == 3):
+            plt.title(str(self.lmda_bnd.bin_lowers[i]) + r'$^o$<$\Lambda$<'+ str(self.lmda_bnd.bin_uppers[i]) + r'$^o$',  y=1.5, x=.2, fontsize=16)
         plt.savefig('stream_beta_plots/lambda_dots_' + str(i) + '_(' + str(self.lmda_bnd.bin_lowers[i]) + ',' + str(self.lmda_bnd.bin_centers[i]) + ',' +  str(self.lmda_bnd.bin_uppers[i]) + ').png', format = 'png')
         plt.savefig('stream_beta_plots/dots/lambda_dots_' + str(i) + '.pdf', format = 'pdf', bbox_inches='tight')
         plt.savefig('stream_beta_plots/dots/lambda_dots_' + str(i) + '.png', format = 'png', bbox_inches='tight')

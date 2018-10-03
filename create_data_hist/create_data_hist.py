@@ -177,7 +177,7 @@ class data:#class system for reading in data and making a data histogram
                 
     def normalize_counts(self, N, Nerr):# need to normalize counts in the mw@home data histogram
         self.bin_normed = binned_data()
-        f_turn_offs = 7.5
+        f_turn_offs = 5
         self.mass_per_count = 1.0 / 222288.47   # each count represents about 5 solar masses #
         total = 0.0
         total_error = 0.0
@@ -236,11 +236,11 @@ class data:#class system for reading in data and making a data histogram
 def main():
     use_vgsr = False
     use_custom_bins = True
-    calc_beta_dispersions = False
+    calc_beta_dispersions = True
     make_hist = False
-    normalize_counts =  False
+    normalize_counts =  True
     
-    plot_counts = False
+    plot_counts = True
     plot_normed_counts = False
     
     # name of the data files # 
@@ -248,7 +248,7 @@ def main():
     on_field_counts_file = "l270soxlbfgcxNTbcorr.newon"
     off_field_counts_file = "l270soxlbfgcxNTbcorr.newoff"
     bin_data = "data_from_yanny.dat"
-    bin_data = "custom_bins3.dat"
+    bin_data = "custom_bins3.dat" #combined
     
     dat = data(on_field_counts_file, off_field_counts_file)
     lamda_beta_plot(dat)
@@ -258,7 +258,7 @@ def main():
         dat.bnd = bin_parameters(bin_data)
     else:
         dat.bnd = bin_parameters()
-    #print dat.bnd.bin_centers
+    print dat.bnd.bin_centers
     # get the data  #
     
     # bin the star counts #
@@ -270,9 +270,10 @@ def main():
 
     # get the binned diff of the two fields. also the error in the difference #
     dat.binned_diff()  
-    #print dat.bin_ON.counts
-    #print dat.bin_OFF.counts
+    print dat.bin_ON.counts
+    print dat.bin_OFF.counts
     print dat.bin_diff.counts
+    print dat.bin_diff.err
     #print dat.bnd.bin_centers
     # plot the binned counts #
     if(plot_counts):

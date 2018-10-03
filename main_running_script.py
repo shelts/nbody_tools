@@ -73,7 +73,7 @@ def standard_run(sim_args, sim_hist):
             nbody.build(False)
 
     if(run_nbody):
-        nbody.run(sim_args, folder + correctans_hist, None, piping_file, manual_body_list)#normally used to create the correctans_hist
+        nbody.run(running, folder + correctans_hist, None, piping_file, manual_body_list)#normally used to create the correctans_hist
     
     if(run_and_compare):
         nbody.run(sim_args, sim_hist, folder + correctans_hist, piping_file, manual_body_list)

@@ -2,6 +2,7 @@ import os
 import subprocess
 from subprocess import call
 import math as mt
+import random
 # # # # # # # # # # # # # # # # # # # # # #
 #        USEFUL CLASSES                   #
 # # # # # # # # # # # # # # # # # # # # # #
@@ -288,7 +289,36 @@ class nbody_outputs:#a class that takes in data from nbody output files and make
             self.bm_normed.append(self.binned_bm[i] / total_bm)
             self.dm_normed.append(self.binned_dm[i] / total_dm)
                     
-                    
+    def cross_selection(self, split, selection_size):
+        if(split):#if the data was split between light and dark
+            self.sub_light_lambdas = []; self.sub_light_betas = []
+            self.sub_dark_lambdas  = []; self.sub_dark_betas = []
+            pop_size = len(self.dark_lambdas)
+        else:
+            self.sub_betas   = []
+            self.sub_lambdas = []
+            pop_size = len(self.lambdas)
+    
+    
+        counter = 0
+        while(counter < selection_size):
+            if(split):
+                i_d = int(round(random.uniform(0.0, selection_size)))
+                i_b = int(round(random.uniform(0.0, selection_size)))
+                
+                self.sub_light_lambdas.append(self.light_lambdas[i_b])
+                self.sub_light_betas.append(self.light_betas[i_b])
+                
+                self.sub_dark_lambdas.append(self.dark_lambdas[i_d])
+                self.sub_dark_betas.append(self.dark_betas[i_d])
+                
+            else:
+                i = int(round(random.uniform(0.0, selection_size)))
+                self.sub_lambdas.append(self.lambdas[i])
+                self.sub_betas.append(self.betas[i])
+            counter += 1
+            
+            
 class nbody_histograms:#a class that takes in data from nbody histogram files and makes them available
     def __init__(self, file_name):
         self.file_name = file_name

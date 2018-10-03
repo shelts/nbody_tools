@@ -211,7 +211,7 @@ def plot_disps(file1):#plots the dispersions from the histogram with lambda beta
     plt.bar(hist1.lbins, hist1.counts, width = w_adjacent, color='r')
     #plt.legend(handles=[mpatches.Patch(color='b', label= 'Counts')])
     #plt.title('Line of Sight Vel Disp Distribution')
-    #plt.xlim((xlower, xupper))
+    plt.xlim((xlower, xupper))
     plt.ylim((0.0, .2))
     plt.ylabel('N')
     plt.xticks([])
@@ -1017,14 +1017,15 @@ def lambda_beta_light_dark_histogram_plot(file_name):
     out = nbody_outputs(file_name + '.out')
     angle_cuttoffs = [-150.0, 150.0, 50, -15.0, 15.0, 1]
     out.binner(angle_cuttoffs)
+    out.cross_selection(True, 2500)
     baryon_color = 'r'
     dm_color = 'k'
     labsiz = 20
     fntsiz = 26
     xlower = -180.0
     xupper = 180.0
-    ylower = -15
-    yupper = 15
+    ylower = -11
+    yupper = 11
     
     coor  = 310
     coori = 1
@@ -1035,9 +1036,6 @@ def lambda_beta_light_dark_histogram_plot(file_name):
     params = {'legend.fontsize': 20,
             'legend.handlelength': 1}
     plt.rcParams.update(params)
-    
-    
-    
     
     #plt.subplot(coor + coori)
     #plt.xlim((xlower, xupper))
@@ -1101,11 +1099,12 @@ def lambda_beta_light_dark_histogram_plot(file_name):
     plt.ylim((ylower, yupper))
     plt.title(r'$\Lambda$ vs $\beta$', fontsize = 26)
     plt.ylabel(r'$\beta$', fontsize = fntsiz)
+    plt.yticks([-10, -5, 0, 5, 10])
     
     plt.tick_params(axis='y', which='major', labelsize=labsiz)
     plt.tick_params(axis='x', which='major', labelsize=labsiz)
-    plt.plot(out.dark_lambdas, out.dark_betas, '.', markersize = 1, color = dm_color, alpha=.75, marker = '.', label = 'dark matter')
-    plt.plot(out.light_lambdas, out.light_betas, '.', markersize = 1.25, color = baryon_color, alpha=1.0, marker = '.',label = 'baryons')
+    plt.plot(out.sub_dark_lambdas, out.sub_dark_betas, '.', markersize = 4, color = dm_color, alpha=.75, marker = '.', label = 'dark matter')
+    plt.plot(out.sub_light_lambdas, out.sub_light_betas, '.', markersize = 4.25, color = baryon_color, alpha=1.0, marker = '.',label = 'baryons')
     plt.legend()
 
     plt.subplot(212)
@@ -1115,7 +1114,7 @@ def lambda_beta_light_dark_histogram_plot(file_name):
     #plt.ylim((0, 0.3))
     plt.xlabel(r'$\Lambda$', fontsize = fntsiz)
     plt.ylabel('N', fontsize = fntsiz)
-    
+    plt.yticks([0.02, 0.04, .06, .08])
     plt.tick_params(axis='y', which='major', labelsize=labsiz)
     plt.tick_params(axis='x', which='major', labelsize=labsiz)
     plt.bar(out.mid_bins, out.dm_normed, width = 5., color=dm_color, hatch="xxx", alpha=0.75, label = 'dark matter')
@@ -1516,8 +1515,8 @@ def main():
     #veldisp(file2)
     #veldisp_lbda_beta(file1)
     
-    #plot_disps(hist1)
-    plot_2betadisps(hist1,hist2)
+    plot_disps(hist1)
+    #plot_2betadisps(hist1,hist2)
     
     #name = 'mwh_hist'
     #plot_single(hist1, name)
@@ -1529,12 +1528,12 @@ def main():
     #lb_plot(file1)
     
     #file1 = folder + 'hist_v170_3p95_0p2_0p2_12_0p2__7_17_18_diffSeed2'
-    file1 = folder + 'hist_v170_3p95_0p2_0p2_12_0p2__7_17_18_diffSeed3'
-    #lambda_beta_light_dark_histogram_plot(file1)
+    #file1 = folder + 'hist_v170_3p95_0p2_0p2_12_0p2__7_17_18_diffSeed3'
+    #lambda_beta_light_dark_histogram_plot(hist1)
     
     file1 = folder + '2gy'
     file2 = folder + '6gy'
-    #lambda_beta_2outputs_plot(file1, file2)
+    lambda_beta_2outputs_plot(file1, file2)
     
     
     d1 = folder + 'data_hist_spring_2018'

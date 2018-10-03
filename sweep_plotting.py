@@ -11,15 +11,15 @@ from nbody_functional import *
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 y = True
 n = False
-plot_1D = n
-plot_2D = y
+plot_1D = y
+plot_2D = n
 
 path = '/home/sidd/Desktop/research/'
 folder = path + "like_surface/"
 name_of_sweeps = 'parameter_sweep_beta_dispersions'
 name_of_sweeps = 'parameter_sweep_data_hist_spring_2018'
-name_of_sweeps = 'parameter_sweep_check'
-name_of_sweeps = '2D_hists'
+name_of_sweeps = 'parameter_sweeps_v172_1d'
+#name_of_sweeps = '2D_hists'
 
 #name_of_sweeps = '_2d'
 
@@ -29,31 +29,36 @@ oneD_names   = ['ft', 'r', 'rr', 'm', 'mr']
 twoD_names   = ['rr_mr']
 correct = [3.95, 0.2, 0.2, 12, 0.2]
 
-args1 = [3.99138199136567, 0.102940314429498, 0.465730031061798, 1.12415455008384, 0.0131667779826989]
-args2 = [4.17724850854679, 0.105629766311366, 0.42943384150974, 1.07679599479701, 0.0106924233790458]
-args3 = [4.13346160014947, 0.101057469673814, 0.465215074196098, 1.31370051160507, 0.0104911992543992]
+#args1 = [3.99138199136567, 0.102940314429498, 0.465730031061798, 1.12415455008384, 0.0131667779826989]
+#args2 = [4.17724850854679, 0.105629766311366, 0.42943384150974, 1.07679599479701, 0.0106924233790458]
+#args3 = [4.13346160014947, 0.101057469673814, 0.465215074196098, 1.31370051160507, 0.0104911992543992]
 
-correct = []
-for i in range(5):
-        ave = (args1[i] + args2[i] + args3[i]) / 3.0
-        correct.append(ave)
+#correct = []
+#for i in range(5):
+        #ave = (args1[i] + args2[i] + args3[i]) / 3.0
+        #correct.append(ave)
 
-correct = [correct[0], correct[1], correct[2], correct[3], correct[4]]
+#correct = [correct[0], correct[1], correct[2], correct[3], correct[4]]
 
+#ranges  = [ [2.0, 6.0],  \
+            #[0.1, 1.3],  \
+            #[0.1, .95],  \
+            #[1., 120.0], \
+            #[.1, .95],   \
+          #]
+
+#ranges  = [ [3.5, 6.0],  \
+            #[0.01, 0.2],  \
+            #[0.2, .6],  \
+            #[.1, 5.0], \
+            #[.001, .15],   \
+          #]
 ranges  = [ [2.0, 6.0],  \
-            [0.1, 1.3],  \
-            [0.1, .95],  \
-            [1., 120.0], \
-            [.1, .95],   \
-          ]
-
-ranges  = [ [3.5, 6.0],  \
-            [0.01, 0.2],  \
-            [0.2, .6],  \
-            [.1, 5.0], \
-            [.001, .15],   \
-          ]
-
+            [0.05, 0.5],  \
+            [0.1, 0.6],  \
+            [.1, 100.0,], \
+            [.001, .95,],   \
+          ]   
 #ranges  = [ [0.1, .95],  \
            #[.001, .2]   \
           #]   
@@ -62,11 +67,11 @@ plot_dim = [0, 5]
 plot_dim2 = [4, 5]
 
 
-run1_ft = n
-run1_r  = n
+run1_ft = y
+run1_r  = y
 run1_rr = y
-run1_m  = n
-run1_mr = n
+run1_m  = y
+run1_mr = y
 which_sweeps1 = [run1_ft, run1_r, run1_rr, run1_m, run1_mr]
 
 run2_ft = n
@@ -90,7 +95,7 @@ def oneD_plot():
     titles  = ['Backward Evolve Time (Gyr)',  'Baryon Scale Radius (kpc)', r'Scale Radius Ratio ($R_{B}/(R_{B}+R_{D})$)', 'Baryonic Mass (SMU)',  'Mass Ratio (Baryonic/Total)']
     #titles  = [r'Scale Radius Ratio ($R_{B}/(R_{B}+R_{D})$)', 'Mass Ratio (Baryonic/Total)']
     plot_corr = 231
-    l = -1000
+    l = -200
     plt.figure(figsize=(20, 10))
     for i in range(plot_dim[0], plot_dim[1]):
         plt.subplot(plot_corr + i)
