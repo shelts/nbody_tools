@@ -927,9 +927,12 @@ def lambda_beta_2outputs_plot(file1, file2):
     
     out1.dark_light_split()
     out1.convert_lambda_beta(True)
+    out1.cross_selection(True, 2500)
+    
     
     out2.dark_light_split()
     out2.convert_lambda_beta(True)
+    out2.cross_selection(True, 2500)
     
     angle_cuttoffs = [-150.0, 150.0, 50, -15.0, 15.0, 1]
     baryon_color = 'k'
@@ -963,7 +966,7 @@ def lambda_beta_2outputs_plot(file1, file2):
     plt.tick_params(axis='y', which='major', labelsize=labsiz)
     plt.tick_params(axis='x', which='major', labelsize=labsiz)
     plt.yticks([-10, -5, 0.0, 5, 10, 15])
-    plt.plot(out1.light_lambdas, out1.light_betas, '.', markersize = .75, color = baryon_color, alpha=0.75, marker = '.',label = '2 Gyr')
+    plt.plot(out1.sub_light_lambdas, out1.sub_light_betas, '.', markersize = 3, color = baryon_color, alpha=0.75, marker = '.',label = '2 Gyr')
     #plt.legend()
     plt.legend(bbox_to_anchor=(0.5,0.1), loc='center', borderaxespad=0.,  prop={'size': 20}, framealpha=1)
     coori += 1
@@ -978,7 +981,7 @@ def lambda_beta_2outputs_plot(file1, file2):
     plt.tick_params(axis='y', which='major', labelsize=labsiz)
     plt.tick_params(axis='x', which='major', labelsize=labsiz)
     plt.yticks([])
-    plt.plot(out2.light_lambdas, out2.light_betas, '.', markersize = .5, color = dm_color, alpha=.75, marker = '.', label = '6 Gyr')
+    plt.plot(out2.sub_light_lambdas, out2.sub_light_betas, '.', markersize = 3, color = dm_color, alpha=.75, marker = '.', label = '6 Gyr')
     plt.legend(bbox_to_anchor=(0.5,0.1), loc='center', borderaxespad=0.,  prop={'size': 20}, framealpha=1)
     #plt.legend()
     coori += 1
@@ -1010,7 +1013,7 @@ def lambda_beta_2outputs_plot(file1, file2):
 
 
     plt.savefig(file1 + '_6gy' + '_lambdabeta.png', format='png', dpi = 300)
-    plt.savefig(file1 + '_6gy' + '_lambdabeta.pdf', format='pdf', dpi = 300)
+    plt.savefig(file1 + '_6gy' + '_lambdabeta.pdf', format='pdf', dpi = 200, bbox_inches='tight')
     
     
 def lambda_beta_light_dark_histogram_plot(file_name):

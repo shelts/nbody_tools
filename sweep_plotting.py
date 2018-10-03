@@ -11,15 +11,15 @@ from nbody_functional import *
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 y = True
 n = False
-plot_1D = y
-plot_2D = n
+plot_1D = n
+plot_2D = y
 
 path = '/home/sidd/Desktop/research/'
 folder = path + "like_surface/"
 name_of_sweeps = 'parameter_sweep_beta_dispersions'
 name_of_sweeps = 'parameter_sweep_data_hist_spring_2018'
 name_of_sweeps = 'parameter_sweeps_v172_1d'
-#name_of_sweeps = '2D_hists'
+name_of_sweeps = 'parameter_sweep_2d_v172_simulated_hist'
 
 #name_of_sweeps = '_2d'
 
@@ -67,11 +67,11 @@ plot_dim = [0, 5]
 plot_dim2 = [4, 5]
 
 
-run1_ft = y
-run1_r  = y
+run1_ft = n
+run1_r  = n
 run1_rr = y
-run1_m  = y
-run1_mr = y
+run1_m  = n
+run1_mr = n
 which_sweeps1 = [run1_ft, run1_r, run1_rr, run1_m, run1_mr]
 
 run2_ft = n
@@ -141,7 +141,7 @@ def twoD_plot():
                 #print(sweep.vals, '\n\n\n', sweep.liks)
                 ax.scatter(sweep.vals, sweep.vals2, sweep.liks, marker = 'o', s = 4, color ='r')
                 #plt.plot(sweep.corr, sweep.cor2, linestyle = '-', linewidth = 1, color ='k', alpha = 1)
-                plt.show()
+                #plt.show()
                 plt.savefig(folder + name_of_sweeps + '/multiplot.png', format = 'png')
     return 0
 

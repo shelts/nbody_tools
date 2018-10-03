@@ -23,10 +23,10 @@ compare = [3.95, 0.2, 0.2, 12., 0.2]
 # # # # # # # # # # # # # # # # # # # # # # # #
 #              Standard Run switches          #
 # # # # # # # # # # # # # # # # # # # # # # # #
-run_nbody                 = n                 #
-remake                    = n                 #
-full_remake               = n
-run_and_compare           = y                 #
+run_nbody                 = y                 #
+remake                    = y                 #
+full_remake               = y
+run_and_compare           = n                 #
 match_histograms          = n                 #
 # # # # # # # # # # # # # # # # # # # # # # # #
 

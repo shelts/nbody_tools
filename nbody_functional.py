@@ -23,7 +23,7 @@ class nbody_running_env:
         os.chdir("nbody_test")
 
         #following are fairly standard cmake commands
-        os.system("cmake -DCMAKE_BUILD_TYPE=Release -DNBODY_DEV_OPTIONS=OFF -DBOINC_RELEASE_NAMES=OFF -DDOUBLEPREC=ON -DNBODY_GL=ON -DNBODY_STATIC=ON -DBOINC_APPLICATION=OFF -DSEPARATION=OFF -DNBODY_OPENMP=ON    " + self.path + "milkywayathome_client/")
+        os.system("cmake -DCMAKE_BUILD_TYPE=Release -DNBODY_DEV_OPTIONS=ON -DBOINC_RELEASE_NAMES=OFF -DDOUBLEPREC=ON -DNBODY_GL=ON -DNBODY_STATIC=ON -DBOINC_APPLICATION=OFF -DSEPARATION=OFF -DNBODY_OPENMP=ON    " + self.path + "milkywayathome_client/")
         
         #making the binaries. the -j is for multithreaded build/
         os.system("make -j ")
