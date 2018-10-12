@@ -1518,7 +1518,7 @@ def main():
     #veldisp(file2)
     #veldisp_lbda_beta(file1)
     
-    plot_disps(hist1)
+    #plot_disps(hist1)
     #plot_2betadisps(hist1,hist2)
     
     #name = 'mwh_hist'
@@ -1536,7 +1536,7 @@ def main():
     
     file1 = folder + '2gy'
     file2 = folder + '6gy'
-    lambda_beta_2outputs_plot(file1, file2)
+    #lambda_beta_2outputs_plot(file1, file2)
     
     
     d1 = folder + 'data_hist_spring_2018'
