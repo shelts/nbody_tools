@@ -48,10 +48,28 @@ class hist_test:
                 output_hist += "_" + str(self.args[i][j])  
             pipe_name = path + "nbody_tools/tests/bestlike_hists/likes.txt"
             nbody.run(self.args[i], output_hist, input_hist, pipe_name) 
-            #self.get_percentage(output_hist)
+            self.get_percentage(output_hist)
             
-    #def get_percentage(self, output_hist):
-        #f = open(output_hist
+    def get_percentage(self, output_hist):
+        f = open(output_hist, 'r')
+        g = open('nbody_tools/tests/bestlike_hists/times.txt', 'a')
+        fts = []
+        bts = []
+        for line in f:
+            if(line.startswith("# Evolve backward time = ")):
+                bt = line.split('# Evolve backward time = ')
+                bt = bt[1].split('\n') 
+                bt = float(bt[0])
+                
+            if(line.startswith("# Evolve forward time = ")):
+                ft = line.split('# Evolve forward time = ')
+                ft = ft[1].split('\n') 
+                ft = float(ft[0])
+                break
+        g.write("%0.15f\t%0.15f\n" % (bt, ft))
+        f.close()
+        g.close()
+        
         
 def main():
     tst = hist_test()
