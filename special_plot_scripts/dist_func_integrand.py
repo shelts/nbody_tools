@@ -155,7 +155,8 @@ def main():
     plt.legend(bbox_to_anchor=(0.8,0.65), loc='lower left', borderaxespad=0.,  prop={'size': 20}, framealpha=1)
 
         #plt.legend()
-    plt.savefig('dist_func.png', format = 'png')
+    plt.savefig('dist_func.png', format = 'png', bbox_inches='tight')
+    plt.savefig('dist_func.pdf', format = 'pdf', bbox_inches='tight')
 
 main()
             
