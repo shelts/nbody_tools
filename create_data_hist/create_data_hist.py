@@ -235,8 +235,8 @@ class data:#class system for reading in data and making a data histogram
     
 def main():
     use_vgsr = False
-    use_custom_bins = True
-    calc_beta_dispersions = True
+    use_custom_bins = False
+    calc_beta_dispersions = False
     make_hist = False
     normalize_counts =  True
     
@@ -258,7 +258,7 @@ def main():
         dat.bnd = bin_parameters(bin_data)
     else:
         dat.bnd = bin_parameters()
-    print dat.bnd.bin_centers
+    #print dat.bnd.bin_centers
     # get the data  #
     
     # bin the star counts #
@@ -270,10 +270,13 @@ def main():
 
     # get the binned diff of the two fields. also the error in the difference #
     dat.binned_diff()  
-    print dat.bin_ON.counts
-    print dat.bin_OFF.counts
-    print dat.bin_diff.counts
-    print dat.bin_diff.err
+    #print dat.bin_ON.counts
+    #print dat.bin_OFF.counts
+    #print dat.bin_diff.counts
+    #print dat.bin_diff.err
+    
+    for i in range(len(dat.bin_ON.counts)):
+         print dat.bin_ON.counts[i], dat.bin_OFF.counts[i], dat.bin_diff.counts[i]
     #print dat.bnd.bin_centers
     # plot the binned counts #
     if(plot_counts):
