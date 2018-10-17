@@ -1,13 +1,19 @@
 #!/bin/bash          
 #/* Copyright (c) 2018 Siddhartha Shelton */
 
-git add create_data_hist/*.py create_data_hist/*.dat
+cd create_data_hist
+git add *.py *.dat *.sh
+cd ..
 
-git add special_plot_scripts/*.py 
-git add special_plot_scripts/*.sh
+cd special_plot_scripts/
+git add *.py *.dat *.sh
+cd ..
 
-git add special_plot_scripts/fturnoff_plots/*.py 
-git add special_plot_scripts/fturnoff_plots/*.sh
+cd special_plot_scripts/fturnoff_plots/
+git add *.py *.dat *.sh
+cd ..
+cd ..
+
 git add *.py *.dat *.sh
 
 git commit -m "update"
