@@ -523,4 +523,32 @@ class sweep_data:
                 self.cor2.append(-10.0 * i)
             if(self.dim > 1):
                 self.vals2.append(self.values[i].val2)
+      
+      
+class binner:
+    def __init__(self, bin_ranges, bin_N, vals_to_bin):
+        self.lower_range = bin_ranges[0]
+        self.upper_range = bin_ranges[1]
+        self.binN = bin_N
+        self.vals = vals_to_bin
+        self.counts = []
+        self.bin_centers = []
+        self.bin_vals()
+        
+    def bin_vals(self):
+        self.bin_width = abs(self.upper_range - self.lower_range) / float(self.binN)
+        loc = self.lower_range + self.bin_width / 2.0
+        for i in range(self.binN):
+            self.counts.append(0)
+            self.bin_centers.append(loc)
+            loc += self.bin_width
+        
+        for i in range(len(self.vals)):
+            for j in range(self.binN):
+                left_edge  = self.bin_centers[j] - self.bin_width / 2.0
+                right_edge = self.bin_centers[j] + self.bin_width / 2.0
+                
+                if(self.vals[i] >= left_edge and self.vals[i] <= right_edge):
+                    self.counts[j] += 1
+                    break
                 

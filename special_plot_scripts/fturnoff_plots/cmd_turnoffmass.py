@@ -100,12 +100,14 @@ class cmd:
         self.fstar_N  = []
         
         loc = self.bin_width / 2.0
+        #print loc
         for i in range(binN):
             self.star_N.append(0)
             self.fstar_N.append(0)
-            loc += self.bin_width 
             self.bin_mids.append(loc)
-        print len(self.stars)
+            loc += self.bin_width       
+        #print self.bin_mids
+        #print len(self.stars)
         
         for i in range(len(self.stars)):
             dist = angular_dist(self.center_ra, self.center_de, self.stars[i].ra, self.stars[i].dec)
@@ -119,7 +121,7 @@ class cmd:
         for i in range(len(self.fturnoffs)):
             dist = angular_dist(self.center_ra, self.center_de, self.fturnoffs[i].ra, self.fturnoffs[i].dec)
             for j in range(binN):
-                if(dist < (self.bin_mids[j] + self.bin_width / 2.) and dist > (self.bin_mids[j] - self.bin_width / 2.)):
+                if(dist <= (self.bin_mids[j] + self.bin_width / 2.) and dist >= (self.bin_mids[j] - self.bin_width / 2.)):
                     self.fstar_N[j] += 1
                     break
         #print self.star_N
