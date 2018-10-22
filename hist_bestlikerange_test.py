@@ -15,8 +15,9 @@ binary        = path + "nbody_test/bin/milkyway_nbody"
 lua           = path + "lua/full_control.lua"
 
 input_hist = folder + 'hist_v172_3p95_0p2_0p2_12_0p2__9_24_18'
-
-
+hist_folder = 'nbody_tools/tests/bestlike_hists_98/'
+#hist_folder = 'nbody_tools/tests/bestlike_hists_95/'
+#hist_folder = 'nbody_tools/tests/bestlike_hists_90/'
 ranges  = [ [2.0, 6.0],  \
             [0.05, 0.5],  \
             [0.1, 0.6],  \
@@ -44,17 +45,17 @@ class hist_test:
     def run_sims(self):
         nbody = nbody_running_env(lua, '', path)
         for i in range(len(self.args)):
-            output_hist = path + "nbody_tools/tests/bestlike_hists/" + "arg" 
+            output_hist = path + hist_folder +  "arg" 
             for j in range(len(ranges)):
                 output_hist += "_" + str(self.args[i][j])  
-            pipe_name = path + "nbody_tools/tests/bestlike_hists/likes.txt"
+            pipe_name = path + hist_folder + "likes.txt"
             nbody.run(self.args[i], output_hist, input_hist, pipe_name) 
             
     def get_percentage(self):
         self.fts = []
         self.bts = []
         for i in range(len(self.args)):
-            output_hist = path + "nbody_tools/tests/bestlike_hists/" + "arg" 
+            output_hist = path + hist_folder + "arg" 
             for j in range(len(ranges)):
                 output_hist += "_" + str(self.args[i][j])  
             output_hist += '.hist'
@@ -76,7 +77,7 @@ class hist_test:
             f.close()
         
     def read_likes(self):
-        g = open(path + 'nbody_tools/tests/bestlike_hists/likes.txt', 'r')
+        g = open(path + hist_folder + "likes.txt", 'r')
         self.likes = []
         for line in g:
              if (line.startswith("<search_likelihood")):
@@ -87,7 +88,7 @@ class hist_test:
                 
     
     def write_out_times(self):
-        g = open(path + 'nbody_tools/tests/bestlike_hists/times.txt', 'w')
+        g = open(path + hist_folder + "times.txt", 'w')
         for i in range(len(self.fts)):
             g.write("%0.15f\t%0.15f\n" % (self.bts, self.fts))
         g.close()
@@ -102,15 +103,17 @@ class hist_test:
             self.perc.append(percent)
     
     def plot(self):
-        hst = binner([0.98, 1.], 100, self.perc)
+        hst = binner([0.90, 1.], 50, self.perc)
         #plt.xlim((,)
-        #plt.ylim((0.0, ))
+        plt.ylim((0.0, 60))
         plt.ylabel('N')
         plt.xlabel('Best Likelihood Range')
         #print hst.bin_centers
         #print hst.counts
         plt.bar(hst.bin_centers, hst.counts, width = 0.001, color='k')
-        plt.savefig('tests/likes_bestlike_range.png', format='png')
+        plt.savefig('tests/likes_bestlike_range_98.png', format='png')
+        #plt.savefig('tests/likes_bestlike_range_95.png', format='png')
+        #plt.savefig('tests/likes_bestlike_range_90.png', format='png')
         
         
 def main():
