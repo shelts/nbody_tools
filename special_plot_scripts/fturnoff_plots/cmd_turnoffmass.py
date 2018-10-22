@@ -174,14 +174,17 @@ class cmd:
         #print self.stellar_mass_enc
     
     def plot_mass_enc(self):
-        plt.clf()
-        #plt.ylim((0, 25))
+        #plt.clf()
+        plt.subplot(212)
+        plt.ylim((0, 360))
         plt.xlim((0.0, 0.18))
         plt.xlabel('r')
         plt.ylabel('N')
-        plt.plot(self.stellar_massenc_r, self.stellar_mass_enc, linewidth = 1, color = 'k')
-        plt.plot(self.plum_massenc_rs, self.plum_mass_enc, linewidth = 1, color = 'r')
+        plt.plot(self.plum_massenc_rs, self.plum_mass_enc, linewidth = 1, color = 'k', label='Plummer')
+        plt.plot(self.stellar_massenc_r, self.stellar_mass_enc, linewidth = 1, color = 'r', label='Stars')
+        plt.legend()
         plt.savefig('count_enclosed.png', format='png', bbox_inches='tight')
+        
     
     def plot_cmd(self):
         plt.ylim((30, 10))
@@ -209,14 +212,19 @@ class cmd:
     
     
     def plot_counts(self):
+        f, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, sharex='col', sharey='row')
+        f.subplots_adjust(hspace=0)
+        plt.subplot(211)
         plt.ylim((0, 25))
-        plt.xlim((0.0, 0.2))
-        plt.xlabel('r')
+        plt.xlim((0.0, 0.18))
+        plt.xticks([])
+        #plt.xlabel('r')
         plt.ylabel('dN')
-        plt.plot(self.plummer_countrs, self.plummer_dN, linewidth = 1, color = 'k')
+        plt.plot(self.plummer_countrs, self.plummer_dN, linewidth = 1, color = 'k', label='Plummer')
         ##plt.bar(self.bin_mids, self.star_N, width = .001, color='r')
-        plt.bar(self.bin_mids, self.fstar_N, width = .002, color='r')
-        plt.savefig('star_counts.png', format='png', bbox_inches='tight')
+        plt.bar(self.bin_mids, self.fstar_N, width = .002, color='r', label='Stars')
+        plt.legend()
+        #plt.savefig('star_counts.png', format='png', bbox_inches='tight')
         
 def main():
     file_name = 'MyTable_7_shelts.csv'
