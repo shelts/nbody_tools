@@ -69,7 +69,8 @@ class hist_test:
         self.fts = []
         self.bts = []
         self.perc = []
-        hist_paths
+        hist_paths = []
+        likes = []
         for i in range(len(hist_time_ranges)):
             self.perc.append([])
             hist_paths.append(hist_folder + hist_time_ranges[i] )
@@ -79,28 +80,52 @@ class hist_test:
             for j in range(len(ranges)):
                 output_hist += "_" + str(self.args[i][j])  
             output_hist += '.hist'
-                
-            #output_hists = []
-            perc = []
+            likes = []
             for j in range(len(hist_time_ranges)):#the different hist folders
-                #output_hists.append( h )#list of the histogram name with the paths to the different folders
-                h = hist_folder + hist_time_ranges[j] + output_hist 
-                
-                hist = nbody_histograms(h)
+                hist = nbody_histograms(hist_paths[j] + output_hist )
                 percent = hist.perc
                 self.perc[j].append(percent)#list of the percentages for each arg. each member a list of the percs from each folder
-                
-            #print self.likes[i]
-            self.plot_all_hists(output_hists, self.likes[i])
+                del hist
+                likes.append(self.likes[j][i])
+            self.plot_all_hists(output_hist, hist_paths, likes)
        
-    
-    #def write_out_times(self):
-        #g = open( hist_folder + "times.txt", 'w')
-        #for i in range(len(self.fts)):
-            #g.write("%0.15f\t%0.15f\n" % (self.bts, self.fts))
-        #g.close()
+   
+    def plot_all_hists(self, hist_name, hist_paths, likes):
+        correct_hist = nbody_histograms(correct_hist_folder + 'hist_v172_3p95_0p2_0p2_12_0p2__9_24_18.hist')
+        xlower = -150
+        xupper = 150
+
+        f, (f1, f2) = plt.subplots(2, sharex = True, sharey = True, figsize=(20, 10))
+        plt.subplot(411 )
+        plt.bar(correct_hist.lbins, correct_hist.counts, width = 2, color='k')
+        #plt.ylim((0.0, ylimit))
+        plt.xticks([])
+        plt.ylabel('N')
+        #plt.xlabel(r'$\Lambda$')
+        
+        for i in range(len(hist_paths)):
+            hist = nbody_histograms(hist_paths[i] + hist_name)
+            plt.subplot(412 + i)
+            plt.bar(hist.lbins, hist.counts, width = 2, color='r', label = str(hist.perc) + '\n' + 'L = ' + str(likes[i]))
+            plt.legend()
+            plt.xlim((xlower, xupper))
+            plt.ylim((0.0, .1))
+            if(i < len(hist_paths) - 1):
+                plt.xticks([])
+            plt.yticks([0.02, 0.04, 0.06, 0.08])
+            plt.ylabel('N')
+            plt.xlabel(r'$\Lambda$')
+            plt.legend( loc='upper left', borderaxespad=0.,  prop={'size': 12}, framealpha=1)
+            f.subplots_adjust(hspace=0)
+            
         
         
+        plt.xlabel(r'$\Lambda$')
+        #plt.savefig('./tests/bestlike_hists_plots/' + hist_names.strip('.hist') + '.png', format='png', bbox_inches='tight')
+        plt.savefig('./tests/bestlike_hists_plots/' + hist_name.strip('.hist') + '.png', format='png', bbox_inches='tight')
+        plt.clf()
+        plt.close()
+            
     def plot(self):
         for i in range(len(hist_time_ranges)):
             hst = binner([0.90, 1.], 50, self.perc[i])
@@ -115,71 +140,6 @@ class hist_test:
 
         plt.savefig('tests/likes_bestlike_ranges.png', format='png', bbox_inches='tight')
         
-   
-   
-    def plot_all_hists(self, hist_names, likes):
-        correct_hist = nbody_histograms(correct_hist_folder + 'hist_v172_3p95_0p2_0p2_12_0p2__9_24_18.hist')
-        #hist_folder1 = 'bestlike_hists_90'
-        #hist_folder2 = 'bestlike_hists_95'
-        #hist_folder3 = 'bestlike_hists_98'
-        
-        xlower = -150
-        xupper = 150
-        #for line in f:
-        #hist_name = line.strip('\n')
-        #hist1 = nbody_histograms('./tests/' + hist_folder1 + '/' + hist_name)
-        #hist2 = nbody_histograms('./tests/' + hist_folder2 + '/' + hist_name)
-        #hist3 = nbody_histograms('./tests/' + hist_folder3 + '/' + hist_name)
-        
-        f, (f1, f2) = plt.subplots(2, sharex = True, sharey = True, figsize=(20, 10))
-        plt.subplot(411 )
-        #print correct_hist.lbins
-        plt.bar(correct_hist.lbins, correct_hist.counts, width = 2, color='k')
-        #plt.ylim((0.0, ylimit))
-        plt.xticks([])
-        plt.ylabel('N')
-        #plt.xlabel(r'$\Lambda$')
-        
-        for i in range(len(hist_time_ranges)):
-            hist = nbody_histograms(hist_names[i])
-            plt.subplot(412 + i)
-            plt.bar(hist.lbins, hist.counts, width = 2, color='r', label = str(hist.perc))
-            plt.legend()
-            plt.xlim((xlower, xupper))
-            plt.ylim((0.0, .1))
-            plt.xticks([])
-            plt.ylabel('N')
-            plt.xlabel(r'$\Lambda$')
-            plt.legend( loc='upper left', borderaxespad=0.,  prop={'size': 12}, framealpha=1)
-            f.subplots_adjust(hspace=0)
-            
-        
-            #plt.subplot(413)
-            #plt.bar(hist2.lbins, hist2.counts, width = 2, color='r', label = str(hist2.perc))
-            #plt.legend()
-            #plt.xlim((xlower, xupper))
-            #plt.ylim((0.0, .1))
-            #plt.xticks([])
-            #plt.ylabel('N')
-            #plt.xlabel(r'$\Lambda$')
-            #plt.legend( loc='upper left', borderaxespad=0.,  prop={'size': 12}, framealpha=1)
-            #f.subplots_adjust(hspace=0)
-            
-            #plt.subplot(414)
-            #plt.bar(hist3.lbins, hist3.counts, width = 2, color='r', label = str(hist3.perc))
-            #plt.legend()
-            #plt.xlim((xlower, xupper))
-            #plt.ylim((0.0, .1))
-            #plt.ylabel('N')
-            #plt.legend( loc='upper left', borderaxespad=0.,  prop={'size': 12}, framealpha=1)
-            #f.subplots_adjust(hspace=0)
-        
-        plt.xlabel(r'$\Lambda$')
-        #plt.savefig('./tests/bestlike_hists_plots/' + hist_names.strip('.hist') + '.png', format='png', bbox_inches='tight')
-        plt.savefig('./tests/bestlike_hists_plots/' + hist_names.strip('.hist') + '.png', format='png', bbox_inches='tight')
-        plt.clf()
-        plt.close()
-            
            
 
 def main():
