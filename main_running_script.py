@@ -14,7 +14,7 @@ n = False
 lmc_dir = '/home/shelts/research/'
 sid_dir = '/home/sidd/Desktop/research/'
 sgr_dir = '/Users/master/sidd_research/'
-path = lmc_dir
+path = sid_dir
 
 running = [3.95, 0.2, 0.2, 12., 0.2] 
 compare = [3.95, 0.2, 0.2, 12., 0.2] 
@@ -27,10 +27,10 @@ compare3 = [3.98887482577406, 0.212173176887538, 0.219882548707629, 12.015227660
 # # # # # # # # # # # # # # # # # # # # # # # #
 #              Standard Run switches          #
 # # # # # # # # # # # # # # # # # # # # # # # #
-run_nbody                 = n                 #
+run_nbody                 = y                 #
 remake                    = n                 #
 full_remake               = n
-run_and_compare           = y                 #
+run_and_compare           = n                 #
 match_histograms          = n                 #
 # # # # # # # # # # # # # # # # # # # # # # # #
 

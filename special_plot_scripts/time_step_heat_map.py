@@ -112,8 +112,8 @@ def imshow(time):
     
     
 def main():
-    baryon_mass = 0.1
-    baryon_scale = 0.05
+    baryon_mass = 1
+    baryon_scale = 0.02
     print 'creating surface'
     time = timestep(baryon_scale, baryon_mass)
     print 'plotting'

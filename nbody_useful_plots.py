@@ -93,6 +93,9 @@ def plot4hists(hist1, hist2, hist3, hist4):
     fntsiz = 26
     xlower = -40.0
     xupper = 40.0
+    xlower = -150.0
+    xupper = 150.0
+    
     ylower = 0
     yupper = .2
     wid = 2
@@ -165,8 +168,8 @@ def plot4hists(hist1, hist2, hist3, hist4):
 
 
 
-    plt.savefig('fitted_hists.png', format='png', dpi = 300)
-    plt.savefig('fitted_hists.pdf', format='pdf', dpi = 300)
+    plt.savefig('plots/fitted_hists_sim.png', format='png', dpi = 300)
+    plt.savefig('plots/fitted_hists_sim.pdf', format='pdf', dpi = 300)
     
     
     
@@ -1540,11 +1543,12 @@ def main():
     
     
     d1 = folder + 'data_hist_spring_2018'
+    d1 = folder + 'hist_v172_3p95_0p2_0p2_12_0p2__9_24_18'
     f1 = folder + 'fit1'
     f2 = folder + 'fit2'
     f3 = folder + 'fit3'
     
-    #plot4hists(d1, f1, f2, f3)
+    plot4hists(d1, f1, f2, f3)
     #lambda_beta_4outputs_plot(f1, f2, f3)
     
     

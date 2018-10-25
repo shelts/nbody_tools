@@ -29,7 +29,7 @@ class cmd:
             self.ra = ra
             self.dec = dec
             self.gmr = gmr
-            
+            self.background_stars = 32
     def __init__(self, file_name):
         self.file_name = file_name
         self.stars   = []
@@ -64,7 +64,6 @@ class cmd:
                 
                 
         print 'number of F-turnoffs: ', len(self.fturnoffs)
-
    
     def plummer_surface_den(self):
         def den(r, M, a):
@@ -73,7 +72,7 @@ class cmd:
         Nd = 822.  #table 5
         Nd = 2576. #table 3
         Nd = 3253. #table 7
-        Nd = 352   #turnoffs
+        Nd = 352 + self.background_stars  #turnoffs
         
         a = 0.0382 / 0.64 #in degress #conversion from CORE radius (not half mass)
         #a = 0.0184 / 1.3 #in kpc
@@ -88,7 +87,24 @@ class cmd:
             self.plummer_countrs.append(r)
             r += 0.001
             
-    
+    def plummer_surface_mass_encl(self):
+        def mass_enc(r, M, a):
+            return ( M * r**2) / (a**2 + r**2)
+        
+        M = 5.0e3 #solar masses
+        Nd = 352 + self.background_stars#turnoffs
+        a = 0.0382 / 0.64 #in degress #conversion from CORE radius (not half mass) 
+        mp = M / Nd 
+        
+        r = 0.0
+        self.plum_mass_enc = []
+        self.plum_massenc_rs = []
+        while(r < 10.0 * a):
+            mass = mass_enc(r, M, a) / mp
+            self.plum_mass_enc.append(mass)
+            self.plum_massenc_rs.append(r)
+            r += 0.001
+            
     def data_binner(self):
         #print angular_dist(self.center_ra, self.center_de, 228.98 , -.1)
         
@@ -130,27 +146,6 @@ class cmd:
                     break
         #print self.star_N
     
-    
-    
-    def plummer_surface_mass_encl(self):
-        def mass_enc(r, M, a):
-            return ( M * r**2) / (a**2 + r**2)
-        
-        M = 3.0e4 #solar masses
-        Nd = 352 #turnoffs
-        a = 0.0382 / 0.64 #in degress #conversion from CORE radius (not half mass) 
-        mp = M / Nd 
-        
-        r = 0.0
-        self.plum_mass_enc = []
-        self.plum_massenc_rs = []
-        while(r < 10.0 * a):
-            mass = mass_enc(r, M, a) / mp
-            self.plum_mass_enc.append(mass)
-            self.plum_massenc_rs.append(r)
-            r += 0.001
-            
-    
     def data_mass_enc(self):
         self.stellar_mass_enc = []
         self.stellar_massenc_r = []
@@ -173,8 +168,22 @@ class cmd:
         
         #print self.stellar_mass_enc
     
-    def plot_mass_enc(self):
-        #plt.clf()
+    def plot_counts_mass_enc(self):
+        f, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, sharex='col', sharey='row')
+        f.subplots_adjust(hspace=0)
+        
+        plt.subplot(211)
+        plt.ylim((0, 25))
+        plt.xlim((0.0, 0.18))
+        plt.xticks([])
+        #plt.xlabel('r')
+        plt.ylabel('dN')
+        plt.plot(self.plummer_countrs, self.plummer_dN, linewidth = 1, color = 'k', label='Plummer')
+        ##plt.bar(self.bin_mids, self.star_N, width = .001, color='r')
+        plt.bar(self.bin_mids, self.fstar_N, width = .002, color='r', label='Stars')
+        plt.legend()
+        #plt.savefig('star_counts.png', format='png', bbox_inches='tight')
+    
         plt.subplot(212)
         plt.ylim((0, 360))
         plt.xlim((0.0, 0.18))
@@ -184,7 +193,6 @@ class cmd:
         plt.plot(self.stellar_massenc_r, self.stellar_mass_enc, linewidth = 1, color = 'r', label='Stars')
         plt.legend()
         plt.savefig('count_enclosed.png', format='png', bbox_inches='tight')
-        
     
     def plot_cmd(self):
         plt.ylim((30, 10))
@@ -210,33 +218,16 @@ class cmd:
         plt.savefig('ra_dec.png', format='png', bbox_inches='tight')
     
     
-    
-    def plot_counts(self):
-        f, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, sharex='col', sharey='row')
-        f.subplots_adjust(hspace=0)
-        plt.subplot(211)
-        plt.ylim((0, 25))
-        plt.xlim((0.0, 0.18))
-        plt.xticks([])
-        #plt.xlabel('r')
-        plt.ylabel('dN')
-        plt.plot(self.plummer_countrs, self.plummer_dN, linewidth = 1, color = 'k', label='Plummer')
-        ##plt.bar(self.bin_mids, self.star_N, width = .001, color='r')
-        plt.bar(self.bin_mids, self.fstar_N, width = .002, color='r', label='Stars')
-        plt.legend()
-        #plt.savefig('star_counts.png', format='png', bbox_inches='tight')
-        
 def main():
     file_name = 'MyTable_7_shelts.csv'
     cd = cmd(file_name)
     cd.fturnoff_select()
-    #cd.plot_cmd()
+    cd.plot_cmd()
     cd.data_binner()
     cd.plummer_surface_den()
-    cd.plot_counts()
     cd.plummer_surface_mass_encl()
     cd.data_mass_enc()
-    cd.plot_mass_enc()
+    cd.plot_counts_mass_enc()
     
 main()
     

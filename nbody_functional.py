@@ -48,7 +48,7 @@ class nbody_running_env:
                          -o " +  output_hist + ".out "
         
         #final piece to the run command. includes the number of threads, output format, and visualizer args
-        end_piece = "-n 30 -b  --visualizer-bin=" + self.path + "nbody_test/bin/milkyway_nbody_graphics -i " + ft + " " + bt + " " + rl + " " + rr + " " + ml + " " + mr + " " + manual_body_list
+        end_piece = "-n 8 -b  -u --visualizer-bin=" + self.path + "nbody_test/bin/milkyway_nbody_graphics -i " + ft + " " + bt + " " + rl + " " + rr + " " + ml + " " + mr + " " + manual_body_list
         
         if(not comparison_hist): ##this will produce a single run of nbody, without comparing the end result to anything
             run_command += end_piece #completing the run command
@@ -325,11 +325,35 @@ class nbody_histograms:#a class that takes in data from nbody histogram files an
         self.get_data()
         
     def get_data(self):#read in the histogram
+        #self.ft = []; self.bt = []; self.perc = []
         self.lbins = []; self.counts = []; self.count_err = []; self.bd = []; self.bd_error = []; self.vd = []; self.vd_error = []
         read_data = False
-
+        bt_found = False
+        ft_found = False
+        
         lines = open(self.file_name, 'r')
         for line in lines:
+            if(line.startswith("# Evolve backward time = ")):
+                bt_found = True
+                bt = line.split('# Evolve backward time = ')
+                bt = bt[1].split('\n') 
+                bt = float(bt[0])
+                self.bt = bt
+                
+            if(line.startswith("# Evolve forward time = ")):
+                ft_found = True
+                ft = line.split('# Evolve forward time = ')
+                ft = ft[1].split('\n') 
+                ft = float(ft[0])
+                self.ft = ft
+                
+            if(bt_found and ft_found):
+                percent = self.ft / self.bt
+                self.perc = percent 
+                bt_found = False
+                ft_found = False
+                
+                
             if (line.startswith("betaBins")):
                 read_data = True
                 continue
