@@ -29,8 +29,8 @@ class cmd:
             self.ra = ra
             self.dec = dec
             self.gmr = gmr
-            self.background_stars = 32
     def __init__(self, file_name):
+        self.background_stars = 32
         self.file_name = file_name
         self.stars   = []
         self.center_ra = 229.025
@@ -187,12 +187,13 @@ class cmd:
         plt.subplot(212)
         plt.ylim((0, 360))
         plt.xlim((0.0, 0.18))
-        plt.xlabel('r')
+        plt.xlabel('Angular Distance from Cluster Center')
         plt.ylabel('N')
         plt.plot(self.plum_massenc_rs, self.plum_mass_enc, linewidth = 1, color = 'k', label='Plummer')
         plt.plot(self.stellar_massenc_r, self.stellar_mass_enc, linewidth = 1, color = 'r', label='Stars')
         plt.legend()
         plt.savefig('count_enclosed.png', format='png', bbox_inches='tight')
+        plt.savefig('count_enclosed.pdf', format='pdf', bbox_inches='tight')
     
     def plot_cmd(self):
         plt.ylim((30, 10))
@@ -202,8 +203,9 @@ class cmd:
         for i in range(len(self.stars)):
             plt.plot(self.stars[i].gmr, self.stars[i].g, '.', markersize = 1, color = 'r', marker = 'o')
         for i in range(len(self.fturnoffs)):
-            plt.plot(self.fturnoffs[i].gmr, self.fturnoffs[i].g, '.', markersize = 1, color = 'b', marker = '+')
+            plt.plot(self.fturnoffs[i].gmr, self.fturnoffs[i].g, '+', markersize = 1, color = 'b', marker = '+')
         plt.savefig('CMD.png', format='png', bbox_inches='tight')
+        plt.savefig('CMD.pdf', format='pdf', bbox_inches='tight')
         
         plt.clf()
         plt.xlabel('RA')
@@ -216,7 +218,7 @@ class cmd:
             plt.plot(self.fturnoffs[i].ra, self.fturnoffs[i].dec, 'x', markersize = 5, color = 'b', marker = '+')
         plt.plot(self.center_ra, self.center_de, '.', markersize = 10, color = 'r', marker = '+')
         plt.savefig('ra_dec.png', format='png', bbox_inches='tight')
-    
+        plt.savefig('ra_dec.pdf', format='pdf', bbox_inches='tight')
     
 def main():
     file_name = 'MyTable_7_shelts.csv'

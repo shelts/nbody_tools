@@ -16,7 +16,7 @@ sid_dir = '/home/sidd/Desktop/research/'
 sgr_dir = '/Users/master/sidd_research/'
 path = sid_dir
 
-running = [3.95, 0.2, 0.2, 12., 0.2] 
+running = [1, 0.2, 0.2, 12., 0.2] 
 compare = [3.95, 0.2, 0.2, 12., 0.2] 
 
 compare1 = [4.08753706475328, 0.20861176280277, 0.235449047582905, 11.9003162573009, 0.269766858968207]
@@ -42,7 +42,7 @@ folder = path + 'quick_plots/hists_outs/'
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # correctans_hist: name for non comparing hist file or the sim data hist for the compare runs #
 # simulations_hist: name for the comparison hist file for comparison runs                     #
-correctans_hist  =  'hist_v172_3p95_0p2_0p2_12_0p2__9_24_18'
+correctans_hist  =  'hist_v172_0_0p2_0p2_12_0p2__9_24_18'
 simulations_hist =  'hist_v172_3p95_0p2_0p2_12_0p2__9_24_18_diffSeed1'
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
@@ -68,28 +68,24 @@ lua = path + 'lua/' + "full_control.lua"
 # # # # # # # # # # # # # # # # # # # # # #
 #    standard nbody running env usage     #
 # # # # # # # # # # # # # # # # # # # # # #
-def standard_run(sim_args, sim_hist):
-    nbody = nbody_running_env(lua, version, path)
+nbody = nbody_running_env(lua, version, path)
     
-    if(remake):
-        if(full_remake):
-            nbody.build(True)#true for complete rebuild
-        else:
-            nbody.build(False)
+if(remake):
+    if(full_remake):
+        nbody.build(True)#true for complete rebuild
+    else:
+        nbody.build(False)
 
-    if(run_nbody):
-        nbody.run(running, folder + correctans_hist, None, piping_file, manual_body_list)#normally used to create the correctans_hist
-    
-    if(run_and_compare):
-        nbody.run(sim_args, sim_hist, folder + correctans_hist, piping_file, manual_body_list)
-    
-    if(match_histograms):
-        nbody.match_hists(sim_hist, folder + correctans_hist)
-    
-    return 0
+if(run_nbody):
+    nbody.run(running, folder + correctans_hist, None, piping_file, manual_body_list)#normally used to create the correctans_hist
 
-# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #    
+if(run_and_compare):
+    for i in range(len(compare_args)):
+        nbody.run(compare_args[i], folder + sim_hists[i], folder + correctans_hist, piping_file, manual_body_list)
 
-for i in range(len(compare_args)):
-    standard_run(compare_args[i], folder + sim_hists[i])
+if(match_histograms):
+    nbody.match_hists(sim_hist, folder + correctans_hist)
+    
+
+
 

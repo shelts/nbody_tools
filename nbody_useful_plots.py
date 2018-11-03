@@ -738,6 +738,11 @@ def lb_plot(file_name): #plots lb from output
         xupper = -.5
         ylower = -.5
         yupper = .5
+        
+        xlower = -50
+        xupper = 50
+        ylower = -60
+        yupper = 60
         ms = 0.5
         #fig.tight_layout()
         plt.axes().set_aspect('equal')
@@ -783,7 +788,7 @@ def lb_plot(file_name): #plots lb from output
         plt.xlabel('z', fontsize=24)
         plt.ylabel('y', fontsize=24)
         #plt.title('z vs y')
-        plt.savefig(file_name + 'ultrafaint_tidal_stream_xyz.png', format='png')
+        plt.savefig('plots/simulation_0gy.png', format='png', bbox_inches='tight')
     
     
     if(plot_xyz_3d):
@@ -1531,7 +1536,9 @@ def main():
     
     #file1 = "dist_test"
     #single_xyz(file1)
-    #lb_plot(file1)
+    file1 = folder + 'hist_v172_3p95_0p2_0p2_12_0p2__9_24_18'
+    file1 = folder + 'hist_v172_0_0p2_0p2_12_0p2__9_24_18'
+    lb_plot(file1)
     
     #file1 = folder + 'hist_v170_3p95_0p2_0p2_12_0p2__7_17_18_diffSeed2'
     #file1 = folder + 'hist_v170_3p95_0p2_0p2_12_0p2__7_17_18_diffSeed3'
@@ -1548,7 +1555,7 @@ def main():
     f2 = folder + 'fit2'
     f3 = folder + 'fit3'
     
-    plot4hists(d1, f1, f2, f3)
+    #plot4hists(d1, f1, f2, f3)
     #lambda_beta_4outputs_plot(f1, f2, f3)
     
     

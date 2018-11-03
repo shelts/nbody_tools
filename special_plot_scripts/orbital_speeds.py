@@ -28,7 +28,7 @@ def orbital_speeds(): #creates a plot of the orbits of the planets in the solar 
         
         print sz
         plt.scatter(radii[i], speeds[i], marker = 'o', s = 0.001 * sz**5, color = colors[i])
-    plt.savefig('orbital_vels.png', format='png')
+    plt.savefig('orbital_vels.png', format='png', bbox_inches='tight')
     
     
     
@@ -104,7 +104,7 @@ def mw_galaxy_orbital_speeds():
         
 
 def main():
-    #orbital_speeds()
-    mw_galaxy_orbital_speeds()
+    orbital_speeds()
+    #mw_galaxy_orbital_speeds()
     
 main()

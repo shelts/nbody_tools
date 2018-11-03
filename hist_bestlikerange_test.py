@@ -121,7 +121,6 @@ class hist_test:
         
         
         plt.xlabel(r'$\Lambda$')
-        #plt.savefig('./tests/bestlike_hists_plots/' + hist_names.strip('.hist') + '.png', format='png', bbox_inches='tight')
         plt.savefig('./tests/bestlike_hists_plots/' + hist_name.strip('.hist') + '.png', format='png', bbox_inches='tight')
         plt.clf()
         plt.close()
@@ -149,7 +148,6 @@ def main():
     #tst.run_sims()
     tst.read_likes()
     tst.get_percentage()
-    #tst.write_out_times()
     tst.plot()
     #tst.plot_all_hists()
     
