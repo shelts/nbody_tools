@@ -11,8 +11,9 @@ class make_latex_table:
        
         for i in range(len(data_files)):
             self.read_data(i)
+        #self.write_table2()
         self.write_table()
-        self.write_stellar_table()
+        #self.write_stellar_table()
     def read_data(self, i):
         likes = []; fts = []; rls = []; rrs = []; mls = []; mrs = []
     
@@ -88,6 +89,41 @@ class make_latex_table:
         
         f.close()
         
+    def write_table2(self):
+        f = open(self.write_file, 'w')
+        
+        f.write("\\begin{center}\n\\begin{table}[!ht]\n\\centering\n\\begin{tabular}{|c|c|c|c|}\n\\hline\n")
+        f.write("Parameters& Evolve Time & $R_B$ & Radius Ratio ($\\frac{R_B}{R_B + R_D}$) \\\\\n")
+        f.write("\\hline \\hline\n")
+        f.write("Search Range\t& " + self.search_range[0] + " & " + self.search_range[1] + " & " + self.search_range[2]  + " \\\\\n")
+        f.write("\\hline\n")
+        for i in range(len(self.data_files)):
+            f.write("Histogram 1 & " + str(round(self.ft[i], 4)) + " & " + str(round(self.rl[i], 4)) + " & " + str(round(self.rr[i], 4)) + " \\\\\n")
+            f.write("\\hline\n")
+        
+        f.write("\\end{tabular}\n")
+        f.write("\\quad\n")
+        f.write("\\vspace{8pt}\n")
+        f.write("\\centering\n")
+        
+        f.write("\\begin{tabular}{|c|c|c|}\n\\hline\n")
+        f.write("Parameters& $M_B$ ($M_\odot$)& $M_D$ ($M_\odot$) \\\\\n")
+        f.write("\\hline \\hline\n")
+        f.write("Search Range\t& " + self.search_range[3] + " & " + self.search_range[4] + " \\\\\n")
+        f.write("\\hline\n")
+        for i in range(len(self.data_files)):
+            f.write("Histogram 1 & " + str(round(self.ml[i], 4)) + " & " + str(round(self.mr[i], 4)) + " \\\\\n")
+            f.write("\\hline\n")
+        
+        f.write("\\end{tabular}\n")
+        
+        
+        f.write("\\caption{}\n")
+        f.write("\\label{table:}\n")
+        f.write("\\end{table}\n\\end{center}\n")
+        
+        f.close()
+        
         
 def main():
     search_range = [ "[3.0 - 6.0]" ,\
@@ -96,15 +132,32 @@ def main():
                     "[1.0 - 100.0]",\
                     "[0.01 - 0.95]" \
                         ]
+    folder = '/home/sidd/Desktop/research/results/data_runs/'
+    runs1 = folder + 'runs_data_3_22_18_pulled_4_21_18/'
+    runs2 = folder + 'runs_data_4_19_18_pulled_6_27_18/'
+    runs3 = folder + 'runs_data_5_1_18_pulled_6_27_18/'
+    runs4 = folder + 'runs_7_2_18_data_pulled_7_23_18/'
+    runs5 = folder + 'runs_7_23_18_data_pulled_8_25_18/'
     
-    folder = '/home/sidd/Desktop/research/like_surface/run_stats/'
-    runs = folder + 'runs_data_5_1_18_pulled_5_31_18/'
-    data_files = [runs + 'de_nbody_5_1_2018_v168_20k__data_1',\
-                  runs + 'de_nbody_5_1_2018_v168_20k__data_2',\
-                  runs + 'de_nbody_5_1_2018_v168_20k__data_3' \
+    
+    data_files = [runs1 + 'de_nbody_3_22_2018_v168_20k__data_1',\
+                  runs1 + 'de_nbody_3_22_2018_v168_20k__data_2',\
+                  runs1 + 'de_nbody_3_22_2018_v168_20k__data_3', \
+                  runs2 + 'de_nbody_4_19_2018_v168_20k__data_1', \
+                  runs2 + 'de_nbody_4_19_2018_v168_20k__data_2', \
+                  runs2 + 'de_nbody_4_19_2018_v168_20k__data_3', \
+                  runs3 + 'de_nbody_5_1_2018_v168_20k__data_1' ,\
+                  runs3 + 'de_nbody_5_1_2018_v168_20k__data_2', \
+                  runs3 + 'de_nbody_5_1_2018_v168_20k__data_3', \
+                  runs4 + 'de_nbody_7_2_2018_v170_20k__data_1', \
+                  runs4 + 'de_nbody_7_2_2018_v170_20k__data_2', \
+                  runs4 + 'de_nbody_7_2_2018_v170_20k__data_3', \
+                  runs5 + 'de_nbody_7_23_2018_v170_20k__data_1', \
+                  runs5 + 'de_nbody_7_23_2018_v170_20k__data_2', \
+                  runs5 + 'de_nbody_7_23_2018_v170_20k__data_3', \
                       ]
     
-    write_file = 'latex_table3.txt'
+    write_file = 'latex_table_data.txt'
     
     make_latex_table(data_files, write_file, search_range)
     

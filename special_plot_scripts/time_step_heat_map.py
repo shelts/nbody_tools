@@ -101,7 +101,7 @@ def imshow(time):
     #plt.xticks( [ 0.2, 0.4])
     plt.ylabel('Mass Ratio (Baryonic/Total)', fontsize = fntsiz)        
     plt.xlabel(r'Scale Radius Ratio ($R_{B}/(R_{B}+R_{D})$)', fontsize = fntsiz)
-    plt.xlim((0.01, .7))
+    plt.xlim((0.01, .6))
     plt.ylim((0.001, .2))
     im = plt.imshow(zi, vmin=min_color, vmax=max_color, origin='lower', cmap ='plasma'  , extent=[x.min(), x.max(), y.min(), y.max()],aspect="auto")
     plt.colorbar(format='%.0e')
@@ -112,8 +112,8 @@ def imshow(time):
     
     
 def main():
-    baryon_mass = 1
-    baryon_scale = 0.02
+    baryon_mass = .3
+    baryon_scale = 0.35
     print 'creating surface'
     time = timestep(baryon_scale, baryon_mass)
     print 'plotting'

@@ -65,8 +65,11 @@ def main():
             ave += pars[j][i] / float(len(pars))
         ave_paras.append(ave)
         
-    print ave_paras
-    half_light(ave_paras)
+    #print ave_paras
+    #half_light(ave_paras)
     
+    
+    paras = [0.2, 0.2, 12., 0.2]
+    half_light(paras)
     
 main()#-5.913089623411990
