@@ -50,13 +50,13 @@ class hessian:
         f.write('starting parameters:  ' + str(p[0]) + ' ' + str(p[1]) + ' ' + str(p[2]) + ' ' + str(p[3]) + ' ' + str(p[4]) + '\n')
         
         if(i == j): # straight up second derivative
-            #asteps = [-3., -2., -1., 0., 1., 2., 3.]
-            #coeffs = [2., -27., 270., -490., 270., -27., 2.]
-            #div = 180. * h1 * h1
+            asteps = [-3., -2., -1., 0., 1., 2., 3.]
+            coeffs = [2., -27., 270., -490., 270., -27., 2.]
+            div = 180. * h1 * h1
             
-            asteps = [-1., 1., 0]#the h steps
-            coeffs = [1., 1., -2.]#the coeffs when added together
-            div =  h1 * h1 
+            #asteps = [-1., 1., 0]#the h steps
+            #coeffs = [1., 1., -2.]#the coeffs when added together
+            #div =  h1 * h1 
             
             fs = []
             for k in range(len(asteps)):
@@ -76,15 +76,15 @@ class hessian:
             
         else: # second partial derivative
             #this is sloppy
-            #asteps = [ 1. , 2., -2, -1., -1., -2., 1., 2.,  2., -2., -2., 2., -1., 1.,  1., -1.]
-            #bsteps = [-2., -1.,  1., 2., -2., -1., 2., 1., -2.,  2., -2., 2., -1., 1., -1.,  1.]
-            #coeffs = [-63., -63., -63., -63., 63., 63., 63., 63., 44., 44., -44., -44., 74., 74., -74., -74.]
-            #div = (600. * h1 * h2)
+            asteps = [ 1. , 2., -2, -1., -1., -2., 1., 2.,  2., -2., -2., 2., -1., 1.,  1., -1.]
+            bsteps = [-2., -1.,  1., 2., -2., -1., 2., 1., -2.,  2., -2., 2., -1., 1., -1.,  1.]
+            coeffs = [-63., -63., -63., -63., 63., 63., 63., 63., 44., 44., -44., -44., 74., 74., -74., -74.]
+            div = (600. * h1 * h2)
             
-            asteps = [1., 1., -1., -1.]
-            bsteps = [1., -1., 1., -1.]
-            coeffs = [1., -1., -1., 1.]
-            div =  4.* h1 * h2
+            #asteps = [1., 1., -1., -1.]
+            #bsteps = [1., -1., 1., -1.]
+            #coeffs = [1., -1., -1., 1.]
+            #div =  4.* h1 * h2
             
             
             fs = []
@@ -129,8 +129,6 @@ class nbody_cost:
         self.lua = lua
         self.correct_hist = hist_name
         
-        
-        
     def get_likelihood(self, parameters):
         nbody = nbody_running_env(self.lua, '', path)
         simulations_hist = 'test_' + str(parameters[0]) + '_' + str(parameters[1]) + '_' + str(parameters[2]) + '_' + str(parameters[3]) + '_' + str(parameters[4])
@@ -155,7 +153,35 @@ class nbody_cost:
         return like
         
         
+class test:
+    class cost:
+        def __init__(self):
+            self.x = 2.
+            self.likelihood_file = 'test_hessian.txt'
+        def get_likelihood(self, paras):
+            m  = paras[0]
+            b  = paras[1]
+            A  = paras[2]
+            mu = paras[3]
+            sg = paras[4]
+            f = m * self.x + b + A * mt.exp( - (self.x - mu)**2. / (2. * sg**2.))
+            return f
         
+    def __init__(self):
+        self.m = 2.0
+        self.b = 3.0
+        self.A = 2.0
+        self.mu = 1.0
+        self.sigma = .5
+        self.parameters = [self.m, self.b, self.A, self.mu, self.sigma]
+        
+        test_cost = self.cost()
+        
+        hess = hessian(test_cost, self.parameters)
+    
+    
+    
+    
 def main():
     create_best_fit_hist = True
     
@@ -171,6 +197,10 @@ def main():
     hist_names = ['mw_best_fit1', 'mw_best_fit2', 'mw_best_fit3']
     piping_files = ['hessian_run_likelihoods1.txt', 'hessian_run_likelihoods2.txt','hessian_run_likelihoods3.txt']
     
+    
+    
+    
+    
     for name in range(len(hist_names)):
         if(create_best_fit_hist):
             nb = nbody_running_env(lua, '', path)
@@ -179,7 +209,7 @@ def main():
         
         #initialize the cost function
         nb_cost = nbody_cost(piping_files[name], lua, hist_names[name])
-        errs = [mt.sqrt(abs(2.74946424e-07)), mt.sqrt(abs(-9.82330531e-08)), mt.sqrt(abs(-5.67039708e-08)), mt.sqrt(abs(2.27250996e-07)), mt.sqrt(abs(-3.20844368e-08)) ]
+        #errs = [mt.sqrt(abs(2.74946424e-07)), mt.sqrt(abs(-9.82330531e-08)), mt.sqrt(abs(-5.67039708e-08)), mt.sqrt(abs(2.27250996e-07)), mt.sqrt(abs(-3.20844368e-08)) ]
         errs = None
         
         hess = hessian(nb_cost, fit_parameters[name], errs) #get initial errors
@@ -192,4 +222,7 @@ def main():
         #i += 1
         
     
-main()
+#main()
+
+
+run_test = test()

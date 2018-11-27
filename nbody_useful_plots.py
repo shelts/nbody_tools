@@ -91,10 +91,10 @@ def plot4hists(hist1, hist2, hist3, hist4):
     dm_color = 'k'
     labsiz = 20
     fntsiz = 26
-    xlower = -40.0
-    xupper = 40.0
     xlower = -150.0
     xupper = 150.0
+    xlower = -40.0
+    xupper = 40.0
     
     ylower = 0
     yupper = .2
@@ -168,11 +168,117 @@ def plot4hists(hist1, hist2, hist3, hist4):
 
 
 
-    plt.savefig('plots/fitted_hists_sim.png', format='png', dpi = 300)
-    plt.savefig('plots/fitted_hists_sim.pdf', format='pdf', dpi = 300)
+    #plt.savefig('plots/fitted_hists_sim.png', format='png', dpi = 300, bbox_inches='tight')
+    #plt.savefig('plots/fitted_hists_sim_neworbital_parameters.pdf', format='pdf', dpi = 300, bbox_inches='tight')
+    plt.savefig('plots/fitted_hists_data_neworbital2.png', format='png', dpi = 300, bbox_inches='tight')
+    #plt.savefig('plots/fitted_hists_data.pdf', format='pdf', dpi = 300, bbox_inches='tight')
+    
+def plot4_lhists_sim(cor, f1, f2, f3):#for plotting the data and the fitted values
+    cor  = nbody_outputs(cor + '.out')
+    out1 = nbody_outputs(f1 + '.out')
+    out2 = nbody_outputs(f2 + '.out')
+    out3 = nbody_outputs(f3 + '.out')
+    
+    binN = 30
+    cor.dark_light_split()
+    cor_lbins = binner([120., 300.], binN, cor.ls)
+    
+    out1.dark_light_split()
+    out1_lbins = binner([120., 300.], binN, out1.ls)
+    
+    out2.dark_light_split()
+    out2_lbins = binner([120., 300.], binN, out2.ls)
+    
+    out3.dark_light_split()
+    out3_lbins = binner([120., 300.], binN, out3.ls)
     
     
+    baryon_color = 'r'
+    dm_color = 'k'
+    labsiz = 20
+    fntsiz = 26
+    xlower = -36.0
+    xupper = 36.0
+    ##xlower = 300.0
+    #xupper = 120.0
     
+    ylower = 0
+    yupper = 2000
+    wid = 2
+    coor  = 410
+    coori = 1
+    
+    f, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, sharex='col', sharey='row', figsize=(10, 10))
+    #f.text(0.04, 0.5, r'$\beta$' , va='center', fontsize = fntsiz)
+    f.subplots_adjust(hspace=0)
+    f.subplots_adjust(wspace=0)
+    params = {'legend.fontsize': 20,
+            'legend.handlelength': 1}
+    plt.rcParams.update(params)
+    
+    plt.subplot(coor + coori)
+    plt.xlim((xlower, xupper))
+    plt.ylim((ylower, yupper))
+    plt.ylabel('N', fontsize = fntsiz)
+    plt.tick_params(axis='y', which='major', labelsize=labsiz)
+    plt.tick_params(axis='x', which='major', labelsize=labsiz)
+    plt.yticks([0.0, 1000])
+    plt.xticks([])
+    plt.bar(cor_lbins.bin_centers, cor_lbins.counts, width = wid, color=baryon_color, alpha=0.75, label = 'data')
+    plt.legend()
+    #plt.legend(bbox_to_anchor=(0.5,0.1), loc='center', borderaxespad=0.,  prop={'size': 20}, framealpha=1)
+    coori += 1
+    
+    
+    plt.subplot(coor + coori)
+    plt.xlim((xlower, xupper))
+    plt.ylim((ylower, yupper))
+    plt.ylabel('N', fontsize = fntsiz)
+    plt.xlabel('l', fontsize = fntsiz)
+    plt.tick_params(axis='y', which='major', labelsize=labsiz)
+    plt.tick_params(axis='x', which='major', labelsize=labsiz)
+    #plt.yticks([])
+    plt.yticks([0.0, 1000])
+    plt.xticks([])
+    plt.bar(out1_lbins.bin_centers, out1_lbins.counts, width = wid, color=dm_color, alpha=0.75, label = 'Fitted 1')
+    #plt.legend(bbox_to_anchor=(0.5,0.1), loc='center', borderaxespad=0.,  prop={'size': 20}, framealpha=1)
+    plt.legend()
+    coori += 1
+    
+    plt.subplot(coor + coori)
+    plt.xlim((xlower, xupper))
+    plt.ylim((ylower, yupper))
+    plt.xlabel('l', fontsize = fntsiz)
+    plt.ylabel('N', fontsize = fntsiz)
+    plt.tick_params(axis='y', which='major', labelsize=labsiz)
+    plt.tick_params(axis='x', which='major', labelsize=labsiz)
+    #plt.yticks([0.0, 0.1, 0.2, 0.3, 0.4])
+    plt.yticks([0.0, 1000])
+    plt.xticks([])
+    plt.bar(out2_lbins.bin_centers, out2_lbins.counts, width = wid, color=dm_color, alpha=0.75, label = 'Fitted 2')
+    plt.legend()
+    coori += 1
+    
+    plt.subplot(coor + coori)
+    plt.xlim((xlower, xupper))
+    plt.ylim((ylower, yupper))
+    plt.xlabel('l', fontsize = fntsiz)
+    plt.ylabel('N', fontsize = fntsiz)
+    plt.tick_params(axis='y', which='major', labelsize=labsiz)
+    plt.tick_params(axis='x', which='major', labelsize=labsiz)
+    #plt.yticks([])
+    plt.yticks([0.0, 1000])
+    plt.bar(out3_lbins.bin_centers, out3_lbins.counts, width = wid, color=dm_color, alpha=0.75, label = 'Fitted 3')
+    plt.legend()
+    coori += 1
+
+
+
+    #plt.savefig('plots/fitted_hists_sim.png', format='png', dpi = 300, bbox_inches='tight')
+    #plt.savefig('plots/fitted_hists_sim.pdf', format='pdf', dpi = 300, bbox_inches='tight')
+    plt.savefig('plots/fitted_lhists_sim.png', format='png', dpi = 300, bbox_inches='tight')
+    #plt.savefig('plots/fitted_lhists_sim.pdf', format='pdf', dpi = 300, bbox_inches='tight')
+
 def plot_disps(file1):#plots the dispersions from the histogram with lambda beta on top
     ylimit = 1
     xlower = -75 
@@ -359,29 +465,51 @@ def plot_veldisp(hist1, hist2, name, label1, label2):#plots the velocity dispers
     return 1
 # # 
 
-def plot_single(hist1, name):#plot single hist
-    ylimit = 0.6
-    xlower = 100 
-    xupper = -100
-    w_adjacent = 4
-    folder = 'quick_plots/hists/'
-    save_folder = 'quick_plots/'
-    print "plot histogram 1: ", hist1
-    plot_hist1 = hist1 + ".hist"
-
+#plot single hist
+def plot_single(hist_name):
+    hist = nbody_histograms(hist_name + '.hist')
+    cor  = nbody_outputs(hist_name + '.out')
+    binN = 30
+    cor.dark_light_split()
+    cor_lbins = binner([120., 300.], binN, cor.ls)
+    
     
     print("plotting histograms\n")
-    hist1 = nbody_histograms(folder + plot_hist1)
-            
-    plt.bar(hist1.lbins, hist1.counts, width = w_adjacent, color='b')
-    #plt.legend(handles=[mpatches.Patch(color='b', label= plot_hist1)])
-    plt.title('MW@h Test Histogram')
+    coor  = 210
+    coori = 1
+    
+    #f, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, sharex='col', sharey='row', figsize=(10, 10))
+    #f.subplots_adjust(hspace=0)
+    #f.subplots_adjust(wspace=0)
+    #params = {'legend.fontsize': 20,
+            #'legend.handlelength': 1}
+    #plt.rcParams.update(params)
+    ylimit = 0.6
+    xlower = 30 
+    xupper = -30
+    w_adjacent = 2
+    plt.subplot(coor + coori)
+    plt.bar(hist.lbins, hist.counts, width = w_adjacent, color='b')
     plt.xlim((xlower, xupper))
-    plt.ylim((0.0, ylimit))
+    #plt.ylim((0.0, ylimit))
     plt.ylabel('N')
-    plt.xlabel('Lambda')
-
-    plt.savefig(save_folder + name + '.png', format='png')
+    plt.xlabel(r'$\Lambda$')
+    coori += 1
+    
+    ylimit = 0.6
+    xlower = 300 
+    xupper = 120
+    w_adjacent = 4
+    
+    plt.subplot(coor + coori)
+    plt.bar(cor_lbins.bin_centers, cor_lbins.counts, width = w_adjacent, color='b')
+    plt.xlim((xlower, xupper))
+    #plt.ylim((0.0, ylimit))
+    plt.ylabel('N')
+    plt.xlabel('l')
+    
+    
+    plt.savefig('plots/new_orbital_parameters.png', format='png')
     plt.clf()
     #plt.show()
     return 1
@@ -788,7 +916,7 @@ def lb_plot(file_name): #plots lb from output
         plt.xlabel('z', fontsize=24)
         plt.ylabel('y', fontsize=24)
         #plt.title('z vs y')
-        plt.savefig('plots/simulation_0gy.png', format='png', bbox_inches='tight')
+        plt.savefig('plots/simulation2.png', format='png', bbox_inches='tight')
     
     
     if(plot_xyz_3d):
@@ -824,8 +952,103 @@ def lb_plot(file_name): #plots lb from output
 #        Very Specific Plots              #
 # # # # # # # # # # # # # # # # # # # # # #
 # #
+def lambda_beta_4outputs_plot_sim(cor, f1, f2, f3):#for plotting the data and the fitted values
+    cor  = nbody_outputs(cor + '.out')
+    out1 = nbody_outputs(f1 + '.out')
+    out2 = nbody_outputs(f2 + '.out')
+    out3 = nbody_outputs(f3 + '.out')
+    
+    cor.dark_light_split()
+    cor.convert_lambda_beta(True)
+    
+    out1.dark_light_split()
+    out1.convert_lambda_beta(True)
+    
+    out2.dark_light_split()
+    out2.convert_lambda_beta(True)
+    
+    out3.dark_light_split()
+    out3.convert_lambda_beta(True)
+    
+    angle_cuttoffs = [-150.0, 150.0, 50, -15.0, 15.0, 1]
+    baryon_color = 'r'
+    dm_color = 'k'
+    labsiz = 20
+    fntsiz = 26
+    xlower = -100.0
+    xupper = 100.0
+    ylower = -4
+    yupper = 4
+    
+    coor  = 410
+    coori = 1
+    
+    f, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, sharex='col', sharey='row', figsize=(20, 10))
+    #f.text(0.04, 0.5, r'$\beta$' , va='center', fontsize = fntsiz)
+    f.subplots_adjust(hspace=0)
+    f.subplots_adjust(wspace=0)
+    params = {'legend.fontsize': 20,
+            'legend.handlelength': 1}
+    plt.rcParams.update(params)
+    
+    plt.subplot(coor + coori)
+    plt.xlim((xlower, xupper))
+    plt.ylim((ylower, yupper))
+    plt.ylabel(r'$\beta$', fontsize = fntsiz)
+    plt.tick_params(axis='y', which='major', labelsize=labsiz)
+    plt.tick_params(axis='x', which='major', labelsize=labsiz)
+    plt.xticks([])
+    plt.plot(cor.light_lambdas, cor.light_betas, '.', markersize = .5, color = baryon_color, alpha=1, marker = '.', label = 'Fit 1')
+    plt.plot(cor.dark_lambdas,  cor.dark_betas, '.', markersize = .5, color = dm_color, alpha=1, marker = '.', label = 'Fit 1')
+    plt.legend(bbox_to_anchor=(0.01,0.03), loc='lower left', borderaxespad=0.,  prop={'size': 20}, framealpha=1)
+    coori += 1
+    
+    
+    plt.subplot(coor + coori)
+    plt.xlim((xlower, xupper))
+    plt.ylim((ylower, yupper))
+    plt.ylabel(r'$\beta$', fontsize = fntsiz)
+    plt.tick_params(axis='y', which='major', labelsize=labsiz)
+    plt.tick_params(axis='x', which='major', labelsize=labsiz)
+    plt.xticks([])
+    plt.plot(out1.light_lambdas, out1.light_betas, '.', markersize = .5, color = baryon_color, alpha=1, marker = '.', label = 'Fit 1')
+    plt.plot(out1.dark_lambdas,  out1.dark_betas, '.', markersize = .5, color = dm_color, alpha=1, marker = '.', label = 'Fit 1')
+    plt.legend(bbox_to_anchor=(0.01,0.03), loc='lower left', borderaxespad=0.,  prop={'size': 20}, framealpha=1)
+    coori += 1
+    
+    plt.subplot(coor + coori)
+    plt.xlim((xlower, xupper))
+    plt.ylim((ylower, yupper))
+    plt.ylabel(r'$\beta$', fontsize = fntsiz)
+    plt.tick_params(axis='y', which='major', labelsize=labsiz)
+    plt.tick_params(axis='x', which='major', labelsize=labsiz)
+    #plt.yticks([])
+    plt.xticks([])
+    plt.plot(out2.light_lambdas, out2.light_betas, '.', markersize = .5, color = baryon_color, alpha=1, marker = '.', label = 'Fit 2')
+    plt.plot(out2.dark_lambdas,  out2.dark_betas, '.', markersize = .5, color = dm_color, alpha=1, marker = '.', label = 'Fit 2')
+    plt.legend(bbox_to_anchor=(0.01,0.03), loc='lower left', borderaxespad=0.,  prop={'size': 20}, framealpha=1)
+    coori += 1
+    
+    plt.subplot(coor + coori)
+    plt.xlim((xlower, xupper))
+    plt.ylim((ylower, yupper))
+    plt.ylabel(r'$\beta$', fontsize = fntsiz)
+    plt.xlabel(r'$\Lambda$', fontsize = fntsiz)
+    plt.tick_params(axis='y', which='major', labelsize=labsiz)
+    plt.tick_params(axis='x', which='major', labelsize=labsiz)
+    #plt.yticks([])
+    plt.plot(out3.light_lambdas, out3.light_betas, '.', markersize = .5, color = baryon_color, alpha=1, marker = '.', label = 'Fit 3')
+    plt.plot(out3.dark_lambdas,  out3.dark_betas, '.', markersize = .5, color = dm_color, alpha=1, marker = '.', label = 'Fit 3')
+    plt.legend(bbox_to_anchor=(0.01,0.03), loc='lower left', borderaxespad=0.,  prop={'size': 20}, framealpha=1)
+    coori += 1
 
-def lambda_beta_4outputs_plot(f1, f2, f3):#for plotting the data and the fitted values
+
+
+    plt.savefig('plots/fitted_lambda_beta_sim.png', format='png', dpi = 300, bbox_inches='tight')
+    plt.savefig('plots/fitted_lambda_beta_sim.pdf', format='pdf', dpi = 300, bbox_inches='tight')
+
+
+def lambda_beta_4outputs_plot_data(f1, f2, f3):#for plotting the data and the fitted values
     out1 = nbody_outputs(f1 + '.out')
     out2 = nbody_outputs(f2 + '.out')
     out3 = nbody_outputs(f3 + '.out')
@@ -853,10 +1076,10 @@ def lambda_beta_4outputs_plot(f1, f2, f3):#for plotting the data and the fitted 
     dm_color = 'k'
     labsiz = 20
     fntsiz = 26
-    xlower = -100.0
-    xupper = 100.0
-    ylower = -4
-    yupper = 4
+    xlower = -180.0
+    xupper = 180.0
+    ylower = -15
+    yupper = 15
     
     coor  = 410
     coori = 1
@@ -923,9 +1146,8 @@ def lambda_beta_4outputs_plot(f1, f2, f3):#for plotting the data and the fitted 
 
 
 
-    #plt.savefig('fitted_lambda_beta.png', format='png', dpi = 300)
-    plt.savefig('fitted_lambda_beta.pdf', format='pdf', dpi = 300)
-    
+    plt.savefig('plots/fitted_lambda_beta_data.png', format='png', dpi = 300, bbox_inches='tight')
+    plt.savefig('plots/fitted_lambda_beta_data.pdf', format='pdf', dpi = 300, bbox_inches='tight')
 
 def lambda_beta_2outputs_plot(file1, file2):
     out1 = nbody_outputs(file1 + '.out')
@@ -1265,7 +1487,7 @@ def plot_hist_lambda_beta_single(file1, file_name = None):
     return 0 
 
 def plot_lmda_beta(file1, file2):
-    individual = True
+    individual = False
     out1 = nbody_outputs(file1 + ".out")
     out2 = nbody_outputs(file2 + ".out")
     
@@ -1283,7 +1505,7 @@ def plot_lmda_beta(file1, file2):
     ylower = -20
     yupper = 20
     
-    plt.figure(figsize=(20, 20))
+    plt.figure(figsize=(10, 10))
     plt.subplot(211)
     plt.xlim((xlower, xupper))
     plt.ylim((ylower, yupper))
@@ -1309,7 +1531,7 @@ def plot_lmda_beta(file1, file2):
     plt.plot(out2.light_lambdas, out2.light_betas, '.', markersize = .75, color = 'b', alpha=.75, marker = '.',label = 'Best Fit  Stars')
     #plt.legend()
     #plt.savefig('/home/sidd/Desktop/research/quick_plots/publish_plots/both_lambda_beta_light.png', format='png', bbox_inches='tight')
-    plt.savefig('/home/sidd/Desktop/research/quick_plots/publish_plots/both_lambda_beta.png', format='png', bbox_inches='tight')
+    plt.savefig('plots/both_lambda_beta.png', format='png', bbox_inches='tight')
     #plt.show()
     
     if(individual):
@@ -1324,7 +1546,7 @@ def plot_lmda_beta(file1, file2):
         plt.plot(out1.light_lambdas, out1.light_betas, '.', markersize = .75, color = 'b', alpha=.75, marker = '.', label = 'Stars')
         #plt.legend(handles=[mpatches.Patch(color='red', label= 'Dark Matter', color='b', label='Stars')])
         #plt.legend()
-        plt.savefig('/home/sidd/Desktop/research/quick_plots/publish_plots/lambda_beta1_light.png', format='png', bbox_inches='tight')
+        plt.savefig('plots/lambda_beta1_light.png', format='png', bbox_inches='tight')
         
         
         plt.clf() 
@@ -1337,7 +1559,7 @@ def plot_lmda_beta(file1, file2):
         #plt.plot(out2.dark_lambdas, out2.dark_betas, '.', markersize = .75, color = 'red', alpha=1, marker = '.', label = 'Dark Matter')
         plt.plot(out2.light_lambdas, out2.light_betas, '.', markersize = .75, color = 'b', alpha=.75, marker = '.',label = 'Stars')
         plt.legend()
-        plt.savefig('/home/sidd/Desktop/research/quick_plots/publish_plots/lambda_beta2_light.png', format='png', bbox_inches='tight')
+        plt.savefig('plots/lambda_beta2_light.png', format='png', bbox_inches='tight')
     
 
 def veldisp(file1):#plots the velocity dispersion from the histograms
@@ -1537,26 +1759,40 @@ def main():
     #file1 = "dist_test"
     #single_xyz(file1)
     file1 = folder + 'hist_v172_3p95_0p2_0p2_12_0p2__9_24_18'
-    file1 = folder + 'hist_v172_0_0p2_0p2_12_0p2__9_24_18'
-    lb_plot(file1)
-    
+    #file1 = folder + 'hist_v172_0_0p2_0p2_12_0p2__9_24_18'
+    #file1 = folder + 'test_3.94829233251_0.202535436239_0.173454370531_11.9484601872_0.16665298617'
+    file2 = folder + 'test_4.18753706475_0.308611762803_0.235449047583_11.9003162573_0.269766858968'
+    #lb_plot(file1)
+    #plot_lmda_beta(file1, file2)
     #file1 = folder + 'hist_v170_3p95_0p2_0p2_12_0p2__7_17_18_diffSeed2'
     #file1 = folder + 'hist_v170_3p95_0p2_0p2_12_0p2__7_17_18_diffSeed3'
     #lambda_beta_light_dark_histogram_plot(hist1)
     
-    file1 = folder + '2gy'
-    file2 = folder + '6gy'
+    #file1 = folder + '2gy'
+    #file2 = folder + '6gy'
     #lambda_beta_2outputs_plot(file1, file2)
     
     
-    d1 = folder + 'data_hist_spring_2018'
-    d1 = folder + 'hist_v172_3p95_0p2_0p2_12_0p2__9_24_18'
-    f1 = folder + 'fit1'
-    f2 = folder + 'fit2'
-    f3 = folder + 'fit3'
+    #cor = folder + 'hist_v172_3p95_0p2_0p2_12_0p2__9_24_18'
+    cor = folder + 'hist_v172_3p95_0p2_0p2_12_0p2__11_7_18'
+    f1 = folder + 'fit_sim1'
+    f2 = folder + 'fit_sim2'
+    f3 = folder + 'fit_sim3'
+    #cor = folder + ''
+    #plot_single(cor)
+    #plot4hists(cor, f1, f2, f3)
+    #plot4_lhists_sim(cor, f1, f2, f3)
+    #lambda_beta_4outputs_plot_sim(cor, f1, f2, f3)
     
+    d1 = folder + 'data_hist_fall_2018'
+    f1 = folder + 'fit_data3_1'
+    f2 = folder + 'fit_data3_2'
+    f3 = folder + 'fit_data3_3'
     #plot4hists(d1, f1, f2, f3)
-    #lambda_beta_4outputs_plot(f1, f2, f3)
+    lambda_beta_4outputs_plot_data(f1, f2, f3)
+    
+    file1 = folder + 'reverse_orbit'
+    lb_plot(file1)
     
     
     return 0 

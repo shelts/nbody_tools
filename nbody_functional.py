@@ -23,7 +23,7 @@ class nbody_running_env:
         os.chdir("nbody_test")
 
         #following are fairly standard cmake commands
-        os.system("cmake -DCMAKE_BUILD_TYPE=Release -DNBODY_DEV_OPTIONS=ON -DBOINC_RELEASE_NAMES=OFF -DDOUBLEPREC=ON -DNBODY_GL=ON -DNBODY_STATIC=ON -DBOINC_APPLICATION=OFF -DSEPARATION=OFF -DNBODY_OPENMP=ON    " + self.path + "milkywayathome_client/")
+        os.system("cmake -DCMAKE_BUILD_TYPE=Release -DNBODY_DEV_OPTIONS=OFF -DBOINC_RELEASE_NAMES=OFF -DDOUBLEPREC=ON -DNBODY_GL=ON -DNBODY_STATIC=ON -DBOINC_APPLICATION=OFF -DSEPARATION=OFF -DNBODY_OPENMP=ON    " + self.path + "milkywayathome_client/")
         
         #making the binaries. the -j is for multithreaded build/
         os.system("make -j ")
@@ -48,7 +48,7 @@ class nbody_running_env:
                          -o " +  output_hist + ".out "
         
         #final piece to the run command. includes the number of threads, output format, and visualizer args
-        end_piece = "-n 8 -b  -u --visualizer-bin=" + self.path + "nbody_test/bin/milkyway_nbody_graphics -i " + ft + " " + bt + " " + rl + " " + rr + " " + ml + " " + mr + " " + manual_body_list
+        end_piece = "-n 30 -b   --visualizer-bin=" + self.path + "nbody_test/bin/milkyway_nbody_graphics -i " + ft + " " + bt + " " + rl + " " + rr + " " + ml + " " + mr + " " + manual_body_list
         
         if(not comparison_hist): ##this will produce a single run of nbody, without comparing the end result to anything
             run_command += end_piece #completing the run command
@@ -92,7 +92,8 @@ class nbody_outputs:#a class that takes in data from nbody output files and make
         self.ls = []; self.bs = []; self.rs = []
         self.vxs = []; self.vys = []; self.vzs = []
         self.vls = []; self.ms = []; self.tps = []
-        
+        self.vs = []
+        self.gc_rs = []
         f = open(self.file_name, 'r')
         read_data = False
         
@@ -108,7 +109,7 @@ class nbody_outputs:#a class that takes in data from nbody output files and make
                 x = float(ss[2])
                 y = float(ss[3])
                 z = float(ss[4])
-            
+                gc_r = mt.sqrt(x**2 + y**2 + z**2)
                 l = float(ss[5])
                 b = float(ss[6])
                 r = float(ss[7])
@@ -116,6 +117,7 @@ class nbody_outputs:#a class that takes in data from nbody output files and make
                 vx = float(ss[8])
                 vy = float(ss[9])
                 vz = float(ss[10])
+                v  = mt.sqrt(vx**2 + vy**2 + vz**2)
                 
                 m  = float(ss[11])
                 vl = float(ss[12])
@@ -123,6 +125,8 @@ class nbody_outputs:#a class that takes in data from nbody output files and make
                 self.ls.append(l); self.bs.append(b); self.rs.append(r)
                 self.vxs.append(vx); self.vys.append(vy); self.vzs.append(vz)
                 self.tps.append(ty); self.ms.append(m); self.vls.append(vl)
+                self.vs.append(v)
+                self.gc_rs.append(gc_r)
             
         f.close()
         
@@ -131,12 +135,15 @@ class nbody_outputs:#a class that takes in data from nbody output files and make
         self.light_l , self.light_b , self.light_r    = ([] for i in range(3))
         self.light_vx , self.light_vy , self.light_vz = ([] for i in range(3))
         self.light_vl, self.light_m                   = ([] for i in range(2))
+        self.light_vs = []
+        self.light_gc_rs = []
         
         self.dark_x , self.dark_y , self.dark_z       = ([] for i in range(3))
         self.dark_l , self.dark_b , self.dark_r       = ([] for i in range(3))
         self.dark_vx , self.dark_vy , self.dark_vz    = ([] for i in range(3))
         self.dark_vl, self.dark_m                     = ([] for i in range(2))
-        
+        self.dark_vs = []
+        self.dark_gc_rs = []
         for i in range(0, len(self.xs)):
             if(self.tps[i] == 0):
                 self.light_x.append(self.xs[i])
@@ -153,6 +160,8 @@ class nbody_outputs:#a class that takes in data from nbody output files and make
                 
                 self.light_vl.append(self.vls[i])
                 self.light_m.append(self.ms[i])
+                self.light_gc_rs.append(self.gc_rs[i])
+                self.light_vs.append(self.vs[i])
                 
             if(self.tps[i] == 1):
                 self.dark_x.append(self.xs[i])
@@ -169,6 +178,8 @@ class nbody_outputs:#a class that takes in data from nbody output files and make
                 
                 self.dark_vl.append(self.vls[i])
                 self.dark_m.append(self.ms[i])    
+                self.dark_gc_rs.append(self.gc_rs[i])
+                self.dark_vs.append(self.vs[i])
                 
     def rescale_l(self):#to change l range from [0:360] to [-180:180]
         for i in range(0, len(self.ls)):
