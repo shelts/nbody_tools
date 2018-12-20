@@ -155,25 +155,6 @@ class vgsr_data:
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     def plot_vgsr(self):
         f, ((ax1, ax2, ax3)) = plt.subplots(3, sharex='col')
         f.subplots_adjust(hspace=0)

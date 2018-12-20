@@ -212,8 +212,7 @@ def plot4_lhists_sim(cor, f1, f2, f3):#for plotting the data and the fitted valu
     #f.text(0.04, 0.5, r'$\beta$' , va='center', fontsize = fntsiz)
     f.subplots_adjust(hspace=0)
     f.subplots_adjust(wspace=0)
-    params = {'legend.fontsize': 20,
-            'legend.handlelength': 1}
+    params = {'legend.fontsize': 20, 'legend.handlelength': 1}
     plt.rcParams.update(params)
     
     plt.subplot(coor + coori)
@@ -1330,7 +1329,7 @@ def lambda_beta_light_dark_histogram_plot(file_name):
     plt.tick_params(axis='x', which='major', labelsize=labsiz)
     plt.xlim((xlower, xupper))
     plt.ylim((ylower, yupper))
-    plt.title(r'$\Lambda$ vs $\beta$', fontsize = 26)
+    #plt.title(r'$\Lambda$ vs $\beta$', fontsize = 26)
     plt.ylabel(r'$\beta$', fontsize = fntsiz)
     plt.yticks([-10, -5, 0, 5, 10])
     
@@ -1354,8 +1353,8 @@ def lambda_beta_light_dark_histogram_plot(file_name):
     plt.bar(out.mid_bins, out.bm_normed, width = 5., color=baryon_color, hatch="\\\\", alpha=0.5, label = 'baryons')
     plt.legend()
 
-    plt.savefig(file_name + '_lambdabeta_hist2.png', format='png', dpi = 300)
-    plt.savefig(file_name + '_lambdabeta_hist2.pdf', format='pdf', dpi = 200)
+    plt.savefig(file_name + '_lambdabeta_hist2_11_7.png', format='png', dpi = 300)
+    plt.savefig(file_name + '_lambdabeta_hist2_11_7.pdf', format='pdf', dpi = 200)
 
 
 def plot_hist_lambda_beta(file1, file2, file_name = None):
@@ -1766,7 +1765,8 @@ def main():
     #plot_lmda_beta(file1, file2)
     #file1 = folder + 'hist_v170_3p95_0p2_0p2_12_0p2__7_17_18_diffSeed2'
     #file1 = folder + 'hist_v170_3p95_0p2_0p2_12_0p2__7_17_18_diffSeed3'
-    #lambda_beta_light_dark_histogram_plot(hist1)
+    hist1 = folder + 'hist_v172_3p95_0p2_0p2_12_0p2__11_7_18'
+    lambda_beta_light_dark_histogram_plot(hist1)
     
     #file1 = folder + '2gy'
     #file2 = folder + '6gy'
@@ -1789,10 +1789,10 @@ def main():
     f2 = folder + 'fit_data3_2'
     f3 = folder + 'fit_data3_3'
     #plot4hists(d1, f1, f2, f3)
-    lambda_beta_4outputs_plot_data(f1, f2, f3)
+    #lambda_beta_4outputs_plot_data(f1, f2, f3)
     
     file1 = folder + 'reverse_orbit'
-    lb_plot(file1)
+    #lb_plot(file1)
     
     
     return 0 

@@ -1,5 +1,7 @@
 #! /usr/bin/python
 #/* Copyright (c) 2018 Siddhartha Shelton */
+import os
+os.system('cp ../nbody_functional.py ./')
 from nbody_functional import *
 import numpy as np
 from numpy.linalg import inv
@@ -27,7 +29,7 @@ class hessian:
                 print 'working on element', i, j
                 derivative = self.calc_derivative_genstencil(i, j)
                 self.H[i].append(derivative)
-            #print self.H[i]
+            print self.H[i]
        
        
 
@@ -132,7 +134,8 @@ class nbody_cost:
     def get_likelihood(self, parameters):
         nbody = nbody_running_env(self.lua, '', path)
         simulations_hist = 'test_' + str(parameters[0]) + '_' + str(parameters[1]) + '_' + str(parameters[2]) + '_' + str(parameters[3]) + '_' + str(parameters[4])
-        nbody.run(parameters, simulations_hist, self.correct_hist, self.likelihood_file)
+        os.system('ls hist/' + simulations_hist)
+        nbody.match_hists('hists/' + simulations_hist, 'hists/' + 'hist_v172_3p95_0p2_0p2_12_0p2__11_7_18', self.likelihood_file)
         #nbody.run(parameters, simulations_hist, self.correct_hist, None)
         likelihood = self.parse_likelihood()
         return likelihood
@@ -183,7 +186,7 @@ class test:
     
     
 def main():
-    create_best_fit_hist = True
+    create_best_fit_hist = False
     
     lua = path + 'lua/' + "full_control.lua"
     lua = path + 'lua/' + "EMD_v172.lua"
@@ -195,13 +198,13 @@ def main():
     
     fit_parameters = [fit_parameters1, fit_parameters2, fit_parameters3]
     hist_names = ['mw_best_fit1', 'mw_best_fit2', 'mw_best_fit3']
-    piping_files = ['hessian_run_likelihoods1.txt', 'hessian_run_likelihoods2.txt','hessian_run_likelihoods3.txt']
+    piping_files = ['hessian_run_likelihoods_recalc1.txt', 'hessian_run_likelihoods_recalc2.txt','hessian_run_likelihoods_recalc3.txt']
     
     
     
     
     
-    for name in range(len(hist_names)):
+    for name in range(len(hist_names) + 1):
         if(create_best_fit_hist):
             nb = nbody_running_env(lua, '', path)
             nb.run(fit_parameters[name], hist_names[name])
@@ -209,20 +212,12 @@ def main():
         
         #initialize the cost function
         nb_cost = nbody_cost(piping_files[name], lua, hist_names[name])
-        #errs = [mt.sqrt(abs(2.74946424e-07)), mt.sqrt(abs(-9.82330531e-08)), mt.sqrt(abs(-5.67039708e-08)), mt.sqrt(abs(2.27250996e-07)), mt.sqrt(abs(-3.20844368e-08)) ]
         errs = None
         
         hess = hessian(nb_cost, fit_parameters[name], errs) #get initial errors
         del nb_cost
-    #i = 0
-    #f = open(piping_file, 'a')
-    #while(1):#iterate errors until errors equal step size
-        #hess = hessian(nb_cost, fit_parameters, hess.errs)
-        #print i
-        #i += 1
         
     
-#main()
+main()
 
 
-run_test = test()
