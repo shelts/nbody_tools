@@ -11,27 +11,12 @@ from nbody_functional import *
 #        histogram plot                   #
 # # # # # # # # # # # # # # # # # # # # # #
 # # 
-#fit_folder = 'test_fits/data_best_like_range_bensparameters/bensparas_as_total/'
-#fit_folder = '11.14_data_runs_converged_fits/'
-#fit_folder = 'test_fits/test_fits_for_release/'
-fit_folder = 'test_fits/diff_seeds_bteqft/'
-fit_folder = 'test_fits/diff_seed2/'
+fit_folder = 'fitted_sim_results_12_6_runs/'
 
-#fit_folder = 'test_fits/ben_parameters_baryonmasssameasdata_12_7_2018/'
-#labels = ['mw@home', 'same diff seed', 'same- diff seed - with best likelihood', '4gyr', '3.94 gyr']
 #labels = ['data', 'fit1', 'fit2', 'fit3']
-#fit_folder = '11.27.fits/'
-#labels = ['data', 'lower best like range', 'middle range', 'upper range']
-#labels = ['data', '.98', '.99']
-labels = ['MilkyWay@home', 'Seed 1','Seed 2','Seed 3','Seed 4','Seed 5','Seed 6','Seed 7','Seed 8','Seed 9','Seed 10']
-#labels = ['Eric branch- eric lua','master-branch-sidd lua-same seed- same parameters','^ more bodies, 3.95 ft','7','8','9','10']
-#plot_name = 'fitparameter1_99per_window'
-#plot_name = 'benparas_astotal_compared_massfollowslight_reducedbaryoncscale10_98window'
-#plot_name = 'fit_data_converged_11_14_2018'
-#plot_name = 'test_fits_for_release'
-#plot_name = 'eric_orphan_test'
-#plot_name = 'ben_parameters_baryonmasssameasdata_12_7_2018_compared'
-plot_name = 'different_seeds'
+labels = ['Data', 'fit1', 'fit2', 'fit3']
+#labels = ['MilkyWay@home', 'Seed 1','Seed 2','Seed 3','Seed 4','Seed 5','Seed 6','Seed 7','Seed 8','Seed 9','Seed 10']
+plot_name = 'fitted_data'
 
 
 def plot4hists(hists, ftype):
@@ -91,7 +76,7 @@ def plot4hists(hists, ftype):
         plt.savefig('plots/' + fit_folder + 'lmbdahist_sim_' + plot_name + '.pdf', format='pdf', dpi = 300, bbox_inches='tight')
     else:
         plt.savefig('plots/' + fit_folder + 'lmbdahist_data_' + plot_name + '.png', format='png', dpi = 300, bbox_inches='tight')
-        #plt.savefig('plots/' + fit_folder + 'fitted_hists_data.pdf', format='pdf', dpi = 300, bbox_inches='tight')
+        plt.savefig('plots/' + fit_folder + 'lmbdahist_data_' + plot_name + '.pdf', format='pdf', dpi = 300, bbox_inches='tight')
     
 def plot4_lhists(hists, ftype):#for plotting the data and the fitted values
     hs = []
@@ -386,58 +371,29 @@ def main():
     f9 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_oldorb_seed9'
     f10 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_oldorb_seed10'
     fs = [cor, f1, f2, f3, f4, f5, f6, f7, f8, f9, f10]
-    plot4_lhists(fs, 'sim')
-    plot4hists(fs, 'sim')
+    
+    
+    cor = folder + 'hist_v172_3p95bt_3p95ft_0p2_0p2_12_0p2__12_5_18_seed5'
+    f1 = folder + 'fit_sim_1'
+    f2 = folder + 'fit_sim_2'
+    f3 = folder + 'fit_sim_3'
+    fs = [cor, f1, f2, f3]
+    #plot4_lhists(fs, 'sim')
+    #plot4hists(fs, 'sim')
     #plot_betadisps_hists(fs, 'sim')
     #lambda_beta_4outputs_plot(fs, 'sim')
     
+    
     d1 = folder + 'data_hist_fall_2018'
-    f1 = folder + 'fit_data3_1'
-    f2 = folder + 'fit_data3_2'
-    f3 = folder + 'fit_data3_3'
-    
-    #f1 = folder + 'benparas_compared_newscheme_window95'
-    f2 = folder + 'benparas_compared_newscheme_window98'
-    f3 = folder + 'benparas_compared_newscheme_window99'
-
-    f2 = folder + 'benparas_astotal_compared_newscheme_window98'
-    f3 = folder + 'benparas_astotal_compared_newscheme_window99'
-
-    f2 = folder + 'benparas_astotal_scaled_cost_massfollowslight_compared_newscheme_window98'
-    f3 = folder + 'benparas_astotal_scaled_cost_massfollowslight_compared_newscheme_window98'
-    
-    f2 = folder + 'benparas_astotal_massfollowslight_reducedbaryonscale10_compared_newscheme_window98'
-    f3 = folder + 'benparas_astotal_massfollowslight_reducedbaryonscale10_compared_newscheme_window98'
-    
-    f1 = folder + 'fit_data_converged_11_14_2018_1'
-    f2 = folder + 'fit_data_converged_11_14_2018_2'
-    f3 = folder + 'fit_data_converged_11_14_2018_3'
+    f1 = folder + 'fit_data_1'
+    f2 = folder + 'fit_data_2'
+    f3 = folder + 'fit_data_3'
     
     fs = [d1, f1, f2, f3]
     
-    f1 = folder + 'ben_parameters_baryonmasssameasdata_12_7_2018_smaller_binrange' #1 orphan mass as baryons not compared at all 
-    #f1 = folder + 'ben_parameters_baryonmasssameasdata_12_7_2018_compared_4bt_3p95ft1'#same as 1
-    f2 = folder + 'ben_parameters_baryonmasssameasdata_12_7_2018_compared_4bt_3p95ft'#2 adjusted orphan mass as baryons compared without best like
-    #f2 = folder + 'ben_parameters_baryonmasssameasdata_12_7_2018_compared_4bt_3p95ft2'#same as 2
-    f3 = folder + 'ben_parameters_baryonmasssameasdata_12_7_2018_compared_4bt_3p95ft2_bestlike'#3 adjusted orphan mass as baryons compared with best like
-    f4 = folder + 'ben_parameters_baryonmasssameasdata_12_7_2018_compared_4bt_3p95ft_datahist_newflags'
-    #f4 = folder + 'ben_parameters_baryonmasssameasdata_12_7_2018_compared_4bt_3p95ft2_bestlike_7176steps'
-    #f5 = folder + 'ben_parameters_baryonmasssameasdata_12_7_2018_compared_4bt_3p95ft2_bestlike_98to100'
-    f5 = folder + 'ben_parameters_baryonmasssameasdata_12_7_2018_compared_4bt_3p95ft_datahist_newflags_alteredbaryons_bestlike'
-    #f3 = folder + 'ben_parameters_baryonmasssameasdata_12_7_2018_compared_lowerbaryonmass'
-    #f4 = folder + 'ben_parameters_baryonmasssameasdata_12_7_2018_compared_lowerbaryonmass2'
-    #f5 = folder + 'ben_parameters_baryonmasssameasdata_12_7_2018_compared_lowerbaryonmass3'
-    fs = [d1, f1, f2, f3, f4, f5]
-    
-    #plot4hists(fs, 'dat')
+    plot4hists(fs, 'dat')
     #plot_betadisps_hists(fs, 'dat')
     
-    #fs = [f1, f2, f3]
-    #-1214.631705639678103
-    #-116.953356173626347
-    #-58.622409798384950
-    #-48.494902698171977
-    fs = [ f1, f2]
     #lambda_beta_4outputs_plot(fs, 'dat')
     #plot4_lhists(fs, 'dat')
     

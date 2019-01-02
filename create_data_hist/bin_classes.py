@@ -51,6 +51,7 @@ class bin_parameters:                       # class to store binner parameters
                 self.bin_centers.append(self.bin_start + self.bin_size * (0.5  + i) ) # middle bin coordinates
                 self.bin_uppers.append(self.bin_start + self.bin_size * (1.0  + i) )
 
+
 class field:#class system for reading in data
     def __init__(self, field_file):
         self.data_file = field_file
@@ -92,7 +93,7 @@ class field:#class system for reading in data
         f.close()
         
         
-class data_correction:
+class data_correction:#object for the beta coordinate corrections
     def __init__(self, field):
         cut = -15
         for i in range(0, len(field.star_lmda)):
@@ -147,8 +148,6 @@ class bin_counts:
         del bnd_counts,  beta_sums, beta_sqsums, beta_binN
         
     
-    
-    
 class get_binned_difference:
     def __init__(self, On_field_binned, Off_field_binned):
         self.binned_data = binned_data()
@@ -160,7 +159,6 @@ class get_binned_difference:
                 
                 err = (On_field_binned.binned_data.counts[i] + Off_field_binned.binned_data.counts[i])**0.5
                 self.binned_data.err.append(err)    # error in the difference. The error in the counts is the sq root of the counts. The sum of the squares is then this.    
-                
                 
                 
 class normalize:
@@ -193,7 +191,6 @@ class normalize:
                 self.binned_data.err.append(1.0 / total)              # if there is no counts, then the error is set to this default #
 
 
-
 class make_mw_hist:
     def __init__(self, bnd_diff_normed, hist_paras, vgsr = None):
         hist = open("data_hist_spring_2018_refac.hist", "w")
@@ -206,4 +203,74 @@ class make_mw_hist:
                 hist.write("1 %.15f %.15f %.15f %.15f %.15f %.15f %.15f %.15f\n" % (hist_paras.bin_centers[i], 0, bnd_diff_normed.binned_data.counts[i], bnd_diff_normed.binned_data.err[i],  -1, -1, -1, -1)) # not using vgsr anymore
             else:
                 hist.write("1 %.15f %.15f %.15f %.15f %.15f %.15f\n" % (hist_paras.bin_centers[i], 0, bnd_diff_normed.binned_data.counts[i], bnd_diff_normed.binned_data.err[i],  vgsr.vel.disp[i], vgsr.vel.disp_err[i]))
-   
+
+
+
+class beta_hist:
+    def __init__(self, lmbda_Nbins):
+        self.lmbda_Nbins = lmbda_Nbins
+        self.bin_centers = []
+        self.beta_Nbins = 30
+        self.lower = -4.0
+        self.upper = 4.0
+        
+        self.bin_width = abs(self.lower - self.upper) / self.beta_Nbins
+        self.bin_centers = []
+        
+        center = self.lower +  self.bin_width / 2.0
+        for i in range(0, self.beta_Nbins): # initial beta bin centers On field
+            self.bin_centers.append(center)
+            center += self.bin_width
+
+    def initialize_beta_bins(self):
+        field_bin = []        
+        
+        # create array for storing beta count data #
+        for i in range(0, self.lmbda_Nbins):  
+            field_bin.append([])
+            
+            # initialize the counts to zero in each bin field #
+            for j in range(0, self.beta_Nbins): # for each beta bins
+                field_bin[i].append(0.0)
+        
+        return field_bin
+            # send the beta coors for this lambda bin for binning #    
+            
+            
+    def bin_fields(self, coors_ON, coors_OFF, ON_field_bins, OFF_field_bins, combined_field):
+        for cur_bin_lmbda_bin in range(0, self.lmbda_Nbins):  #for each lambda bin
+            
+            for j in range(0, len(coors_ON[cur_bin_lmbda_bin])): # for each beta coordinate in the lmda bin On field
+                
+                for k in range(0, self.beta_Nbins): # for each beta bin
+                    lower_bound = (self.bin_centers[k] - self.bin_width / 2.0) # bin bounds
+                    upper_bound = (self.bin_centers[k] + self.bin_width / 2.0)
+                    
+                    if(coors_ON[cur_bin_lmbda_bin][j] >= lower_bound  and coors_ON[cur_bin_lmbda_bin][j] <= upper_bound): # check if beta coor is in the bin
+                        ON_field_bins[cur_bin_lmbda_bin][k] += 1.0
+                        combined_field[cur_bin_lmbda_bin][k] += 1.0
+            
+            for j in range(0, len(coors_OFF[cur_bin_lmbda_bin])): # for each beta coordinate in the lmda bin
+                
+                for k in range(0, self.beta_Nbins): # for each beta bin
+                    lower_bound = (self.bin_centers[k] - self.bin_width / 2.0)
+                    upper_bound = (self.bin_centers[k] + self.bin_width / 2.0)
+                    
+                    if(coors_OFF[cur_bin_lmbda_bin][j] >= lower_bound  and coors_OFF[cur_bin_lmbda_bin][j] <= upper_bound):
+                        OFF_field_bins[cur_bin_lmbda_bin][k] += 1.0
+                        combined_field[cur_bin_lmbda_bin][k] += 1.0
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
