@@ -12,7 +12,7 @@ path = '/home/sidd/Desktop/research/'
 folder = path + "like_surface/"
 #name_of_sweeps = '2D_hists'
 #name_of_sweeps = 'parameter_sweep_2d_v170'
-name_of_sweeps = 'parameter_sweep_2d_v172_simulated_hist'
+name_of_sweeps = 'parameter_sweep_2d_v174_simulated_hist'
 twoD_names   = ['rr_mr']
 titles  = ['Backward Evolve Time (Gyr)',  'Baryon Scale Radius (kpc)', r'Scale Radius Ratio ($R_{B}/(R_{B}+R_{D})$)', 'Baryonic Mass (SMU)',  'Mass Ratio (Baryonic/Total)']
 coori = 2
@@ -81,8 +81,8 @@ class half_light:
 
 def imshow(sweep, const_half_light):
     #fitted = [[0.235449047582905,0.269766858968207], [0.173454370530649,0.166652986169686], [0.219882548707629,0.23749775053657]]#test values
-    fitted = [[0.282291462697629,0.345760264545573], [0.213388844765707,0.203773596841339], [0.243460580326148,0.314222556206743]]#test values
-    
+    #fitted = [[0.282291462697629,0.345760264545573], [0.213388844765707,0.203773596841339], [0.243460580326148,0.314222556206743]]#test values
+    fitted = [[0.199125487778006, 0.22195363970244], [0.19827770887759,0.238590596229027], [0.196378867869936,0.221402554565405]]
     #fitted = [[0.5,0.01], [0.462,0.011], [.431,.01]]#test values
     
     
@@ -134,8 +134,9 @@ def imshow(sweep, const_half_light):
     plt.plot(const_half_light.rrs, const_half_light.mrs, linestyle = '-', linewidth = 5, color ='r', alpha = 0.5, zorder=1)
 
     #fitted points:
+    colors = ['k', 'k', 'k']
     for i in range(len(fitted)):
-        plt.scatter(fitted[i][0], fitted[i][1], s=80, marker= 'o',  color='k', alpha=1, edgecolors='none', zorder=2)
+        plt.scatter(fitted[i][0], fitted[i][1], s=80, marker= 'o',  color=colors[i], alpha=1, edgecolors='none', zorder=2)
     
     #correct answer:
     plt.scatter(0.2, 0.2, s=120, marker= 'x',  color='chartreuse', alpha=1, edgecolors='none', zorder=3)

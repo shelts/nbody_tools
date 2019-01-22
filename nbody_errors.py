@@ -133,7 +133,7 @@ class nbody_cost:
         nbody = nbody_running_env(self.lua, '', path)
         simulations_hist = 'test_' + str(parameters[0]) + '_' + str(parameters[1]) + '_' + str(parameters[2]) + '_' + str(parameters[3]) + '_' + str(parameters[4])
         nbody.run(parameters, simulations_hist, self.correct_hist, self.likelihood_file)
-        #nbody.run(parameters, simulations_hist, self.correct_hist, None)
+        nbody.run(parameters, simulations_hist, self.correct_hist, None)
         likelihood = self.parse_likelihood()
         return likelihood
         
@@ -183,35 +183,39 @@ class test:
     
     
 def main():
-    create_best_fit_hist = True
-    
-    lua = path + 'lua/' + "full_control.lua"
-    lua = path + 'lua/' + "EMD_v172.lua"
-    piping_file = 'hessian_run_likelihoods.txt'
-    hist_name = 'mw_best_fit'
-    fit_parameters1 = [4.08753706475328, 0.20861176280277, 0.235449047582905, 11.9003162573009, 0.269766858968207]#best fit parameters from mw@h 1
-    fit_parameters2 = [4.04829233251125, 0.202535436238761, 0.173454370530649, 11.9484601872371, 0.166652986169686]
-    fit_parameters3 = [3.98887482577406, 0.212173176887538, 0.219882548707629, 12.0152276604504, 0.23749775053657]
-    
+    create_best_fit_hist = False
+
+    #lua = path + 'lua/' + "full_control.lua"
+    #lua = path + 'lua/' + "EMD_v172.lua"
+    lua = path + 'lua/' + "EMD_v172_newseed3_expandedbestlikerange.lua"
+    #piping_file = 'hessian_run_likelihoods.txt'
+    #hist_name = 'mw_best_fit'
+
+    fit_parameters1 = [4.04527299753613,  0.208437918245098, 0.282291462697629, 11.718973542302,  0.345760264545573]
+    fit_parameters2 = [4.33995251508554,  0.204745363700832, 0.213388844765707, 12.0613611915163, 0.203773596841339]
+    fit_parameters3 = [4.13447487661123,  0.207812478111877, 0.243460580326148, 11.8706869015982, 0.314222556206743]
+
+
     fit_parameters = [fit_parameters1, fit_parameters2, fit_parameters3]
     hist_names = ['mw_best_fit1', 'mw_best_fit2', 'mw_best_fit3']
     piping_files = ['hessian_run_likelihoods1.txt', 'hessian_run_likelihoods2.txt','hessian_run_likelihoods3.txt']
-    
-    
-    
-    
-    
+
+    #errs1 =  [0.00681776580104, 0.0030626508632,  0.00458045943695, 0.00860758866875, 0.0062500117844]
+    #errs2 =  [0.00613594050553, 0.00332079675398, 0.00457320225599, 0.00706147640738, 0.00538597950453]
+    #errs3 =  [0.00637638503062, 0.00318872340635, 0.0049669662772, 0.00765140121081, 0.00666776347562]
+    #errs  = [errs1, errs2, errs3]    
+    hist_name = 'hist_v172_3p95bt_3p95ft_0p2_0p2_12_0p2__12_5_18_seed5'
+    hist_names = [hist_name, hist_name, hist_name] #this is sloppy because it was a quick hack. whatevs
     for name in range(len(hist_names)):
         if(create_best_fit_hist):
             nb = nbody_running_env(lua, '', path)
             nb.run(fit_parameters[name], hist_names[name])
-        
-        
+
+
         #initialize the cost function
         nb_cost = nbody_cost(piping_files[name], lua, hist_names[name])
-        #errs = [mt.sqrt(abs(2.74946424e-07)), mt.sqrt(abs(-9.82330531e-08)), mt.sqrt(abs(-5.67039708e-08)), mt.sqrt(abs(2.27250996e-07)), mt.sqrt(abs(-3.20844368e-08)) ]
         errs = None
-        
+
         hess = hessian(nb_cost, fit_parameters[name], errs) #get initial errors
         del nb_cost
     #i = 0
@@ -220,9 +224,10 @@ def main():
         #hess = hessian(nb_cost, fit_parameters, hess.errs)
         #print i
         #i += 1
-        
-    
-#main()
+
+
+main()
+
 
 
 run_test = test()

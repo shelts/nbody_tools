@@ -15,6 +15,7 @@ class binned_data:                          # class to store binned data
     def __init__(self):
         self.counts = []
         self.err = []
+        self.counts2 = []
         
 class bin_parameters:                       # class to store binner parameters
     def __init__(self, file_name = None):   # init the data bins since its common between star counts and vgsr disp.
@@ -181,7 +182,7 @@ class normalize:
         c2 = total_error / total                # coeff for use later #
         for i in range(0, len(N)):
             self.binned_data.counts.append(N[i] / total)  # normalized counts #
-            
+            self.binned_data.counts2.append(N[i] / f_turn_offs)
             if(N[i] > 0):                       # error for bins with counts in them #
                 c1 = Nerr[i] / N[i]             # another coeff #     
                 er = (N[i] / total) * (c1 * c1 + c2 *c2)**0.5 # follows the error formula for division of two things with error, in this case the individual count and the total #
@@ -192,18 +193,30 @@ class normalize:
 
 
 class make_mw_hist:
-    def __init__(self, bnd_diff_normed, hist_paras, vgsr = None):
-        hist = open("data_hist_spring_2018_refac.hist", "w")
+    def __init__(self, bnd_diff_normed, ifnormed, hist_paras, vgsr = None):
+        if(ifnormed):
+            hist = open("data_hist_fall_2018.hist", "w")
+        else:
+            hist = open("data_hist_fall_2018_unnormalized.hist", "w")
         hist.write("# Orphan Stream histogram \n# Generated from data from Dr. Yanny from Orphan stream paper\n# format is same as other MW@Home histograms\n#\n#\n")
         hist.write("n = %i\n" % (int(bnd_diff_normed.total_count)))
         hist.write("massPerParticle = %.15f\n" % (bnd_diff_normed.mass_per_count))
         hist.write("lambdaBins = %i\nbetaBins = 1\n" % (len(hist_paras.bin_centers)))
-        for i in range(0, len(hist_paras.bin_centers)):
-            if(vgsr == None):
-                hist.write("1 %.15f %.15f %.15f %.15f %.15f %.15f %.15f %.15f\n" % (hist_paras.bin_centers[i], 0, bnd_diff_normed.binned_data.counts[i], bnd_diff_normed.binned_data.err[i],  -1, -1, -1, -1)) # not using vgsr anymore
-            else:
-                hist.write("1 %.15f %.15f %.15f %.15f %.15f %.15f\n" % (hist_paras.bin_centers[i], 0, bnd_diff_normed.binned_data.counts[i], bnd_diff_normed.binned_data.err[i],  vgsr.vel.disp[i], vgsr.vel.disp_err[i]))
-
+        
+        if(ifnormed):
+            for i in range(0, len(hist_paras.bin_centers)):
+                if(vgsr == None):
+                    hist.write("1 %.15f %.15f %.15f %.15f %.15f %.15f %.15f %.15f\n" % (hist_paras.bin_centers[i], 0, bnd_diff_normed.binned_data.counts[i], bnd_diff_normed.binned_data.err[i],  -1, -1, -1, -1)) # not using vgsr anymore
+                else:
+                    hist.write("1 %.15f %.15f %.15f %.15f %.15f %.15f\n" % (hist_paras.bin_centers[i], 0, bnd_diff_normed.binned_data.counts[i], bnd_diff_normed.binned_data.err[i],  vgsr.vel.disp[i], vgsr.vel.disp_err[i]))
+        else:
+            for i in range(0, len(hist_paras.bin_centers)):
+                if(vgsr == None):
+                    hist.write("1 %.15f %.15f %.15f %.15f %.15f %.15f %.15f %.15f\n" % (hist_paras.bin_centers[i], 0, bnd_diff_normed.binned_data.counts2[i], bnd_diff_normed.binned_data.err[i],  -1, -1, -1, -1)) # not using vgsr anymore
+                else:
+                    hist.write("1 %.15f %.15f %.15f %.15f %.15f %.15f\n" % (hist_paras.bin_centers[i], 0, bnd_diff_normed.binned_data.counts2[i], bnd_diff_normed.binned_data.err[i],  vgsr.vel.disp[i], vgsr.vel.disp_err[i]))
+        hist.close()
+        
 
 
 class beta_hist:

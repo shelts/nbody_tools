@@ -34,15 +34,15 @@ compare = [4, 0.2, 0.2, 12., 0.2]
 # # # # # # # # # # # # # # # # # # # # # # # #
 #              Standard Run switches          #
 # # # # # # # # # # # # # # # # # # # # # # # #
-run_nbody                 = y                 #
-remake                    = y                 #
+run_nbody                 = n                 #
+remake                    = n                 #
 full_remake               = n                 #
 run_and_compare           = n                 #
-match_histograms          = n                 #
+match_histograms          = y                 #
 # # # # # # # # # # # # # # # # # # # # # # # #
 
 #    Histogram names      #
-folder = path + 'quick_plots/hists_outs/'
+folder = path + 'quick_plots/hists_outs/willet_paras/'
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 # correctans_hist: name for non comparing hist file or the sim data hist for the compare runs #
@@ -50,9 +50,9 @@ folder = path + 'quick_plots/hists_outs/'
 #correctans_hist  =  'hist_v172_3p95_0p2_0p2_12_0p2__11_7_18'
 #correctans_hist  = 'hist_v172_3p95_0p2_0p2_12_0p2__9_24_18'
 #correctans_hist  = 'data_hist_fall_2018'
-correctans_hist = "test"
+correctans_hist = "data_hist_fall_2018_skipped_bins"
 #correctans_hist = '4bt_3.95ft_withbestlikerange_test_copy'
-simulations_hist = '4bt_3.95ft_withbestlikerange_test'
+simulations_hist = 'willet_parameters_1.4DataHistMassAsBaryonMass_RestAsDM_.2r_.8rr'
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
 
 

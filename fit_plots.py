@@ -11,15 +11,25 @@ from nbody_functional import *
 #        histogram plot                   #
 # # # # # # # # # # # # # # # # # # # # # #
 # # 
-fit_folder = 'fitted_sim_results_12_6_runs/'
-
+#fit_folder = 'diff_seeds/'
 #labels = ['data', 'fit1', 'fit2', 'fit3']
-labels = ['Data', 'fit1', 'fit2', 'fit3']
-#labels = ['MilkyWay@home', 'Seed 1','Seed 2','Seed 3','Seed 4','Seed 5','Seed 6','Seed 7','Seed 8','Seed 9','Seed 10']
-plot_name = 'fitted_data'
+#labels = ['Seed 1','Seed 2','Seed 3','Seed 4','Seed 5','Seed 6','Seed 7','Seed 8','Seed 9','Seed 10']
+#plot_name = '20k_diff_seed_ericseeds'
+
+#fit_folder = 'fitted_sim_results_12_6_runs/'
+#labels = ['MilkyWay@home', 'fit1', 'fit2', 'fit3']
+#plot_name = 'fitted_sim_1_15_2018'
+
+fit_folder = 'fitted_sim_results_12_6_runs/'
+labels = ['data', 'fit1', 'fit2', 'fit3']
+plot_name = 'fitted_data_1_21_2018'
+
+#fit_folder = '/home/sidd/Desktop/research/quick_plots/hists_outs/willet_paras/'
+#labels = ['data', 'half_in_baryons, L = -9531', 'data hist mass as baryon mass, rest as DM, L =-2707.77', '1.5 data hist mass as barons, rest DM, L=-61.85', '1.4 data mass as barons, rest DM, .2 Baryon scale, .8 rad ratio, -77.155']
+#plot_name = 'willet_parameters'
 
 
-def plot4hists(hists, ftype):
+def plot_hists(hists, ftype):
     hs = []
     for i in range(len(hists)):
         hs.append(nbody_histograms(hists[i] + '.hist'))
@@ -74,11 +84,83 @@ def plot4hists(hists, ftype):
     if(ftype == 'sim'):
         plt.savefig('plots/' + fit_folder + 'lmbdahist_sim_' + plot_name + '.png', format='png', dpi = 300, bbox_inches='tight')
         plt.savefig('plots/' + fit_folder + 'lmbdahist_sim_' + plot_name + '.pdf', format='pdf', dpi = 300, bbox_inches='tight')
+        
     else:
         plt.savefig('plots/' + fit_folder + 'lmbdahist_data_' + plot_name + '.png', format='png', dpi = 300, bbox_inches='tight')
         plt.savefig('plots/' + fit_folder + 'lmbdahist_data_' + plot_name + '.pdf', format='pdf', dpi = 300, bbox_inches='tight')
+        #plt.savefig(fit_folder + 'lmbdahist_data_' + plot_name + '.png', format='png', dpi = 300, bbox_inches='tight')
+ 
+ 
+
+def plot_unnormalized_hists(hists, data, ftype):
+    hs = []
+    angle_cuttoffs = [-36.0, 36.0, 24, -15.0, 15.0, 1]
+    dh = nbody_histograms(data + '.hist')
+    hs.append(dh)
+    for i in range(1, len(hists) + 1):
+        hs.append(nbody_outputs(hists[i - 1] + '.out'))
+        hs[i].binner(angle_cuttoffs)
+    labsiz = 20
+    fntsiz = 26
+    if(ftype == 'sim'):
+        xlower = -180.0
+        xupper = 180.0
+    else:
+        xlower = -40.0
+        xupper = 40.0
     
-def plot4_lhists(hists, ftype):#for plotting the data and the fitted values
+    ylower = 0
+    yupper = 250
+    wid = 2
+    #coor  = (len(hs) * 100)  + 10
+    #coor  = 410
+    coori = 1
+    
+    f, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, sharex='col', sharey='row', figsize=(10, 10))
+    #f.text(0.04, 0.5, r'$\beta$' , va='center', fontsize = fntsiz)
+    f.subplots_adjust(hspace=0)
+    f.subplots_adjust(wspace=0)
+    params = {'legend.fontsize': 14,
+            'legend.handlelength': 1}
+    plt.rcParams.update(params)
+    
+    for coori in range(len(hs)):
+        #plt.subplot(coor + coori + 1)
+        plt.subplot(len(hs), 1 , coori + 1)
+        plt.xlim((xlower, xupper))
+        plt.ylim((ylower, yupper))
+        plt.ylabel('N', fontsize = fntsiz)
+        plt.tick_params(axis='y', which='major', labelsize=labsiz)
+        plt.tick_params(axis='x', which='major', labelsize=labsiz)
+        #plt.yticks([0.0, 0.1, 0.2, 0.3, 0.4])
+        #plt.yticks([0.0, 500, 1000, 1500])
+        plt.yticks([0.0, 250])
+        
+        if(coori < len(hs) - 1):#get the tics on the last panel of plot
+            plt.xticks([])
+        
+        if(coori == len(hs) - 1):
+            plt.xlabel(r'$\Lambda_{Orphan}$', fontsize = fntsiz)
+            
+        c = 'r' if coori == 0 else 'k'
+        if(coori == 0):
+            plt.bar(hs[coori].lbins, hs[coori].counts, width = wid, color=c, alpha=1, label = labels[coori])
+            continue
+        
+        plt.bar(hs[coori].mid_bins, hs[coori].binned_bm, width = wid, color=c, alpha=1, label = labels[coori])
+        plt.legend()
+        #plt.legend(bbox_to_anchor=(0.5,0.1), loc='center', borderaxespad=0.,  prop={'size': 20}, framealpha=1)
+
+    if(ftype == 'sim'):
+        plt.savefig('plots/' + fit_folder + 'lmbdahist_sim_' + plot_name + '.png', format='png', dpi = 300, bbox_inches='tight')
+        plt.savefig('plots/' + fit_folder + 'lmbdahist_sim_' + plot_name + '.pdf', format='pdf', dpi = 300, bbox_inches='tight')
+        
+    else:
+        plt.savefig('plots/' + fit_folder + 'unnormalized_lmbdahist_data_' + plot_name + '.png', format='png', dpi = 300, bbox_inches='tight')
+        plt.savefig('plots/' + fit_folder + 'unnormalized_lmbdahist_data_' + plot_name + '.pdf', format='pdf', dpi = 300, bbox_inches='tight')
+        #plt.savefig(fit_folder + 'unnormalized_lmbdahist_data_' + plot_name + '.png', format='png', dpi = 300, bbox_inches='tight')
+ 
+def plot_lhists(hists, ftype):#for plotting the data and the fitted values
     hs = []
     outs_l = []
     outs_d = []
@@ -156,7 +238,7 @@ def plot4_lhists(hists, ftype):#for plotting the data and the fitted values
         #plt.savefig('plots/' + fit_folder + 'fitted_lhists_sim.pdf', format='pdf', dpi = 300, bbox_inches='tight')
 
 
-def lambda_beta_4outputs_plot(hists, ftype):#for plotting the data and the fitted values
+def lambda_beta_outputs_plot(hists, ftype):#for plotting the data and the fitted values
     outs = []
     hs = []
 
@@ -207,7 +289,7 @@ def lambda_beta_4outputs_plot(hists, ftype):#for plotting the data and the fitte
     
     for coori in range(len(outs)):
         #plt.subplot(coor + coori + 1)
-        plt.subplot(len(hs), 1 , coori + 1)
+        plt.subplot(len(hs) + 1, 1 , coori + 1)
         plt.xlim((xlower, xupper))
         plt.ylim((ylower, yupper))
         plt.ylabel(r'$\beta$', fontsize = fntsiz)
@@ -223,7 +305,7 @@ def lambda_beta_4outputs_plot(hists, ftype):#for plotting the data and the fitte
             
         if(ftype == 'sim' or (ftype == 'dat' and coori > 0)):
             plt.plot(outs[coori].light_lambdas, outs[coori].light_betas, '.', markersize = .5, color = baryon_color, alpha=1, marker = '.', label = labels[coori])
-            plt.plot(outs[coori].dark_lambdas,  outs[coori].dark_betas, '.', markersize = .5, color = dm_color, alpha=1, marker = '.', label = labels[coori])
+            #plt.plot(outs[coori].dark_lambdas,  outs[coori].dark_betas, '.', markersize = .5, color = dm_color, alpha=1, marker = '.', label = labels[coori])
 
         elif(ftype == 'dat' and coori == 0):
             plt.plot(dat_lambdas, dat_betas, '.', markersize = .75, color = baryon_color, alpha=1, marker = '.', label = labels[coori])
@@ -293,8 +375,9 @@ def plot_betadisps_hists(hists, ftype):#plots the dispersions from the histogram
         plt.savefig('plots/' + fit_folder + 'betadisp_hists_sim_' + plot_name + '.png', format='png', dpi = 300, bbox_inches='tight')
         #plt.savefig('plots/' + fit_folder + 'fitted_hists_sim.pdf', format='pdf', dpi = 300, bbox_inches='tight')
     else:
-        plt.savefig('plots/' + fit_folder + 'betadisp_hists_data_' + plot_name + '.png', format='png', dpi = 300, bbox_inches='tight')
+        #plt.savefig('plots/' + fit_folder + 'betadisp_hists_data_' + plot_name + '.png', format='png', dpi = 300, bbox_inches='tight')
         #plt.savefig('plots/' + fit_folder + 'fitted_hists_data.pdf', format='pdf', dpi = 300, bbox_inches='tight')
+        plt.savefig(fit_folder + 'betadisp_hists_data_' + plot_name + '.png', format='png', dpi = 300, bbox_inches='tight')
 
     #plt.show()
     return 1
@@ -302,86 +385,81 @@ def plot_betadisps_hists(hists, ftype):#plots the dispersions from the histogram
 def main():
     path = '/home/sidd/Desktop/research/'
 
+    #folder = path + 'quick_plots/hists_outs/willet_paras/'
     folder = path + 'quick_plots/hists_outs/'
+     
+    if(False):
+        f1 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_seed1'
+        f2 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_seed2'
+        f3 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_seed3'
+        f4 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_seed4'
+        f5 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_seed5'
+        f6 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_seed6'
+        f7 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_seed7'
+        f8 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_seed8'
+        f9 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_seed9'
+        f10 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_seed10'
+        fs = [cor, f2, f3, f4, f5, f6, f7, f8, f9, f10]
+        
+        f1 = folder + 'hist_v172_3p95bt_3p95ft_0p2_0p2_12_0p2__12_5_18_seed1'
+        f2 = folder + 'hist_v172_3p95bt_3p95ft_0p2_0p2_12_0p2__12_5_18_seed2'
+        f3 = folder + 'hist_v172_3p95bt_3p95ft_0p2_0p2_12_0p2__12_5_18_seed3'
+        f4 = folder + 'hist_v172_3p95bt_3p95ft_0p2_0p2_12_0p2__12_5_18_seed4'
+        f5 = folder + 'hist_v172_3p95bt_3p95ft_0p2_0p2_12_0p2__12_5_18_seed5'
+        f6 = folder + 'hist_v172_3p95bt_3p95ft_0p2_0p2_12_0p2__12_5_18_seed6'
+        f7 = folder + 'hist_v172_3p95bt_3p95ft_0p2_0p2_12_0p2__12_5_18_seed7'
+        f8 = folder + 'hist_v172_3p95bt_3p95ft_0p2_0p2_12_0p2__12_5_18_seed8'
+        f9 = folder + 'hist_v172_3p95bt_3p95ft_0p2_0p2_12_0p2__12_5_18_seed9'
+        f10 = folder + 'hist_v172_3p95bt_3p95ft_0p2_0p2_12_0p2__12_5_18_seed10'
+        fs = [cor, f1, f2, f3, f4, f5, f6, f7, f8, f9, f10]
+        
+        
     
-    cor = folder + 'hist_v172_3p95_0p2_0p2_12_0p2__11_7_18'
+    f1 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_seed5'
+    f2 = folder + '4bt_3.95ft_test'
+    f3 = folder + '4bt_3.95ft_withbestlikerange_test'
+    f4 = folder + '4gy_test'
+    f5 = folder + '3.94gy_test'
+    fs = [f1, f2, f3, f4, f5]
+    
+    if(False):
+        f1 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_oldorb_seed1'
+        f2 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_oldorb_seed2'
+        f3 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_oldorb_seed3'
+        f4 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_oldorb_seed4'
+        f5 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_oldorb_seed5'
+        f6 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_oldorb_seed6'
+        f7 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_oldorb_seed7'
+        f8 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_oldorb_seed8'
+        f9 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_oldorb_seed9'
+        f10 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_oldorb_seed10'
+        
+        
+        f1 = folder + 'hist_v174_100k_4bt_3p95ft_0p2_0p2_12_0p2__1_2_19_seed1'
+        f2 = folder + 'hist_v174_100k_4bt_3p95ft_0p2_0p2_12_0p2__1_2_19_seed2'
+        f3 = folder + 'hist_v174_100k_4bt_3p95ft_0p2_0p2_12_0p2__1_2_19_seed3'
+        f4 = folder + 'hist_v174_100k_4bt_3p95ft_0p2_0p2_12_0p2__1_2_19_seed4'
+        f5 = folder + 'hist_v174_100k_4bt_3p95ft_0p2_0p2_12_0p2__1_2_19_seed5'
+        f6 = folder + 'hist_v174_100k_4bt_3p95ft_0p2_0p2_12_0p2__1_2_19_seed6'
+        f7 = folder + 'hist_v174_100k_4bt_3p95ft_0p2_0p2_12_0p2__1_2_19_seed7'
+        f8 = folder + 'hist_v174_100k_4bt_3p95ft_0p2_0p2_12_0p2__1_2_19_seed8'
+        f9 = folder + 'hist_v174_100k_4bt_3p95ft_0p2_0p2_12_0p2__1_2_19_seed9'
+        f10 = folder + 'hist_v174_100k_4bt_3p95ft_0p2_0p2_12_0p2__1_2_19_seed10'
+        
+    
+    
+        fs = [f1, f2, f3, f4, f5, f6, f7, f8, f9, f10]
+        #plot_hists(fs, 'sim')
+        #plot_lhists(fs, 'sim')
+        #lambda_beta_outputs_plot(fs, 'sim')
+    
+    cor = folder + 'hist_v172_3p95bt_3p95ft_0p2_0p2_12_0p2__12_5_18_seed5'
     f1 = folder + 'fit_sim2_1'
     f2 = folder + 'fit_sim2_2'
     f3 = folder + 'fit_sim2_3'
-    
-    f1 = folder + 'willet_values'
-    f1 = folder + 'mw_hist_values_kpcgy_orbit_3.95'
-    
-    #f1 = folder + 'mw_hist_values_kms_orbit_3.95_seed3'#same as used to create it
-    f1 = folder + 'hist_v172_3p95_0p2_0p2_12_0p2__9_24_18'
-    #f2 = folder + 'mw_hist_values_kms_orbit_3.95_mwathomeseed_compared' # milkyway@home seed but comparing it with correct hist L=-44.174160067193867 
-    #f3 = folder + 'mw_hist_values_kms_orbit_3.95_mwathomeseed_compared_4gy' # milkyway@home seed but comparing it with correct hist L =-43.284475063290735
-    
-    #f2 = folder + 'mw_hist_values_kms_orbit_mwathomeseed_3.51gy'
-    f2 = folder + 'mw_hist_values_kms_orbit_mwathomeseed_4gy'
-    f3 = folder + 'mw_hist_values_kms_orbit_mwathomeseed_3.8gy'
-    
-    #f2 = folder + 'mw_hist_values_kms_orbit_3.95_seed2'
-    #f3 = folder + 'mw_hist_values_kms_orbit_3.95_mwathomeseed'#same as mw@home fits
-    #f3 = folder + 'mw_hist_values_kms_orbit_3.95_seed3'#used to make the current mw@h hist
-     
-    #f1 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_seed1'
-    #f2 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_seed2'
-    #f3 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_seed3'
-    #f4 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_seed4'
-    #f5 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_seed5'
-    #f6 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_seed6'
-    #f7 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_seed7'
-    #f8 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_seed8'
-    #f9 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_seed9'
-    #f10 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_seed10'
-    #fs = [cor, f2, f3, f4, f5, f6, f7, f8, f9, f10]
-    
-    #f1 = folder + 'hist_v172_3p95bt_3p95ft_0p2_0p2_12_0p2__12_5_18_seed1'
-    #f2 = folder + 'hist_v172_3p95bt_3p95ft_0p2_0p2_12_0p2__12_5_18_seed2'
-    #f3 = folder + 'hist_v172_3p95bt_3p95ft_0p2_0p2_12_0p2__12_5_18_seed3'
-    #f4 = folder + 'hist_v172_3p95bt_3p95ft_0p2_0p2_12_0p2__12_5_18_seed4'
-    #f5 = folder + 'hist_v172_3p95bt_3p95ft_0p2_0p2_12_0p2__12_5_18_seed5'
-    #f6 = folder + 'hist_v172_3p95bt_3p95ft_0p2_0p2_12_0p2__12_5_18_seed6'
-    #f7 = folder + 'hist_v172_3p95bt_3p95ft_0p2_0p2_12_0p2__12_5_18_seed7'
-    #f8 = folder + 'hist_v172_3p95bt_3p95ft_0p2_0p2_12_0p2__12_5_18_seed8'
-    #f9 = folder + 'hist_v172_3p95bt_3p95ft_0p2_0p2_12_0p2__12_5_18_seed9'
-    #f10 = folder + 'hist_v172_3p95bt_3p95ft_0p2_0p2_12_0p2__12_5_18_seed10'
-    #fs = [cor, f1, f2, f3, f4, f5, f6, f7, f8, f9, f10]
-    
-    
-    
-    #f1 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_seed5'
-    #f2 = folder + '4bt_3.95ft_test'
-    #f3 = folder + '4bt_3.95ft_withbestlikerange_test'
-    #f4 = folder + '4gy_test'
-    #f5 = folder + '3.94gy_test'
-    #fs = [f1, f2, f3, f4, f5]
-    
-    #fs = [folder + 'eric_orphan_test', folder + 'eric_orphan_test6', folder + 'eric_orphan_test_20k', folder + 'eric_orphan_test_20k_old_orbital', folder + 'eric_orphan_test_20k_old_orbital2']
-    
-    f1 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_oldorb_seed1'
-    f2 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_oldorb_seed2'
-    f3 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_oldorb_seed3'
-    f4 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_oldorb_seed4'
-    f5 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_oldorb_seed5'
-    f6 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_oldorb_seed6'
-    f7 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_oldorb_seed7'
-    f8 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_oldorb_seed8'
-    f9 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_oldorb_seed9'
-    f10 = folder + 'hist_v172_4bt_3p95ft_0p2_0p2_12_0p2__11_29_18_oldorb_seed10'
-    fs = [cor, f1, f2, f3, f4, f5, f6, f7, f8, f9, f10]
-    
-    
-    cor = folder + 'hist_v172_3p95bt_3p95ft_0p2_0p2_12_0p2__12_5_18_seed5'
-    f1 = folder + 'fit_sim_1'
-    f2 = folder + 'fit_sim_2'
-    f3 = folder + 'fit_sim_3'
     fs = [cor, f1, f2, f3]
-    #plot4_lhists(fs, 'sim')
-    #plot4hists(fs, 'sim')
+    #plot_hists(fs, 'sim')
     #plot_betadisps_hists(fs, 'sim')
-    #lambda_beta_4outputs_plot(fs, 'sim')
     
     
     d1 = folder + 'data_hist_fall_2018'
@@ -391,11 +469,26 @@ def main():
     
     fs = [d1, f1, f2, f3]
     
-    plot4hists(fs, 'dat')
-    #plot_betadisps_hists(fs, 'dat')
+    plot_hists(fs, 'dat')
+    d1 = folder + 'data_hist_fall_2018_unnormalized'
+
+    fs = [f1, f2, f3]
+    lambda_beta_outputs_plot(fs, 'dat')
+    plot_unnormalized_hists(fs, d1, 'dat')
     
-    #lambda_beta_4outputs_plot(fs, 'dat')
-    #plot4_lhists(fs, 'dat')
+    
+    #d1 = folder + 'data_hist_fall_2018'
+    #f1 = folder + 'willet_parameters_total_mass_halfb_halfd_3.945'
+    #f2 = folder + 'willet_parameters_DataHistMassAsBaryonMass_RestAsDM_3.945'
+    #f3 = folder + 'willet_parameters_1.5DataHistMassAsBaryonMass_RestAsDM'
+    #f4 = folder + 'willet_parameters_1.4DataHistMassAsBaryonMass_RestAsDM_.2r_.8rr'
+    
+    
+    #fs = [d1, f1, f2, f3, f4]
+    
+    #plot_hists(fs, 'dat')
+    #plot_betadisps_hists(fs, 'dat')
+    #plot_lhists(fs, 'dat')
     
     return 0 
 main()

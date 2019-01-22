@@ -14,19 +14,20 @@ from plot_functions import *
     
 def main():
     use_vgsr = False
-    use_custom_bins = True
-    calc_beta_dispersions = True
+    use_custom_bins = False
+    calc_beta_dispersions = False
     make_hist = False
-    normalize_counts =  False
+    make_unnormalized_hist = False
+    normalize_counts =  True
     
-    plot_counts = False
+    plot_counts = True
     plot_normed_counts = False
     
     # name of the data files # 
     vgsr_file = "my16lambet2bg.specbhb.dist.lowmet.stream"
     on_field_counts_file = "l270soxlbfgcxNTbcorr.newon"
     off_field_counts_file = "l270soxlbfgcxNTbcorr.newoff"
-    bin_data = "data_from_yanny.dat"
+    bin_data = "data_from_yanny.dat"#uncombined. bins arrangement from orphan paper
     bin_data = "custom_bins3.dat" #combined
     
     if(not use_custom_bins):
@@ -91,6 +92,9 @@ def main():
         vgsr_dat.clear('data lists')
         make_mw_hist(binned_difference_normed, hist_paramaters, vgsr_dat)
     elif(make_hist):
-        make_mw_hist(binned_difference_normed, hist_paramaters)
+        make_mw_hist(binned_difference_normed, True, hist_paramaters)
+    
+    if(make_unnormalized_hist):
+         make_mw_hist(binned_difference_normed, False,  hist_paramaters)
 main()
     

@@ -268,8 +268,7 @@ class nbody_outputs:#a class that takes in data from nbody output files and make
         # transform to lambda beta coordinates from lbr
         self.dark_light_split()
         self.convert_lambda_beta(True)
-        
-        for i in range(0, len(self.light_lambdas)):#go through the different lambda coordinates
+        for i in range(len(self.light_lambdas)):#go through the different lambda coordinates
             if(self.light_betas[i] >= beta_lower and self.light_betas[i] <= beta_upper):#if it is between the beta cuttoffs
                 for j in range(0, len(self.mid_bins)):#go through the bin coordinates
                     left_edge  = self.mid_bins[j] - bin_size / 2.0 #edges of the bin
@@ -281,7 +280,7 @@ class nbody_outputs:#a class that takes in data from nbody output files and make
                         total_bm += 1.0
                         break 
                     
-        for i in range(0, len(self.dark_lambdas)):#go through the different lambda coordinates
+        for i in range(len(self.dark_lambdas)):#go through the different lambda coordinates
             if(self.dark_betas[i] >= beta_lower and self.dark_betas[i] <= beta_upper):#if it is between the beta cuttoffs
                 for j in range(0, len(self.mid_bins)):#go through the bin coordinates
                     left_edge  = self.mid_bins[j] - bin_size / 2.0 #edges of the bin
